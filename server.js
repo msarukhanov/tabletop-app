@@ -40,7 +40,7 @@ app.use(session({
 }));
 //app.use(i18n.init);
 app.set('views', '' + __dirname + '/tabletop/view');
-app.use('/favicon.ico', express.static('./files/img/theweave.ico'));
+app.use('/favicon.ico', express.static('/images/theweave.ico'));
 require('./tabletop')('routes', app);
 
 var port = parseInt(process.env.PORT) || 8888;
