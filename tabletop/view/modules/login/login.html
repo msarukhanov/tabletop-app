@@ -1,0 +1,26 @@
+<div class="container login-container valign-wrapper" ng-controller="Login">
+    <div class="login-panel panel panel-default valign center-block">
+        <div class="panel-heading my-new-heading">
+            <h3 class="panel-title center">{{"Sign In" | translate}}</h3>
+            <div class="panel-body">
+                <form role="form" name="myForm">
+                    <fieldset>
+                        <div class="form-group">
+                            <input ng-model="login.username" required class="form-control new-form-control"
+                                   placeholder="{{'Username' | translate}}" name="username" type="text" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <input ng-model="login.password" required class="form-control new-form-control"
+                                   placeholder="{{'Password' | translate}}" name="password" type="password" value="">
+                        </div>
+                        <button ng-click="userLogin()" ng-disabled="myForm.username.$dirty && myForm.username.$invalid ||
+  									myForm.password.$dirty && myForm.password.$invalid"
+                                type="submit" class="btn btn-lg btn-success btn-block login-btn-success center-block">{{"Login" | translate}}
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+            <div onerror="showToastError()"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,260 @@
+<div class="global-wrapper" ng-init="getCharacterData()">
+    <h4 class="page-header global-page-header center">{{"Character" | translate}}</h4>
+
+    <div class="panel global-panel-default">
+        <div class="panel-header" ng-show="!hideLoader">
+            {{"Vincent Krieg" | translate}}
+            <div class="btn-group pull-right header-right-column">
+                <label>( {{"VTM" | translate}}</label> <label>-</label> <label>{{"Detroit1" | translate}} )</label>
+            </div>
+        </div>
+        <div class="panel-body global-panel-body" ng-show="!hideLoader">
+            <ul class="collapsible" data-collapsible="expandable">
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">accessibility</i> Stats.
+                    </div>
+                    <div class="collapsible-body attributes">
+                        <div class="row">
+                            <div class="col s4">
+                                <p class="main_info">Name:</p>
+                                <p class="main_info">Player:</p>
+                                <p class="main_info">Chronicle:</p>
+                                <p class="attr-space"></p>
+                                <p class="attr-group">Physical</p>
+                                <p class="attr">
+                                    <span class="attr-name">Strength</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Dexterity</span>
+                                    <span class="attr-stat">6</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Stamina</span>
+                                    <span class="attr-stat">6</span>
+                                </p>
+                                <p class="attr-space"></p>
+                                <p class="attr-group">Talents</p>
+                                <p class="attr">
+                                    <span class="attr-name">Alertness</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Athletics</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Brawl</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Dodge</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Empathy</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Expression</span>
+                                    <span class="attr-stat">4</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Intimidation</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Leadership</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Streetwise</span>
+                                    <span class="attr-stat">4</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Subterfuge</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr-space"></p>
+                                <p class="attr-group">Disciplines</p>
+
+                            </div>
+                            <div class="col s4">
+                                <p class="main_info">Nature:</p>
+                                <p class="main_info">Demeanor:</p>
+                                <p class="main_info">Concept:</p>
+                                <p class="attr-space">Attributes</p>
+                                <p class="attr-group">Social</p>
+                                <p class="attr">
+                                    <span class="attr-name">Charisma</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Manipulation</span>
+                                    <span class="attr-stat">6</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Appearance</span>
+                                    <span class="attr-stat">6</span>
+                                </p>
+                                <p class="attr-space">Abilities</p>
+                                <p class="attr-group">Skills</p>
+                                <p class="attr">
+                                    <span class="attr-name">Animal Ken</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Crafts</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Drive</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Etiquette</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Firearms</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Performance</span>
+                                    <span class="attr-stat">4</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Melee</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Security</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Stealth</span>
+                                    <span class="attr-stat">4</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Survival</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr-space">Advantages</p>
+                                <p class="attr-group">Backgrounds</p>
+                            </div>
+                            <div class="col s4">
+                                <p class="main_info">Clan:</p>
+                                <p class="main_info">Generation:</p>
+                                <p class="main_info">Sire:</p>
+                                <p class="attr-space"></p>
+                                <p class="attr-group">Mental</p>
+                                <p class="attr">
+                                    <span class="attr-name">Perception</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Intelligence</span>
+                                    <span class="attr-stat">6</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Wits</span>
+                                    <span class="attr-stat">6</span>
+                                </p>
+                                <p class="attr-space"></p>
+                                <p class="attr-group">Knowledges</p>
+                                <p class="attr">
+                                    <span class="attr-name">Academics</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Computer</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Finance</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Investigation</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Law</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Linguistics</span>
+                                    <span class="attr-stat">4</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Medicine</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Occult</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Politics</span>
+                                    <span class="attr-stat">4</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Science</span>
+                                    <span class="attr-stat">7</span>
+                                </p>
+                                <p class="attr-space"></p>
+                                <p class="attr-group">Virtues</p>
+                                <p class="attr">
+                                    <span class="attr-name">Conscience / Conviction</span>
+                                    <span class="attr-stat">5</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Self-Control / Instinct</span>
+                                    <span class="attr-stat">4</span>
+                                </p>
+                                <p class="attr">
+                                    <span class="attr-name">Courage</span>
+                                    <span class="attr-stat">4</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">assignment</i> Bio.
+                    </div>
+                    <div class="collapsible-body">
+                        <span>Lorem ipsum dolor sit amet.</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">language</i> Status.
+                    </div>
+                    <div class="collapsible-body">
+                        <span>Lorem ipsum dolor sit amet.</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">people</i> Party (coming soon)
+                    </div>
+                    <div class="collapsible-body">
+                        <span>Shepard</span>, <span>Alice</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--<div class="pre-loader global-loader global-wrapper center valign-wrapper" ng-show="!hideLoader">-->
+        <!--<i class="fa fa-cog fa-spin fa-3x pre-loader  valign center-block"></i>-->
+        <!--</div>-->
+    </div>
+</div>
+
+<script>
+    $('.collapsible').collapsible({
+        accordion: true
+    });
+</script>

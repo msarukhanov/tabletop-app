@@ -1,0 +1,86 @@
+.login-container {
+    height: 100%;
+    position: fixed;
+    width: 100%;
+}
+nav {
+    background-color: #000;
+}
+nav .button-collapse {
+    margin-left: 5px;
+}
+nav .button-collapse i {
+    font-size: 1.7rem;
+}
+.dr-left {
+    top: 56px !important;
+    width: 200px !important;
+}
+.global-wrapper {
+    position: absolute;
+    top: 56px;
+    height: calc(100% - 106px);
+    padding: 0 10px;
+    width: 100%;
+}
+
+.attributes {
+    padding: 0 4px;
+}
+.attributes .col {
+    padding: 0;
+    border-right: 1px solid #000;
+    min-height: 500px;
+}
+.attributes .col:last-child {
+    border: none;
+}
+.attributes.collapsible-body p {
+    margin: 0;
+    padding: 2px 0;
+}
+.attributes.collapsible-body .main_info {
+    font-weight: 900;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-left: 3px;
+}
+.attributes.collapsible-body .attr-space {
+    padding: 5px 0;
+    height: 30px;
+    float: left;
+    width: 100%;
+    text-align: center;
+    font-size: 120%;
+}
+.attributes.collapsible-body .attr-group {
+    padding: 5px 0;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    float: left;
+    width: 100%;
+    text-align: center;
+}
+.attributes.collapsible-body .attr {
+    width: 100%;
+    float: left;
+    padding-left: 5px;
+
+}
+.attributes.collapsible-body .attr-stat {
+    float: right;
+    margin-right: 5px;
+    margin-top: 2px;
+    border-radius: 50px;
+    border: 1px solid #000;
+    width: 18px;
+    height: 18px;
+    line-height: 17px;
+    text-align: center;
+}
+.attributes.collapsible-body .attr-name {
+    float: left;
+    max-width: 80%;
+}
