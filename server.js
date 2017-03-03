@@ -40,9 +40,11 @@ app.use(session({
 }));
 //app.use(i18n.init);
 app.set('views', '' + __dirname + '/tabletop/view');
+app.use('/favicon.ico', express.static('./files/img/theweave.ico'));
 require('./tabletop')('routes', app);
 
-app.listen(8888, function() {
-    console.log( 'Server listening on port %d in %s mode', 8888, 'dev' );
+var port = parseInt(process.env.PORT) || 8888;
+app.listen(port, function() {
+    console.log( 'Server listening on port %d in %s mode', port, 'dev' );
 });
 
