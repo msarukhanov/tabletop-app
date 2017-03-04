@@ -30,7 +30,8 @@
     "telegram-bot-api": "^1.2.0",
     "underscore": "^1.8.3",
     "wait.for": "^0.6.6",
-    "pg": "~6.1.2"
+    "pg": "~6.1.2",
+    "moment": "~2.17.1"
   },
   "devDependencies": {
     "grunt-contrib-clean": "^1.0.0",

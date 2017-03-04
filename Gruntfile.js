@@ -9,8 +9,8 @@ module.exports = function(grunt) {
         },
         app: {
             files: {
-                'terminal/view/production/temp/app.js': ['terminal/view/core/app.js'],
-                'terminal/view/production/temp/controllers.js': ['terminal/view/modules/*/*.js']
+                'tabletop/view/production/temp/app.js': ['tabletop/view/core/app.js'],
+                'tabletop/view/production/temp/controllers.js': ['tabletop/view/modules/*/*.js']
             }
         }
     };
@@ -22,31 +22,31 @@ module.exports = function(grunt) {
         concat: {
             dist_libs : {
                 src: [
-                    'terminal/view/scripts/libs/jquery-2.1.3.min.js',
+                    'tabletop/view/scripts/libs/jquery-2.1.3.min.js',
 
-                    'terminal/view/scripts/libs/angular.js',
-                    'terminal/view/scripts/libs/angular-cookies.js',
-                    'terminal/view/scripts/libs/angular-route.js',
-                    'terminal/view/scripts/libs/angular-sanitize.js',
-                    'terminal/view/scripts/libs/angular-translate.js',
-                    'terminal/view/scripts/libs/angular-translate-loader-static-files.js',
-                    'terminal/view/scripts/libs/ngStorage.js',
+                    'tabletop/view/scripts/libs/angular.js',
+                    'tabletop/view/scripts/libs/angular-cookies.js',
+                    'tabletop/view/scripts/libs/angular-route.js',
+                    'tabletop/view/scripts/libs/angular-sanitize.js',
+                    'tabletop/view/scripts/libs/angular-translate.js',
+                    'tabletop/view/scripts/libs/angular-translate-loader-static-files.js',
+                    'tabletop/view/scripts/libs/ngStorage.js',
 
-                    'terminal/view/scripts/libs/underscore.js',
-                    'terminal/view/scripts/libs/bootstrap-datepicker.js',
-                    'terminal/view/scripts/libs/JsBarcode.all.min.js',
-                    'terminal/view/scripts/libs/materialize.min.js'
+                    'tabletop/view/scripts/libs/underscore.js',
+                    'tabletop/view/scripts/libs/bootstrap-datepicker.js',
+                    'tabletop/view/scripts/libs/JsBarcode.all.min.js',
+                    'tabletop/view/scripts/libs/materialize.min.js'
                 ],
-                dest: 'terminal/view/production/production-libs.js'
+                dest: 'tabletop/view/production/production-libs.js'
             },
             dist_terminal: {
                 src: [
-                    'terminal/view/production/production-libs.js',
-                    'terminal/view/production/production-html.js',
-                    'terminal/view/production/temp/app.js',
-                    'terminal/view/production/temp/controllers.js'
+                    'tabletop/view/production/production-libs.js',
+                    'tabletop/view/production/production-html.js',
+                    'tabletop/view/production/temp/app.js',
+                    'tabletop/view/production/temp/controllers.js'
                 ],
-                dest: 'terminal/view/production/production-js.js'
+                dest: 'tabletop/view/production/production-js.js'
             }
         },
         htmlConvert: {
@@ -55,49 +55,49 @@ module.exports = function(grunt) {
             },
             templates: {
                 src: [
-                    'terminal/view/modules/*/*.html'
+                    'tabletop/view/modules/*/*.html'
                 ],
-                dest: 'terminal/view/production/production-html.js'
+                dest: 'tabletop/view/production/production-html.js'
             }
         },
         cssmin: {
             target: {
                 files: [{
                     src: [
-                        'terminal/view/styles/*.css'
+                        'tabletop/view/styles/*.css'
                     ],
-                    dest: 'terminal/view/production/production-css.min.css'
+                    dest: 'tabletop/view/production/production-css.min.css'
                 }]
             }
         },
         uglify: {
             build: {
                 files: [{
-                    src: 'terminal/view/production/production-js.js',
-                    dest: 'terminal/view/production/production-js.min.js'
+                    src: 'tabletop/view/production/production-js.js',
+                    dest: 'tabletop/view/production/production-js.min.js'
                 },{
-                    src: 'terminal/view/production/production-html.js',
-                    dest: 'terminal/view/production/production-html.min.js'
+                    src: 'tabletop/view/production/production-html.js',
+                    dest: 'tabletop/view/production/production-html.min.js'
                 }]
 
             }
         },
         clean: {
             build: {
-                src: ['terminal/view/production/temp']
+                src: ['tabletop/view/production/temp']
             }
         },
         watch: {
             scripts: {
-                files: ['terminal/view/modules/*/*.js','terminal/view/core/app.js'],
+                files: ['tabletop/view/modules/*/*.js','tabletop/view/core/app.js'],
                 tasks: ['ngAnnotate', 'htmlConvert', 'concat:dist_libs', 'concat:dist_terminal', 'clean']
             },
             css: {
-                files: ['terminal/view/styles/*.css'],
+                files: ['tabletop/view/styles/*.css'],
                 tasks: ['cssmin']
             },
             another: {
-                files: ['terminal/view/modules/*/*.html'],
+                files: ['tabletop/view/modules/*/*.html'],
                 tasks: ['ngAnnotate', 'htmlConvert', 'concat:dist_libs', 'concat:dist_terminal']
             }
         }

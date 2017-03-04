@@ -3,6 +3,7 @@
  */
 var md5 = require('MD5');
 var latestData = require('moment-timezone/data/packed/latest.json');
+var moment   = require('moment');
 var moment_timezone = require('moment-timezone');
 moment_timezone.tz.load(latestData);
 
@@ -11,18 +12,6 @@ var http = require('http');
 var knex = require('knex')({
     client: 'pg',
     connection: 'postgres://gxlwcegldechzz:073cc0afaa097f77f818c89d3d3e9d1a2309ba743977e63a78c86bb5662b9afc@ec2-54-225-230-243.compute-1.amazonaws.com:5432/d12ief33mdff9t?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory',
-    //connection: {
-    //    host: 'ec2-54-225-230-243.compute-1.amazonaws.com',
-    //    port: '5432',
-    //    user: 'gxlwcegldechzz',
-    //    password: '073cc0afaa097f77f818c89d3d3e9d1a2309ba743977e63a78c86bb5662b9afc',
-    //    database: 'd12ief33mdff9t',
-    //    debug: false,
-    //    pool: {
-    //        min: 0,
-    //        max: 10
-    //    }
-    //}
 });
 //knex.raw("create table if not exists `users` (`id` int unsigned not null auto_increment primary key, `name` varchar(255), `created_at` datetime, `updated_at` datetime)")
 //    .then(function(data) {
@@ -39,6 +28,7 @@ var knex = require('knex')({
 //    table.increments('user_id').primary();
 //    table.string('username');
 //    table.string('password');
+//    table.string('type');
 //    table.integer('server_id');
 //    table.integer('char_id');
 //    table.dateTime('joined_at')
@@ -56,6 +46,7 @@ var knex = require('knex')({
 //});
 //knex('users').insert({
 //    username: 'mmalkav',
+//    type: 'admin',
 //    password: '1',
 //    joined_at: new Date()
 //}).then(function(data) {
@@ -63,6 +54,11 @@ var knex = require('knex')({
 //}, function(err) {
 //    console.log(err);
 //});
+//knex('users').where('user_id', 1).del().then(function(data) {
+//        console.log(data);
+//    }, function(err) {
+//        console.log(err);
+//    });
 knex.select().table('users')
     .then(function(data) {
         console.log(data);
@@ -91,18 +87,12 @@ knex.select().table('users')
 //});
 
 var redisRequests = require('./redisRequests');
-//
-//var BS = require('./helpers/bettingService')(knex, wait);
-//var AS = require('./helpers/services');
-//var PlaceBet = require('./helpers/placeBet')(knex, wait, moment_timezone, BS, AS);
-//var GameBet = require('./helpers/gameBet')(knex, wait, moment_timezone, BS);
-//var PayBet = require('./helpers/payBet')(knex, wait, moment_timezone, BS, AS);
-//var Prematch = require('./helpers/prematch')(knex, wait, BS);
 
-global.BetOfficeRoute = function(app, route, callback, permissions) {
-    return app.post('/office/'+route, function (req, res) {
+
+global.appRoute = function(app, route, callback, permissions) {
+    return app.post('/api/'+route, function (req, res) {
         if (req.headers.authorization == undefined) {
-            res.send({error: true, message: 'Authorizatioin token required', error_code: 'auth_1'}).end();
+            res.send({error: true, message: 'Authorization token required', error_code: 'auth_1'}).end();
         }
         else {
             redisRequests.Getter(req.headers.authorization, function (result) {
@@ -134,13 +124,7 @@ global.BetOfficeRoute = function(app, route, callback, permissions) {
 global.userToRedis = function(user, cookieExpireTime, callback) {
     redisRequests.SetterEx(user.user_token, cookieExpireTime, user, function (result) {
         if (result.error != true) {
-            var allow_use_settings = user.user_level == 1;
-            callback({
-                error: false,
-                message: 'Success',
-                allow_use_settings: allow_use_settings,
-                data: _.pick(user, 'user_token', 'username', 'agent_timezone', 'user_country', 'user_language', 'employee_info')
-            });
+            callback({error: false, message: 'Success', data: user});
         }
         else {
             callback({error: true, message: 'Error', error_code: 'Red_1'});
@@ -152,6 +136,45 @@ module.exports = function (app) {
 
     //var Account = require('./models/account')(app, knex, md5, crypto, generators);
     //Account.regRoutes();
+
+    app.post('/api/signIn', function (req, res) {
+        if (req.headers.authorization == undefined) {
+            knex('users').select('*')
+                .where({
+                    username: req.body.username,
+                    password: req.body.password
+                })
+                .then(function (rows) {
+                    if (_.isEmpty(rows)) {
+                        res.send({error: true, message: 'Email or Password is Wrong', data: null})
+                    }
+                    else {
+                        var timestamp = (moment().unix()*1000+moment().millisecond());
+                        var uniqueID = "";
+                        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                        for (var i = 0; i < 6; i++) uniqueID += possible.charAt(Math.floor(Math.random() * possible.length));
+                        rows[0].user_token = uniqueID+'T'+rows[0].user_id+'T'+timestamp;
+                        userToRedis(rows[0], 30000, function(data) { res.send(data) });
+                    }
+                }, function (error) {
+                    res.send({error: true, message: 'Database error' + error.toString().split("at")[0], data: null})
+                });
+        }
+        else {
+            res.send({error: true, message: 'Authorization token required', error_code: 'auth_1'}).end();
+        }
+    });
+
+    appRoute(app, 'accountInfo', function(req,res,currentUser) {
+        if(currentUser) {
+            res.send({error: false, data: currentUser}).end();
+        }
+        else {
+            res.send({error: true, message: 'Authorization token required', error_code: 'auth_1'}).end();
+        }
+    });
+
+
 
 	app.get('/', function (req, res) {
 		res.render('./index', {title: 'TableTap App'});

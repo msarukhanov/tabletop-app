@@ -35,6 +35,10 @@ nav .button-collapse {
 nav .button-collapse i {
     font-size: 1.7rem;
 }
+.lm_true {
+    display: block;
+    opacity: 1;
+}
 .dr-left {
     top: 56px !important;
     width: 200px !important;
@@ -58,11 +62,11 @@ nav .button-collapse i {
 .attributes .col:last-child {
     border: none;
 }
-.attributes.collapsible-body p {
+.attributes p {
     margin: 0;
     padding: 2px 0;
 }
-.attributes.collapsible-body .main_info {
+.attributes .main_info {
     font-weight: 900;
     text-overflow: ellipsis;
     word-break: break-all;
@@ -70,7 +74,7 @@ nav .button-collapse i {
     overflow: hidden;
     padding-left: 3px;
 }
-.attributes.collapsible-body .attr-space {
+.attributes .attr-space {
     padding: 5px 0;
     height: 30px;
     float: left;
@@ -78,7 +82,7 @@ nav .button-collapse i {
     text-align: center;
     font-size: 120%;
 }
-.attributes.collapsible-body .attr-group {
+.attributes .attr-group {
     padding: 5px 0;
     border-top: 1px solid #000;
     border-bottom: 1px solid #000;
@@ -86,24 +90,24 @@ nav .button-collapse i {
     width: 100%;
     text-align: center;
 }
-.attributes.collapsible-body .attr {
+.attributes .attr {
     width: 100%;
     float: left;
-    padding-left: 5px;
+    padding-left: 2px;
 
 }
-.attributes.collapsible-body .attr-stat {
+.attributes .attr-stat {
     float: right;
-    margin-right: 5px;
+    margin-right: 2px;
     margin-top: 2px;
     border-radius: 50px;
-    border: 1px solid #000;
-    width: 18px;
-    height: 18px;
+    /*border: 1px solid #000;*/
+    /*width: 18px;*/
+    /*height: 18px;*/
     line-height: 17px;
     text-align: center;
 }
-.attributes.collapsible-body .attr-name {
+.attributes .attr-name {
     float: left;
     max-width: 80%;
 }

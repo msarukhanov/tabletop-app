@@ -10,22 +10,34 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
 
         $routeProvider
             .when("/", {
-                template : templates["../terminal/view/modules/home/home.html"],
+                template : templates["../tabletop/view/modules/home/home.html"],
                 controller: 'Home'
             })
             .when("/games", {
-                template : templates["../terminal/view/modules/home/home.html"],
+                template : templates["../tabletop/view/modules/home/home.html"],
+                controller: 'Home'
+            })
+            .when("/charlist", {
+                template : templates["../tabletop/view/modules/charlist/charlist.html"],
+                controller: 'Home'
+            })
+            .when("/bio", {
+                template : templates["../tabletop/view/modules/bio/bio.html"],
+                controller: 'Home'
+            })
+            .when("/games", {
+                template : templates["../tabletop/view/modules/home/home.html"],
                 controller: 'Home'
             })
 
             .otherwise({
                 redirectTo: '/'
             });
-
-        // $locationProvider.html5Mode({
-        //     enabled: true,
-        //     requireBase: false
-        // });
+         //
+         //$locationProvider.html5Mode({
+         //    enabled: true,
+         //    requireBase: false
+         //});
 
         $httpProvider.interceptors.push(['$q', '$location', '$cookieStore', function($q, $location, $cookieStore, $rootScope) {
             return {
@@ -54,15 +66,15 @@ app.run(['$rootScope', '$translate', '$cookieStore', '$templateCache',
 
         $rootScope.templates = templates;
 
-        $templateCache.put('login', templates["../terminal/view/modules/login/login.html"]);
-        $templateCache.put('main', templates["../terminal/view/modules/main/main.html"]);
+        $templateCache.put('login', templates["../tabletop/view/modules/login/login.html"]);
+        $templateCache.put('main', templates["../tabletop/view/modules/main/main.html"]);
 
-        //$rootScope.$on("$routeChangeStart", function () {
-        //    if(!$cookieStore.get('token')){
-        //        $rootScope.isLoggedIn = false;
-        //    }
-        //});
-        //var token = $cookieStore.get('token');
+        $rootScope.$on("$routeChangeStart", function () {
+            if(!$cookieStore.get('token')){
+                $rootScope.isLoggedIn = false;
+            }
+        });
+        var token = $cookieStore.get('token');
         //$translate.use(locale);
 
     }
@@ -73,7 +85,7 @@ app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http
         CRUDUser: function (path, obj, callback) {
             $http({
                 method: 'POST',
-                url: '/office/' + path,
+                url: '/api/' + path,
                 data: obj
             }).then(function (success) {
                 callback(success.data)

@@ -24,17 +24,15 @@ module.exports = {
 
     keyGenerator: function (userID) {
         var timestamp = (moment().unix()*1000+moment().millisecond());
-        var uniqueID = this.makeId();
+        var uniqueID = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (var i = 0; i < 6; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
         var zkey = uniqueID+'.'+userID+'.'+timestamp;
         return zkey;
     },
 
     makeId: function () {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        for (var i = 0; i < 6; i++)
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
 
         return text;
     },

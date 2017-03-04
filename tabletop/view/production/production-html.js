@@ -1,6 +1,238 @@
 var templates = {};
 
-templates["../terminal/view/modules/home/home.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
+templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
+   "    <h4 class=\"page-header global-page-header center\">{{\"BIO\" | translate}}</h4>\n" +
+   "\n" +
+   "    <div class=\"panel global-panel-default\">\n" +
+   "        <div class=\"row\">\n" +
+   "            <div class=\"col s12\">\n" +
+   "                <textarea></textarea>\n" +
+   "            </div>\n" +
+   "        </div>\n" +
+   "    </div>\n" +
+   "    <!--<div class=\"pre-loader global-loader global-wrapper center valign-wrapper\" ng-show=\"!hideLoader\">-->\n" +
+   "    <!--<i class=\"fa fa-cog fa-spin fa-3x pre-loader  valign center-block\"></i>-->\n" +
+   "    <!--</div>-->\n" +
+   "</div>";
+
+templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
+   "    <h4 class=\"page-header global-page-header center\">\n" +
+   "        {{\"Character\" | translate}}\n" +
+   "    </h4>\n" +
+   "\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"!hideLoader\">\n" +
+   "        <div class=\"row attributes\">\n" +
+   "            <div class=\"col s4\">\n" +
+   "                <p class=\"main_info\">Name:</p>\n" +
+   "                <p class=\"main_info\">Player:</p>\n" +
+   "                <p class=\"main_info\">Chronicle:</p>\n" +
+   "                <p class=\"attr-space\"></p>\n" +
+   "                <p class=\"attr-group\">Physical</p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Strength</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Dexterity</span>\n" +
+   "                    <span class=\"attr-stat\">6</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Stamina</span>\n" +
+   "                    <span class=\"attr-stat\">6</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr-space\"></p>\n" +
+   "                <p class=\"attr-group\">Talents</p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Alertness</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Athletics</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Brawl</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Dodge</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Empathy</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Expression</span>\n" +
+   "                    <span class=\"attr-stat\">4</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Intimidation</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Leadership</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Streetwise</span>\n" +
+   "                    <span class=\"attr-stat\">4</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Subterfuge</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr-space\"></p>\n" +
+   "                <p class=\"attr-group\">Disciplines</p>\n" +
+   "\n" +
+   "            </div>\n" +
+   "            <div class=\"col s4\">\n" +
+   "                <p class=\"main_info\">Nature:</p>\n" +
+   "                <p class=\"main_info\">Demeanor:</p>\n" +
+   "                <p class=\"main_info\">Concept:</p>\n" +
+   "                <p class=\"attr-space\">Attributes</p>\n" +
+   "                <p class=\"attr-group\">Social</p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Charisma</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Manipulation</span>\n" +
+   "                    <span class=\"attr-stat\">6</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Appearance</span>\n" +
+   "                    <span class=\"attr-stat\">6</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr-space\">Abilities</p>\n" +
+   "                <p class=\"attr-group\">Skills</p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Animal Ken</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Crafts</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Drive</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Etiquette</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Firearms</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Performance</span>\n" +
+   "                    <span class=\"attr-stat\">4</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Melee</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Security</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Stealth</span>\n" +
+   "                    <span class=\"attr-stat\">4</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Survival</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr-space\">Advantages</p>\n" +
+   "                <p class=\"attr-group\">Backgrounds</p>\n" +
+   "            </div>\n" +
+   "            <div class=\"col s4\">\n" +
+   "                <p class=\"main_info\">Clan:</p>\n" +
+   "                <p class=\"main_info\">Generation:</p>\n" +
+   "                <p class=\"main_info\">Sire:</p>\n" +
+   "                <p class=\"attr-space\"></p>\n" +
+   "                <p class=\"attr-group\">Mental</p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Perception</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Intelligence</span>\n" +
+   "                    <span class=\"attr-stat\">6</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Wits</span>\n" +
+   "                    <span class=\"attr-stat\">6</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr-space\"></p>\n" +
+   "                <p class=\"attr-group\">Knowledges</p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Academics</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Computer</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Finance</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Investigation</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Law</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Linguistics</span>\n" +
+   "                    <span class=\"attr-stat\">4</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Medicine</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Occult</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Politics</span>\n" +
+   "                    <span class=\"attr-stat\">4</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Science</span>\n" +
+   "                    <span class=\"attr-stat\">7</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr-space\"></p>\n" +
+   "                <p class=\"attr-group\">Virtues</p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Conscience / Conviction</span>\n" +
+   "                    <span class=\"attr-stat\">5</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Self-Control / Instinct</span>\n" +
+   "                    <span class=\"attr-stat\">4</span>\n" +
+   "                </p>\n" +
+   "                <p class=\"attr\">\n" +
+   "                    <span class=\"attr-name\">Courage</span>\n" +
+   "                    <span class=\"attr-stat\">4</span>\n" +
+   "                </p>\n" +
+   "            </div>\n" +
+   "        </div>\n" +
+   "    </div>\n" +
+   "    <!--<div class=\"pre-loader global-loader global-wrapper center valign-wrapper\" ng-show=\"!hideLoader\">-->\n" +
+   "    <!--<i class=\"fa fa-cog fa-spin fa-3x pre-loader  valign center-block\"></i>-->\n" +
+   "    <!--</div>-->\n" +
+   "</div>\n" +
+   "";
+
+templates["../tabletop/view/modules/home/home.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
    "    <h4 class=\"page-header global-page-header center\">{{\"Character\" | translate}}</h4>\n" +
    "\n" +
    "    <div class=\"panel global-panel-default\">\n" +
@@ -14,231 +246,20 @@ templates["../terminal/view/modules/home/home.html"] = "<div class=\"global-wrap
    "            <ul class=\"collapsible\" data-collapsible=\"expandable\">\n" +
    "                <li>\n" +
    "                    <div class=\"collapsible-header\">\n" +
-   "                        <i class=\"material-icons\">accessibility</i> Stats.\n" +
+   "                        <i class=\"material-icons\">language</i> Status.\n" +
    "                    </div>\n" +
-   "                    <div class=\"collapsible-body attributes\">\n" +
-   "                        <div class=\"row\">\n" +
-   "                            <div class=\"col s4\">\n" +
-   "                                <p class=\"main_info\">Name:</p>\n" +
-   "                                <p class=\"main_info\">Player:</p>\n" +
-   "                                <p class=\"main_info\">Chronicle:</p>\n" +
-   "                                <p class=\"attr-space\"></p>\n" +
-   "                                <p class=\"attr-group\">Physical</p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Strength</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Dexterity</span>\n" +
-   "                                    <span class=\"attr-stat\">6</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Stamina</span>\n" +
-   "                                    <span class=\"attr-stat\">6</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr-space\"></p>\n" +
-   "                                <p class=\"attr-group\">Talents</p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Alertness</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Athletics</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Brawl</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Dodge</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Empathy</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Expression</span>\n" +
-   "                                    <span class=\"attr-stat\">4</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Intimidation</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Leadership</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Streetwise</span>\n" +
-   "                                    <span class=\"attr-stat\">4</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Subterfuge</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr-space\"></p>\n" +
-   "                                <p class=\"attr-group\">Disciplines</p>\n" +
-   "\n" +
-   "                            </div>\n" +
-   "                            <div class=\"col s4\">\n" +
-   "                                <p class=\"main_info\">Nature:</p>\n" +
-   "                                <p class=\"main_info\">Demeanor:</p>\n" +
-   "                                <p class=\"main_info\">Concept:</p>\n" +
-   "                                <p class=\"attr-space\">Attributes</p>\n" +
-   "                                <p class=\"attr-group\">Social</p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Charisma</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Manipulation</span>\n" +
-   "                                    <span class=\"attr-stat\">6</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Appearance</span>\n" +
-   "                                    <span class=\"attr-stat\">6</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr-space\">Abilities</p>\n" +
-   "                                <p class=\"attr-group\">Skills</p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Animal Ken</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Crafts</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Drive</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Etiquette</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Firearms</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Performance</span>\n" +
-   "                                    <span class=\"attr-stat\">4</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Melee</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Security</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Stealth</span>\n" +
-   "                                    <span class=\"attr-stat\">4</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Survival</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr-space\">Advantages</p>\n" +
-   "                                <p class=\"attr-group\">Backgrounds</p>\n" +
-   "                            </div>\n" +
-   "                            <div class=\"col s4\">\n" +
-   "                                <p class=\"main_info\">Clan:</p>\n" +
-   "                                <p class=\"main_info\">Generation:</p>\n" +
-   "                                <p class=\"main_info\">Sire:</p>\n" +
-   "                                <p class=\"attr-space\"></p>\n" +
-   "                                <p class=\"attr-group\">Mental</p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Perception</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Intelligence</span>\n" +
-   "                                    <span class=\"attr-stat\">6</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Wits</span>\n" +
-   "                                    <span class=\"attr-stat\">6</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr-space\"></p>\n" +
-   "                                <p class=\"attr-group\">Knowledges</p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Academics</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Computer</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Finance</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Investigation</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Law</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Linguistics</span>\n" +
-   "                                    <span class=\"attr-stat\">4</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Medicine</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Occult</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Politics</span>\n" +
-   "                                    <span class=\"attr-stat\">4</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Science</span>\n" +
-   "                                    <span class=\"attr-stat\">7</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr-space\"></p>\n" +
-   "                                <p class=\"attr-group\">Virtues</p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Conscience / Conviction</span>\n" +
-   "                                    <span class=\"attr-stat\">5</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Self-Control / Instinct</span>\n" +
-   "                                    <span class=\"attr-stat\">4</span>\n" +
-   "                                </p>\n" +
-   "                                <p class=\"attr\">\n" +
-   "                                    <span class=\"attr-name\">Courage</span>\n" +
-   "                                    <span class=\"attr-stat\">4</span>\n" +
-   "                                </p>\n" +
-   "                            </div>\n" +
-   "                        </div>\n" +
+   "                </li>\n" +
+   "                <li>\n" +
+   "                    <div class=\"collapsible-header\">\n" +
+   "                        <i class=\"material-icons\">accessibility</i> Charlist.\n" +
    "                    </div>\n" +
    "                </li>\n" +
    "                <li>\n" +
    "                    <div class=\"collapsible-header\">\n" +
    "                        <i class=\"material-icons\">assignment</i> Bio.\n" +
    "                    </div>\n" +
-   "                    <div class=\"collapsible-body\">\n" +
-   "                        <span>Lorem ipsum dolor sit amet.</span>\n" +
-   "                    </div>\n" +
    "                </li>\n" +
-   "                <li>\n" +
-   "                    <div class=\"collapsible-header\">\n" +
-   "                        <i class=\"material-icons\">language</i> Status.\n" +
-   "                    </div>\n" +
-   "                    <div class=\"collapsible-body\">\n" +
-   "                        <span>Lorem ipsum dolor sit amet.</span>\n" +
-   "                    </div>\n" +
-   "                </li>\n" +
+   "\n" +
    "                <li>\n" +
    "                    <div class=\"collapsible-header\">\n" +
    "                        <i class=\"material-icons\">people</i> Party (coming soon)\n" +
@@ -262,7 +283,7 @@ templates["../terminal/view/modules/home/home.html"] = "<div class=\"global-wrap
    "</script>\n" +
    "";
 
-templates["../terminal/view/modules/leftmenu/leftmenu.html"] = "<!DOCTYPE html>\n" +
+templates["../tabletop/view/modules/leftmenu/leftmenu.html"] = "<!DOCTYPE html>\n" +
    "<html lang=\"en\">\n" +
    "<head>\n" +
    "    <meta charset=\"UTF-8\">\n" +
@@ -273,7 +294,7 @@ templates["../terminal/view/modules/leftmenu/leftmenu.html"] = "<!DOCTYPE html>\
    "</body>\n" +
    "</html>";
 
-templates["../terminal/view/modules/login/login.html"] = "<div class=\"container login-container valign-wrapper\" ng-controller=\"Login\">\n" +
+templates["../tabletop/view/modules/login/login.html"] = "<div class=\"container login-container valign-wrapper\" ng-controller=\"Login\">\n" +
    "    <div class=\"login-panel panel panel-default valign center-block\">\n" +
    "        <div class=\"panel-heading my-new-heading\">\n" +
    "            <h3 class=\"panel-title center\">{{\"Sign In\" | translate}}</h3>\n" +
@@ -300,7 +321,7 @@ templates["../terminal/view/modules/login/login.html"] = "<div class=\"container
    "    </div>\n" +
    "</div>";
 
-templates["../terminal/view/modules/main/main.html"] = "<div id=\"page-wrapper\">\n" +
+templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\">\n" +
    "    <nav>\n" +
    "        <div class=\"nav-wrapper\">\n" +
    "            <div class=\"left\">\n" +
@@ -316,6 +337,21 @@ templates["../terminal/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "                    <li>\n" +
    "                        <a ng-click='menuLink(\"/games\")' ng-class=\"{active: activeTab=='/games'}\">\n" +
    "                            <i class=\"fa fa-globe fa-fw\"></i> {{\"Games\" | translate}}\n" +
+   "                        </a>\n" +
+   "                    </li>\n" +
+   "                    <li>\n" +
+   "                        <a ng-click='menuLink(\"/charlist\")' ng-class=\"{active: activeTab=='/charlist'}\">\n" +
+   "                            <i class=\"fa fa-address-card fa-fw\"></i> {{\"Charlist\" | translate}}\n" +
+   "                        </a>\n" +
+   "                    </li>\n" +
+   "                    <li>\n" +
+   "                        <a ng-click='menuLink(\"/bio\")' ng-class=\"{active: activeTab=='/bio'}\">\n" +
+   "                            <i class=\"fa fa-book fa-fw\"></i> {{\"Bio\" | translate}}\n" +
+   "                        </a>\n" +
+   "                    </li>\n" +
+   "                    <li>\n" +
+   "                        <a ng-click='menuLink(\"/actions\")' ng-class=\"{active: activeTab=='/actions'}\">\n" +
+   "                            <i class=\"fa fa-bolt fa-fw\"></i> {{\"Actions\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
    "                </ul>\n" +

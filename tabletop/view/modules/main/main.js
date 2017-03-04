@@ -20,19 +20,21 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
         var token = $cookieStore.get('token');
         function getUserInfo(token) {
             if (token) {
-                userRequests.getUserInfo(function (data) {
-                    if (data && !data.error) {
-                        $rootScope.isLoggedIn = true;
-                        $rootScope.isTerminalUser = true;
-                        $translate.use(locale);
+                userRequests.CRUDUser('accountInfo', {}, function (data) {
+                    $scope.error = data.error;
+                    $scope.message = data.message;
+                    if (!data.error) {
+                        var token = data.data.user_token;
+                        $cookieStore.put('token', token);
                         $rootScope.userInfo = data;
+                        $rootScope.isLoggedIn = true;
+                    }
+                    else {
+                        $scope.showToastError($scope.message);
                     }
                 });
-
             }
-            else {
-
-            }
+            $rootScope.isLoggedIn = false;
         }
         getUserInfo(token);
     }

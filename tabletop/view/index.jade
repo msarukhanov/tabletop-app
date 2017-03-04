@@ -15,4 +15,4 @@ html(lang='en' ng-app="tabletapApp")
 
         script var menu = '#{menu}';
 
-    body(ng-controller="MainCtrl" ng-include="!isLoggedIn && 'main' || 'login'")
+    body(ng-controller="MainCtrl" ng-include="isLoggedIn && 'main' || 'login'")
