@@ -95,3 +95,12 @@ app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http
         }
     }
 }]);
+app.directive('charList', ['$rootScope', function($rootScope){
+    return {
+        restrict: 'E',
+        scope: {
+            char: '=char'
+        },
+        template: $rootScope.userInfo.char_template || '<span class="login_to_server">Invalid server data.</span>'
+    };
+}]);

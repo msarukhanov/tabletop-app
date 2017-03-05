@@ -42994,210 +42994,304 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "    </h4>\n" +
    "\n" +
    "    <div class=\"panel global-panel-default\" ng-show=\"!hideLoader\">\n" +
-   "        <div class=\"row attributes\">\n" +
-   "            <div class=\"col s4\">\n" +
-   "                <p class=\"main_info\">Name:</p>\n" +
-   "                <p class=\"main_info\">Player:</p>\n" +
-   "                <p class=\"main_info\">Chronicle:</p>\n" +
-   "                <p class=\"attr-space\"></p>\n" +
-   "                <p class=\"attr-group\">Physical</p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Strength</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Dexterity</span>\n" +
-   "                    <span class=\"attr-stat\">6</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Stamina</span>\n" +
-   "                    <span class=\"attr-stat\">6</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr-space\"></p>\n" +
-   "                <p class=\"attr-group\">Talents</p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Alertness</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Athletics</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Brawl</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Dodge</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Empathy</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Expression</span>\n" +
-   "                    <span class=\"attr-stat\">4</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Intimidation</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Leadership</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Streetwise</span>\n" +
-   "                    <span class=\"attr-stat\">4</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Subterfuge</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr-space\"></p>\n" +
-   "                <p class=\"attr-group\">Disciplines</p>\n" +
+   "        <char-list char=\"currentChar\"></char-list>\n" +
+   "        <!--<div class=\"row vtm_attributes\">-->\n" +
+   "            <!--<div class=\"col s4\">-->\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Name</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Name}}</span>-->\n" +
+   "                <!--</p>-->\n" +
    "\n" +
-   "            </div>\n" +
-   "            <div class=\"col s4\">\n" +
-   "                <p class=\"main_info\">Nature:</p>\n" +
-   "                <p class=\"main_info\">Demeanor:</p>\n" +
-   "                <p class=\"main_info\">Concept:</p>\n" +
-   "                <p class=\"attr-space\">Attributes</p>\n" +
-   "                <p class=\"attr-group\">Social</p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Charisma</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Manipulation</span>\n" +
-   "                    <span class=\"attr-stat\">6</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Appearance</span>\n" +
-   "                    <span class=\"attr-stat\">6</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr-space\">Abilities</p>\n" +
-   "                <p class=\"attr-group\">Skills</p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Animal Ken</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Crafts</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Drive</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Etiquette</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Firearms</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Performance</span>\n" +
-   "                    <span class=\"attr-stat\">4</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Melee</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Security</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Stealth</span>\n" +
-   "                    <span class=\"attr-stat\">4</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Survival</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr-space\">Advantages</p>\n" +
-   "                <p class=\"attr-group\">Backgrounds</p>\n" +
-   "            </div>\n" +
-   "            <div class=\"col s4\">\n" +
-   "                <p class=\"main_info\">Clan:</p>\n" +
-   "                <p class=\"main_info\">Generation:</p>\n" +
-   "                <p class=\"main_info\">Sire:</p>\n" +
-   "                <p class=\"attr-space\"></p>\n" +
-   "                <p class=\"attr-group\">Mental</p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Perception</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Intelligence</span>\n" +
-   "                    <span class=\"attr-stat\">6</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Wits</span>\n" +
-   "                    <span class=\"attr-stat\">6</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr-space\"></p>\n" +
-   "                <p class=\"attr-group\">Knowledges</p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Academics</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Computer</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Finance</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Investigation</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Law</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Linguistics</span>\n" +
-   "                    <span class=\"attr-stat\">4</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Medicine</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Occult</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Politics</span>\n" +
-   "                    <span class=\"attr-stat\">4</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Science</span>\n" +
-   "                    <span class=\"attr-stat\">7</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr-space\"></p>\n" +
-   "                <p class=\"attr-group\">Virtues</p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Conscience / Conviction</span>\n" +
-   "                    <span class=\"attr-stat\">5</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Self-Control / Instinct</span>\n" +
-   "                    <span class=\"attr-stat\">4</span>\n" +
-   "                </p>\n" +
-   "                <p class=\"attr\">\n" +
-   "                    <span class=\"attr-name\">Courage</span>\n" +
-   "                    <span class=\"attr-stat\">4</span>\n" +
-   "                </p>\n" +
-   "            </div>\n" +
-   "        </div>\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Player</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Player}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Chronicle</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Chronicle}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\"></p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Physical</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Strength</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Strength}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Dexterity</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Dexterity}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Stamina</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Stamina}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\"></p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Talents</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Alertness</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Alertness}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Athletics</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Strength}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Brawl</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Brawl}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Dodge</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Dodge}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Empathy</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Empathy}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Expression</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Expression}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Intimidation</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Intimidation}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Leadership</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Leadership}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Streetwise</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Streetwise}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Subterfuge</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Subterfuge}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\"></p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Disciplines</p>-->\n" +
+   "\n" +
+   "            <!--</div>-->\n" +
+   "            <!--<div class=\"col s4\">-->\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Nature</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Nature}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Demeanor</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Demeanor}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Concept</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Concept}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\">Attributes</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Social</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Charisma</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Charisma}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Manipulation</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Manipulation}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Appearance</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Appearance}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\">Abilities</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Skills</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">AnimalKen</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.AnimalKen}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Crafts</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Crafts}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Drive</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Drive}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Etiquette</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Etiquette}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Firearms</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Firearms}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Performance</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Performance}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Melee</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Melee}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Security</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Security}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Stealth</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Stealth}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Survival</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Survival}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\">Advantages</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Backgrounds</p>-->\n" +
+   "            <!--</div>-->\n" +
+   "            <!--<div class=\"col s4\">-->\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Clan</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Clan}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Generation</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Generation}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"main_info\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Sire</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.main.Sire}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\"></p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Mental</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Perception</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Perception}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Intelligence</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Intelligence}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Wits</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.attr.Wits}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\"></p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Knowledges</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Academics</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Academics}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Computer</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Computer}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Finance</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Finance}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Investigation</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Investigation}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Law</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Law}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Linguistics</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Linguistics}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Medicine</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Medicine}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Occult</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Occult}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Politics</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Politics}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Science</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">{{char.abi.Science}}</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-space\"></p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr-group\">Virtues</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Conscience / Conviction</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">5</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Self-Control / Instinct</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">4</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "\n" +
+   "                <!--<p class=\"attr\">-->\n" +
+   "                    <!--<span class=\"attr-name\">Courage</span>-->\n" +
+   "                    <!--<span class=\"attr-stat\">4</span>-->\n" +
+   "                <!--</p>-->\n" +
+   "            <!--</div>-->\n" +
+   "        <!--</div>-->\n" +
    "    </div>\n" +
    "    <!--<div class=\"pre-loader global-loader global-wrapper center valign-wrapper\" ng-show=\"!hideLoader\">-->\n" +
    "    <!--<i class=\"fa fa-cog fa-spin fa-3x pre-loader  valign center-block\"></i>-->\n" +
@@ -43312,17 +43406,17 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "                            <i class=\"fa fa-globe fa-fw\"></i> {{\"Games\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
-   "                    <li>\n" +
+   "                    <li ng-if=\"userInfo.schema_id\">\n" +
    "                        <a ng-click='menuLink(\"/charlist\")' ng-class=\"{active: activeTab=='/charlist'}\">\n" +
    "                            <i class=\"fa fa-address-card fa-fw\"></i> {{\"Charlist\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
-   "                    <li>\n" +
+   "                    <li ng-if=\"userInfo.schema_id\">\n" +
    "                        <a ng-click='menuLink(\"/bio\")' ng-class=\"{active: activeTab=='/bio'}\">\n" +
    "                            <i class=\"fa fa-book fa-fw\"></i> {{\"Bio\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
-   "                    <li>\n" +
+   "                    <li ng-if=\"userInfo.schema_id\">\n" +
    "                        <a ng-click='menuLink(\"/actions\")' ng-class=\"{active: activeTab=='/actions'}\">\n" +
    "                            <i class=\"fa fa-bolt fa-fw\"></i> {{\"Actions\" | translate}}\n" +
    "                        </a>\n" +
@@ -43453,6 +43547,16 @@ app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http
         }
     }
 }]);
+app.directive('charList', ['$rootScope', function($rootScope){
+    return {
+        restrict: 'E',
+        scope: {
+            char: '=char'
+        },
+        template: $rootScope.userInfo.char_template || '<span class="login_to_server">Invalid server data.</span>'
+    };
+}]);
+
 app.controller('Home', ['$scope', '$rootScope', '$routeParams',
     function ($scope, $rootScope, $routeParams) {
 

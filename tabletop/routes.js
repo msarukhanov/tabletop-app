@@ -37,18 +37,31 @@ var knex = require('knex')({
 //    }, function(err) {
 //        console.log(err);
 //    });
-//knex.schema.alterTable('users', function(t) {
-//    t.unique('username')
+//knex.schema.alterTable('chars', function(table) {
+//    //table.unique('username')
+//    //table.dropColumn('char_id');
+//    //table.integer('char_id')
+//    //    .references('id')
+//    //    .inTable('chars');
+//    //table.dropColumn('char_id');
+//    //table.dropColumn('char_id');
+//    table.integer('charlist_id')
+//        .references('list_id')
+//        .inTable('charlists');
+//    table.integer('bio_id')
+//        .references('bio_id')
+//        .inTable('bios');
 //}).then(function(data) {
 //    console.log(data);
 //}, function(err) {
 //    console.log(err);
 //});
-//knex('users').insert({
-//    username: 'mmalkav',
+//knex('chars').insert({
+//    char_name: 'Vincent Krieg',
+//    user_id: 1,
 //    type: 'admin',
 //    password: '1',
-//    joined_at: new Date()
+//    created_at: new Date()
 //}).then(function(data) {
 //    console.log(data);
 //}, function(err) {
@@ -59,12 +72,12 @@ var knex = require('knex')({
 //    }, function(err) {
 //        console.log(err);
 //    });
-knex.select().table('users')
-    .then(function(data) {
-        console.log(data);
-    }, function(err) {
-        console.log(err);
-    });
+//knex.select().table('users')
+//    .then(function(data) {
+//        console.log(data);
+//    }, function(err) {
+//        console.log(err);
+//    });
 //knex.schema.createTableIfNotExists('servers', function(table){
 //    table.increments('id').primary();
 //    table.string('title');
@@ -74,16 +87,60 @@ knex.select().table('users')
 //        .inTable('users');
 //    table.dateTime('postDate');
 //});
-//knex.schema.createTableIfNotExists('comments', function(table){
+//knex.schema.createTableIfNotExists('chars', function(table){
 //    table.increments('id').primary();
-//    table.string('body');
-//    table.integer('author_id')
-//        .references('uid')
+//    table.string('char_name');
+//    table.integer('user_id')
+//        .references('user_id')
 //        .inTable('users');
-//    table.integer('post_id')
+//    //table.integer('charlist_id')
+//    //    .references('list_id')
+//    //    .inTable('charlists');
+//    //table.integer('bio_id')
+//    //    .references('bio_id')
+//    //    .inTable('bios');
+//    //table.integer('server_id')
+//    //    .references('server_id')
+//    //    .inTable('servers');
+//    table.dateTime('created_at');
+//}).then(function(data) {
+//    console.log(data);
+//}, function(err) {
+//    console.log(err);
+//});
+//knex.schema.createTableIfNotExists('charlists', function(table){
+//    table.increments('id').primary();
+//    table.integer('char_id')
 //        .references('id')
-//        .inTable('posts');
-//    table.dateTime('postDate');
+//        .inTable('chars');
+//    table.jsonb('list');
+//    table.dateTime('updated_at');
+//    table.dateTime('created_at');
+//}).then(function(data) {
+//    console.log(data);
+//}, function(err) {
+//    console.log(err);
+//});
+//knex.schema.createTableIfNotExists('chars', function(table){
+//    table.increments('id').primary();
+//    table.string('char_name');
+//    table.integer('user_id')
+//        .references('user_id')
+//        .inTable('users');
+//    //table.integer('charlist_id')
+//    //    .references('list_id')
+//    //    .inTable('charlists');
+//    //table.integer('bio_id')
+//    //    .references('bio_id')
+//    //    .inTable('bios');
+//    //table.integer('server_id')
+//    //    .references('server_id')
+//    //    .inTable('servers');
+//    table.dateTime('created_at');
+//}).then(function(data) {
+//    console.log(data);
+//}, function(err) {
+//    console.log(err);
 //});
 
 var redisRequests = require('./redisRequests');

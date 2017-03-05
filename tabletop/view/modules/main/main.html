@@ -16,17 +16,17 @@
                             <i class="fa fa-globe fa-fw"></i> {{"Games" | translate}}
                         </a>
                     </li>
-                    <li>
+                    <li ng-if="userInfo.schema_id">
                         <a ng-click='menuLink("/charlist")' ng-class="{active: activeTab=='/charlist'}">
                             <i class="fa fa-address-card fa-fw"></i> {{"Charlist" | translate}}
                         </a>
                     </li>
-                    <li>
+                    <li ng-if="userInfo.schema_id">
                         <a ng-click='menuLink("/bio")' ng-class="{active: activeTab=='/bio'}">
                             <i class="fa fa-book fa-fw"></i> {{"Bio" | translate}}
                         </a>
                     </li>
-                    <li>
+                    <li ng-if="userInfo.schema_id">
                         <a ng-click='menuLink("/actions")' ng-class="{active: activeTab=='/actions'}">
                             <i class="fa fa-bolt fa-fw"></i> {{"Actions" | translate}}
                         </a>

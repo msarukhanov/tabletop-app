@@ -51,22 +51,22 @@ nav .button-collapse i {
     width: 100%;
 }
 
-.attributes {
+.vtm_attributes {
     padding: 0 4px;
 }
-.attributes .col {
+.vtm_attributes .col {
     padding: 0;
     border-right: 1px solid #000;
     min-height: 500px;
 }
-.attributes .col:last-child {
+.vtm_attributes .col:last-child {
     border: none;
 }
-.attributes p {
+.vtm_attributes p {
     margin: 0;
     padding: 2px 0;
 }
-.attributes .main_info {
+.vtm_attributes .main_info {
     font-weight: 900;
     text-overflow: ellipsis;
     word-break: break-all;
@@ -74,7 +74,7 @@ nav .button-collapse i {
     overflow: hidden;
     padding-left: 3px;
 }
-.attributes .attr-space {
+.vtm_attributes .attr-space {
     padding: 5px 0;
     height: 30px;
     float: left;
@@ -82,7 +82,7 @@ nav .button-collapse i {
     text-align: center;
     font-size: 120%;
 }
-.attributes .attr-group {
+.vtm_attributes .attr-group {
     padding: 5px 0;
     border-top: 1px solid #000;
     border-bottom: 1px solid #000;
@@ -90,13 +90,13 @@ nav .button-collapse i {
     width: 100%;
     text-align: center;
 }
-.attributes .attr {
+.vtm_attributes .attr {
     width: 100%;
     float: left;
     padding-left: 2px;
 
 }
-.attributes .attr-stat {
+.vtm_attributes .attr-stat {
     float: right;
     margin-right: 2px;
     margin-top: 2px;
@@ -107,7 +107,7 @@ nav .button-collapse i {
     line-height: 17px;
     text-align: center;
 }
-.attributes .attr-name {
+.vtm_attributes .attr-name {
     float: left;
     max-width: 80%;
 }
