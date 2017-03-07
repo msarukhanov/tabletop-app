@@ -1,3 +1,35 @@
+app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', 'userRequests',
+    function ($scope, $rootScope, $routeParams, userRequests) {
+
+        $rootScope.hideLoader = false;
+        if($rootScope.userInfo && $rootScope.userInfo.char_id) {
+            if(!$rootScope.userInfo.char_info.charlist || !$rootScope.userInfo.server_info.charlist_name) {
+                userRequests.CRUDUser('getCharacterList', {
+                    char_id : $rootScope.userInfo.char_id
+                }, function (data) {
+                    $scope.error = data.error;
+                    $scope.message = data.message;
+                    $rootScope.hideLoader = true;
+                    if (!data.error) {
+                        console.log(data.data);
+                        $scope.schema = data.data.schema;
+                        $scope.currentChar = data.data.charlist.list;
+                    }
+                    else {
+                        //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
+                    }
+                });
+            }
+            else {
+                $scope.schema = $rootScope.userInfo.server_info.charlist_name;
+                $scope.currentChar = $rootScope.userInfo.char_info.charlist.list;
+                $rootScope.hideLoader = true;
+            }
+        }
+
+    }
+]);
+
 app.controller('Home', ['$scope', '$rootScope', '$routeParams',
     function ($scope, $rootScope, $routeParams) {
 
@@ -8,7 +40,7 @@ app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore',
     function ($scope, $rootScope, $routeParams, $cookieStore, userRequests, $localStorage, $translate) {
 
         window.deleteCookie = function() {
-            $cookieStore.remove('token');
+            $cookieStore.remove('ttapp_token');
         };
 
         $scope.showToastError = function (errorMsg) {
@@ -24,36 +56,31 @@ app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore',
                     $scope.message = data.message;
                     if (!data.error) {
                         var token = data.data.user_token;
-                        $cookieStore.put('token', token);
+                        $cookieStore.put('ttapp_token', token);
                         $rootScope.getUserData();
                     } else {
-                        $scope.showToastError($scope.message);
+                        if($scope.message == 'Already logged in.') {
+                            $cookieStore.remove('ttapp_token');
+                            userRequests.CRUDUser('signIn', formData, function (data) {
+                                $scope.error = data.error;
+                                $scope.message = data.message;
+                                if (!data.error) {
+                                    var token = data.data.user_token;
+                                    $cookieStore.put('ttapp_token', token);
+                                    $rootScope.getUserData();
+                                } else {
+                                    if($scope.message == 'Already logged in.') {
+                                        $cookieStore.remove('ttapp_token');
+                                    }
+                                }
+                            });
+                        }
                     }
                 });
             } else {
                 $scope.message = 'Fields are required!';
             }
         };
-
-        $rootScope.getUserData = function () {
-            var token = $cookieStore.get('token');
-            if (token) {
-                userRequests.CRUDUser('accountInfo', {}, function (data) {
-                    $scope.error = data.error;
-                    $scope.message = data.message;
-                    if (!data.error) {
-                        var token = data.data.user_token;
-                        $cookieStore.put('token', token);
-                        $rootScope.userInfo = data;
-                        $rootScope.isLoggedIn = true;
-                    }
-                    else {
-                        $scope.showToastError($scope.message);
-                    }
-                });
-            }
-        };
-
     }
 ]);
 app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStore', '$localStorage', '$location', '$translate',
@@ -62,6 +89,7 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
         $rootScope.isLoggedIn = false;
         $rootScope.readOnly = false;
         $rootScope.showLM = false;
+        $rootScope.hideLoader = true;
         $scope.menuLink = function (link) {
             $location.url(link);
             $rootScope.showLM = false;
@@ -70,30 +98,32 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
             $rootScope.showLM = !$rootScope.showLM;
         };
         $scope.logout = function () {
-            $cookieStore.remove('token');
+            $cookieStore.remove('ttapp_token');
             $rootScope.isLoggedIn = false;
             location.reload();
         };
 
-        var token = $cookieStore.get('token');
-        function getUserInfo(token) {
+        $rootScope.getUserData = function () {
+            $rootScope.hideLoader = false;
+            var token = $cookieStore.get('ttapp_token');
             if (token) {
                 userRequests.CRUDUser('accountInfo', {}, function (data) {
                     $scope.error = data.error;
                     $scope.message = data.message;
+                    $rootScope.hideLoader = true;
                     if (!data.error) {
                         var token = data.data.user_token;
-                        $cookieStore.put('token', token);
-                        $rootScope.userInfo = data;
+                        $cookieStore.put('ttapp_token', token);
+                        $rootScope.userInfo = data.data;
                         $rootScope.isLoggedIn = true;
                     }
                     else {
-                        $scope.showToastError($scope.message);
+                        //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
                     }
                 });
             }
-            $rootScope.isLoggedIn = false;
-        }
-        getUserInfo(token);
+            else $rootScope.isLoggedIn = false;
+        };
+        $rootScope.getUserData();
     }
 ]);

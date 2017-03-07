@@ -2,7 +2,7 @@ app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore',
     function ($scope, $rootScope, $routeParams, $cookieStore, userRequests, $localStorage, $translate) {
 
         window.deleteCookie = function() {
-            $cookieStore.remove('token');
+            $cookieStore.remove('ttapp_token');
         };
 
         $scope.showToastError = function (errorMsg) {
@@ -18,35 +18,30 @@ app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore',
                     $scope.message = data.message;
                     if (!data.error) {
                         var token = data.data.user_token;
-                        $cookieStore.put('token', token);
+                        $cookieStore.put('ttapp_token', token);
                         $rootScope.getUserData();
                     } else {
-                        $scope.showToastError($scope.message);
+                        if($scope.message == 'Already logged in.') {
+                            $cookieStore.remove('ttapp_token');
+                            userRequests.CRUDUser('signIn', formData, function (data) {
+                                $scope.error = data.error;
+                                $scope.message = data.message;
+                                if (!data.error) {
+                                    var token = data.data.user_token;
+                                    $cookieStore.put('ttapp_token', token);
+                                    $rootScope.getUserData();
+                                } else {
+                                    if($scope.message == 'Already logged in.') {
+                                        $cookieStore.remove('ttapp_token');
+                                    }
+                                }
+                            });
+                        }
                     }
                 });
             } else {
                 $scope.message = 'Fields are required!';
             }
         };
-
-        $rootScope.getUserData = function () {
-            var token = $cookieStore.get('token');
-            if (token) {
-                userRequests.CRUDUser('accountInfo', {}, function (data) {
-                    $scope.error = data.error;
-                    $scope.message = data.message;
-                    if (!data.error) {
-                        var token = data.data.user_token;
-                        $cookieStore.put('token', token);
-                        $rootScope.userInfo = data;
-                        $rootScope.isLoggedIn = true;
-                    }
-                    else {
-                        $scope.showToastError($scope.message);
-                    }
-                });
-            }
-        };
-
     }
 ]);

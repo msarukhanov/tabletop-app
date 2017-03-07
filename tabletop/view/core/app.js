@@ -17,11 +17,11 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
                 template : templates["../tabletop/view/modules/home/home.html"],
                 controller: 'Home'
             })
-            .when("/charlist", {
+            .when("/charlist?:char_id", {
                 template : templates["../tabletop/view/modules/charlist/charlist.html"],
-                controller: 'Home'
+                controller: 'Charlist'
             })
-            .when("/bio", {
+            .when("/bio?:char_id", {
                 template : templates["../tabletop/view/modules/bio/bio.html"],
                 controller: 'Home'
             })
@@ -43,7 +43,7 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
             return {
                 'request': function (config) {
                     config.headers = config.headers || {};
-                    var token = $cookieStore.get('token');
+                    var token = $cookieStore.get('ttapp_token');
                     if (token) {
                         config.headers.Authorization = token;
                     }
@@ -52,7 +52,7 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
                 'responseError': function(response) {
                     if(response.status === 401 || response.status === 403) {
                         $rootScope.isLoggedIn = false;
-                        $cookieStore.remove('token');
+                        $cookieStore.remove('ttapp_token');
                     }
                     return $q.reject(response);
                 }
@@ -70,11 +70,11 @@ app.run(['$rootScope', '$translate', '$cookieStore', '$templateCache',
         $templateCache.put('main', templates["../tabletop/view/modules/main/main.html"]);
 
         $rootScope.$on("$routeChangeStart", function () {
-            if(!$cookieStore.get('token')){
+            if(!$cookieStore.get('ttapp_token')){
                 $rootScope.isLoggedIn = false;
             }
         });
-        var token = $cookieStore.get('token');
+
         //$translate.use(locale);
 
     }
@@ -96,11 +96,12 @@ app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http
     }
 }]);
 app.directive('charList', ['$rootScope', function($rootScope){
+    console.log("../tabletop/view/modules/schemas/" + $rootScope.userInfo.server_info.charlist_name + ".html")
     return {
         restrict: 'E',
         scope: {
             char: '=char'
         },
-        template: $rootScope.userInfo.char_template || '<span class="login_to_server">Invalid server data.</span>'
+        template: templates["../tabletop/view/modules/schemas/" + $rootScope.userInfo.server_info.charlist_name + ".html"] || '<span class="login_to_server">Invalid server data.</span>'
     };
 }]);

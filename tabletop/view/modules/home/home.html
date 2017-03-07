@@ -1,49 +1,59 @@
 <div class="global-wrapper" ng-init="getCharacterData()">
-    <h4 class="page-header global-page-header center">{{"Character" | translate}}</h4>
+    <h4 class="page-header global-page-header center" ng-show="!userInfo.char_info.length">
+        {{userInfo.username}}
+        <!--{{"Character" | translate}}-->
+    </h4>
 
     <div class="panel global-panel-default">
-        <div class="panel-header" ng-show="!hideLoader">
-            {{"Vincent Krieg" | translate}}
-            <div class="btn-group pull-right header-right-column">
-                <label>( {{"VTM" | translate}}</label> <label>-</label> <label>{{"Detroit1" | translate}} )</label>
-            </div>
-        </div>
-        <div class="panel-body global-panel-body" ng-show="!hideLoader">
-            <ul class="collapsible" data-collapsible="expandable">
-                <li>
-                    <div class="collapsible-header">
-                        <i class="material-icons">language</i> Status.
-                    </div>
-                </li>
-                <li>
-                    <div class="collapsible-header">
-                        <i class="material-icons">accessibility</i> Charlist.
-                    </div>
-                </li>
-                <li>
-                    <div class="collapsible-header">
-                        <i class="material-icons">assignment</i> Bio.
-                    </div>
-                </li>
-
-                <li>
-                    <div class="collapsible-header">
-                        <i class="material-icons">people</i> Party (coming soon)
+        <div class="panel-body global-panel-body" ng-show="hideLoader">
+            <ul class="collapsible" data-collapsible="expandable" ng-show="!userInfo.char_info.length">
+                <li ng-show="userInfo.server_info.schema_id">
+                    <div class="collapsible-header active">
+                        <i class="material-icons">language</i> Current Game.
                     </div>
                     <div class="collapsible-body">
-                        <span>Shepard</span>, <span>Alice</span>
+                        <div class="row">
+                            <div class="col offset-s1 s4 bold">{{"Title" | translate}}</div>
+                            <div class="col s6">{{userInfo.server_info.name}}</div>
+                        </div>
                     </div>
                 </li>
+                <li ng-show="userInfo.char_info.char_id">
+                    <div class="collapsible-header active">
+                        <i class="material-icons">assignment</i> Current Character.
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="row">
+                            <div class="col offset-s1 s4 bold">{{"Name" | translate}}</div>
+                            <div class="col s6">{{userInfo.char_info.char_name}}</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">language</i> Available Games.
+                    </div>
+                    <div class="collapsible-body">
+                        <span>Lorem ipsum dolor sit amet.</span>
+                        <span>Lorem ipsum dolor sit amet.</span>
+                        <span>Lorem ipsum dolor sit amet.</span>
+                    </div>
+                </li>
+                <!--<li>-->
+                    <!--<div class="collapsible-header">-->
+                        <!--<i class="material-icons">people</i> Party (coming soon)-->
+                    <!--</div>-->
+                    <!--<div class="collapsible-body">-->
+                        <!--<span>Shepard</span>, <span>Alice</span>-->
+                    <!--</div>-->
+                <!--</li>-->
             </ul>
         </div>
-        <!--<div class="pre-loader global-loader global-wrapper center valign-wrapper" ng-show="!hideLoader">-->
-        <!--<i class="fa fa-cog fa-spin fa-3x pre-loader  valign center-block"></i>-->
-        <!--</div>-->
     </div>
 </div>
 
 <script>
     $('.collapsible').collapsible({
-        accordion: true
+        //accordion: false
     });
 </script>

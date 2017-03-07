@@ -43,7 +43,7 @@ app.set('views', '' + __dirname + '/tabletop/view');
 app.use('/favicon.ico', express.static('/images/theweave.ico'));
 require('./tabletop')('routes', app);
 
-var port = parseInt(process.env.PORT) || 8888;
+var port = parseInt(process.env.PORT) || 8877;
 app.listen(port, function() {
     console.log( 'Server listening on port %d in %s mode', port, 'dev' );
 });

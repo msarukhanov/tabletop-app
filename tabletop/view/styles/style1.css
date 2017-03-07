@@ -20,11 +20,22 @@
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
 }
-
+.bold {
+    font-weight: 900;
+}
 .login-container {
     height: 100%;
     position: fixed;
     width: 100%;
+}
+.login-panel {
+    margin-top: -50px;
+}
+.login-panel fieldset {
+    border: none;
+}
+.login-panel button.btn {
+    background-color: #000;
 }
 nav {
     background-color: #000;

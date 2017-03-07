@@ -16,17 +16,17 @@
                             <i class="fa fa-globe fa-fw"></i> {{"Games" | translate}}
                         </a>
                     </li>
-                    <li ng-if="userInfo.schema_id">
+                    <li ng-if="userInfo.server_info.schema_id">
                         <a ng-click='menuLink("/charlist")' ng-class="{active: activeTab=='/charlist'}">
                             <i class="fa fa-address-card fa-fw"></i> {{"Charlist" | translate}}
                         </a>
                     </li>
-                    <li ng-if="userInfo.schema_id">
+                    <li ng-if="userInfo.server_info.schema_id">
                         <a ng-click='menuLink("/bio")' ng-class="{active: activeTab=='/bio'}">
                             <i class="fa fa-book fa-fw"></i> {{"Bio" | translate}}
                         </a>
                     </li>
-                    <li ng-if="userInfo.schema_id">
+                    <li ng-if="userInfo.server_info.schema_id">
                         <a ng-click='menuLink("/actions")' ng-class="{active: activeTab=='/actions'}">
                             <i class="fa fa-bolt fa-fw"></i> {{"Actions" | translate}}
                         </a>
@@ -35,22 +35,25 @@
             </div>
             <ul class="right">
                 <li>
-                    <a href="" class="dropdown-button" data-activates="user-dropdown">
+                    <a href="">
                         <i class="fa fa-user fa-fw"></i> {{userInfo.username}}
                     </a>
                 </li>
                 <li>
-                    <a href="#" ng-click="logout()">{{"LOGOUT" | translate}}
-                        <i class="fa fa-sign-out"></i>
+                    <a href="/#!/" ng-click="logout()">
+                        {{"LOGOUT" | translate}} <i class="fa fa-sign-out"></i>
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div ng-view id="main">
+    <div ng-view id="main"></div>
 
+    <div class="pre-loader global-loader global-wrapper center valign-wrapper" ng-show="!hideLoader">
+        <i class="fa fa-cog fa-spin fa-3x pre-loader  valign center-block"></i>
     </div>
+
 </div>
 
 

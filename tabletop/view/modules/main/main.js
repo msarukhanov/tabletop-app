@@ -4,6 +4,7 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
         $rootScope.isLoggedIn = false;
         $rootScope.readOnly = false;
         $rootScope.showLM = false;
+        $rootScope.hideLoader = true;
         $scope.menuLink = function (link) {
             $location.url(link);
             $rootScope.showLM = false;
@@ -12,30 +13,32 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
             $rootScope.showLM = !$rootScope.showLM;
         };
         $scope.logout = function () {
-            $cookieStore.remove('token');
+            $cookieStore.remove('ttapp_token');
             $rootScope.isLoggedIn = false;
             location.reload();
         };
 
-        var token = $cookieStore.get('token');
-        function getUserInfo(token) {
+        $rootScope.getUserData = function () {
+            $rootScope.hideLoader = false;
+            var token = $cookieStore.get('ttapp_token');
             if (token) {
                 userRequests.CRUDUser('accountInfo', {}, function (data) {
                     $scope.error = data.error;
                     $scope.message = data.message;
+                    $rootScope.hideLoader = true;
                     if (!data.error) {
                         var token = data.data.user_token;
-                        $cookieStore.put('token', token);
-                        $rootScope.userInfo = data;
+                        $cookieStore.put('ttapp_token', token);
+                        $rootScope.userInfo = data.data;
                         $rootScope.isLoggedIn = true;
                     }
                     else {
-                        $scope.showToastError($scope.message);
+                        //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
                     }
                 });
             }
-            $rootScope.isLoggedIn = false;
-        }
-        getUserInfo(token);
+            else $rootScope.isLoggedIn = false;
+        };
+        $rootScope.getUserData();
     }
 ]);
