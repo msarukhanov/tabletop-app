@@ -16,6 +16,69 @@ var knex = require('knex')({
 
 var redisRequests = require('./redisRequests');
 
+var charJson = {
+    main : {
+        Name : "",
+        Player : "",
+        Chronicle : "",
+        Nature : "",
+        Demeanor : "",
+        Concept : "",
+        Clan : "",
+        Generation : "",
+        Sire : ""
+    },
+    attr : {
+        Alertness : "",
+        Athletics : "",
+        Brawl : "",
+        Dodge : "",
+        Empathy : "",
+        Expression : "",
+        Intimidation : "",
+        Leadership : "",
+        Streetwise : "",
+        Subterfuge : "",
+        AnimalKen : "",
+        Crafts : "",
+        Drive : "",
+        Etiquette : "",
+        Firearms : "",
+        Performance : "",
+        Melee : "",
+        Security : "",
+        Stealth : "",
+        Survival : "",
+        Academics : "",
+        Computer : "",
+        Finance : "",
+        Investigation : "",
+        Law : "",
+        Linguistics : "",
+        Medicine : "",
+        Occult : "",
+        Politics : "",
+        Science : ""
+    },
+    disciplines : {
+
+    },
+    advantages : {
+
+    },
+    virtues : {
+
+    }
+};
+
+//knex('charlists')
+//    .update({list: JSON.stringify(charJson)})
+//    .where({id : 1})
+//    .then(function(rows) {
+//        //console.log(rows[0]);
+//    }, function(error) {
+//        //console.log(error);
+//    });
 
 global.appRoute = function(app, route, callback, permissions) {
     return app.post('/api/'+route, function (req, res) {

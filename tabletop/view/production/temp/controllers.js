@@ -11,9 +11,8 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', 'userRequest
                     $scope.message = data.message;
                     $rootScope.hideLoader = true;
                     if (!data.error) {
-                        console.log(data.data);
                         $scope.schema = data.data.schema;
-                        $scope.currentChar = data.data.charlist.list;
+                        $scope.currentChar = data.data.char.list;
                     }
                     else {
                         //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
@@ -26,7 +25,9 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', 'userRequest
                 $rootScope.hideLoader = true;
             }
         }
-
+        else if($rootScope.userInfo && !$rootScope.userInfo.char_id) {
+            //TODO create character dialog
+        }
     }
 ]);
 

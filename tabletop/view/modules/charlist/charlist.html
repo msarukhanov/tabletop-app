@@ -4,12 +4,12 @@
         {{"Character" | translate}}
     </h4>
 
-    <h4 class="page-header global-page-header center" ng-show="hideLoader">
-        {{"Character" | translate}}
-    </h4>
+    <!--<h4 class="page-header global-page-header center" ng-show="hideLoader">-->
+        <!-- -->
+    <!--</h4>-->
 
     <div class="panel global-panel-default" ng-show="hideLoader">
-        <char-list char="currentChar"></char-list>
+        <char-list ng-if="currentChar" char="currentChar"></char-list>
     </div>
 
 </div>
