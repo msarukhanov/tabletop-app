@@ -1,4 +1,5 @@
-<svg style="&#10; width: 100%;&#10;" preserveAspectRatio="xMidYMid meet" viewBox="0 0 2513.000000 263.000000" height="100%" width="100%" version="1.0" xmlns="http://www.w3.org/2000/svg">
+<svg style="&#10; width: 100%;&#10;" preserveAspectRatio="xMidYMid meet" viewBox="0 0 2513.000000 263.000000"
+     height="100%" width="100%" version="1.0" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(0.000000,263.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
         <path d="M4500 2383 c-40 -12 -111 -16 -267 -17 -116 0 -211 -2 -210 -2 1 -1 42 -18 90 -38 171 -70 317 -155 371 -215 l19 -21 51 29 51 28 325 -77 c179 -43 318 -80 310 -83 -8 -3 -55 -13 -105 -22 -430 -79 -1041 -233 -1950 -491 -692 -197 -680 -194 -820 -201 -108 -5 -126 -4 -168 15 -36 16 -47 26 -47 43 0 21 1 21 18 6 30 -28 89 -22 123 12 36 36 37 60 3 100 -89 106 -264 30 -264 -114 0 -46 20 -84 65 -124 l36 -31 -389 0 -388 0 -48 49 -49 50 -46 -23 c-100 -51 -268 -101 -421 -127 l-75 -12 130 -22 c155 -26 256 -55 346 -100 l67 -33 28 29 28 29 4034 0 c2870 0 4039 3 4054 11 31 17 50 71 37 108 -6 17 -19 36 -29 41 -10 5 -746 181 -1636 390 -891 209 -1639 386 -1664 393 -44 13 -43 13 100 25 580 49 1095 66 1505 52 562 -20 895 -57 1563 -172 79 -14 112 -2 112 40 0 52 -16 60 -160 87 -1013 185 -1920 212 -3185 95 -115 -11 -241 -22 -280 -26 -65 -5 -105 3 -585 116 -283 66 -523 123 -532 126 -9 3 -28 25 -43 49 -29 50 -27 49 -105 28z m2620 -829 c855 -201 1557 -367 1559 -370 2 -2 -1365 -4 -3039 -4 -1674 0 -3041 2 -3039 4 4 4 535 156 1039 297 511 143 1061 279 1435 353 178 36 446 84 475 85 8 1 715 -164 1570 -365z"/>
         <path d="M20776 2356 c-14 -25 -34 -47 -44 -50 -9 -3 -267 -64 -572 -136 l-555 -130 -270 25 c-932 86 -1584 98 -2255 40 -449 -39 -1082 -136 -1122 -172 -37 -33 -12 -93 38 -93 13 0 128 18 256 40 390 66 758 108 1147 130 233 13 834 13 1096 0 200 -10 737 -49 742 -54 1 -1 -730 -174 -1625 -384 -1543 -363 -1628 -384 -1649 -410 -33 -39 -31 -94 3 -121 l27 -21 3990 0 3990 0 44 -41 c24 -22 47 -39 51 -37 135 71 267 112 452 140 47 7 74 14 60 16 -155 22 -346 76 -457 130 l-61 29 -38 -38 -38 -39 -364 0 -364 0 26 30 c55 66 53 149 -5 215 -56 63 -154 67 -213 9 -48 -49 -31 -107 38 -134 24 -9 36 -7 67 8 42 21 54 9 21 -21 -31 -29 -76 -39 -163 -39 -130 0 -208 19 -800 186 -1011 287 -1469 402 -2034 512 -76 15 -134 29 -127 32 6 2 170 41 364 87 l352 83 44 -28 45 -28 63 52 c69 57 211 134 342 186 45 18 82 33 82 34 0 0 -93 1 -208 1 -160 1 -222 5 -275 18 -38 9 -70 17 -72 17 -2 0 -15 -20 -29 -44z m-786 -491 c392 -68 897 -183 1425 -325 285 -76 1248 -349 1254 -355 2 -3 -1341 -5 -2985 -4 -1644 0 -2984 3 -2977 6 36 14 3013 711 3043 712 19 1 127 -15 240 -34z"/>
@@ -26,7 +27,7 @@
         <path d="M12515 615 c-44 -44 -22 -108 47 -135 87 -35 108 -72 67 -124 -16 -21 -29 -26 -62 -26 -31 0 -38 -3 -27 -10 8 -5 35 -10 58 -10 36 0 49 5 72 30 35 38 46 82 29 121 -9 22 -30 39 -80 65 -74 37 -88 63 -48 84 30 16 66 4 81 -26 18 -37 32 -34 39 9 5 34 4 35 -30 41 -77 13 -121 7 -146 -19z"/>
     </g>
 </svg>
-<div class="row vtm_main">
+<div class="row vtm_main" ng-init="prepareCharList()">
     <div class="col s12 center">
         {{char.main.Name}}
     </div>
@@ -66,18 +67,18 @@
     <div class="col s4">
 
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Name</span>-->
-            <!--<span class="attr-stat">{{char.main.Name}}</span>-->
+        <!--<span class="attr-name">Name</span>-->
+        <!--<span class="attr-stat">{{char.main.Name}}</span>-->
         <!--</p>-->
 
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Player</span>-->
-            <!--<span class="attr-stat">{{char.main.Player}}</span>-->
+        <!--<span class="attr-name">Player</span>-->
+        <!--<span class="attr-stat">{{char.main.Player}}</span>-->
         <!--</p>-->
 
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Chronicle</span>-->
-            <!--<span class="attr-stat">{{char.main.Chronicle}}</span>-->
+        <!--<span class="attr-name">Chronicle</span>-->
+        <!--<span class="attr-stat">{{char.main.Chronicle}}</span>-->
         <!--</p>-->
 
         <p class="attr-space"></p>
@@ -160,18 +161,18 @@
     </div>
     <div class="col s4">
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Nature</span>-->
-            <!--<span class="attr-stat">{{char.main.Nature}}</span>-->
+        <!--<span class="attr-name">Nature</span>-->
+        <!--<span class="attr-stat">{{char.main.Nature}}</span>-->
         <!--</p>-->
 
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Demeanor</span>-->
-            <!--<span class="attr-stat">{{char.main.Demeanor}}</span>-->
+        <!--<span class="attr-name">Demeanor</span>-->
+        <!--<span class="attr-stat">{{char.main.Demeanor}}</span>-->
         <!--</p>-->
 
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Concept</span>-->
-            <!--<span class="attr-stat">{{char.main.Concept}}</span>-->
+        <!--<span class="attr-name">Concept</span>-->
+        <!--<span class="attr-stat">{{char.main.Concept}}</span>-->
         <!--</p>-->
 
         <p class="attr-space">Attributes</p>
@@ -253,18 +254,18 @@
     </div>
     <div class="col s4">
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Clan</span>-->
-            <!--<span class="attr-stat">{{char.main.Clan}}</span>-->
+        <!--<span class="attr-name">Clan</span>-->
+        <!--<span class="attr-stat">{{char.main.Clan}}</span>-->
         <!--</p>-->
 
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Generation</span>-->
-            <!--<span class="attr-stat">{{char.main.Generation}}</span>-->
+        <!--<span class="attr-name">Generation</span>-->
+        <!--<span class="attr-stat">{{char.main.Generation}}</span>-->
         <!--</p>-->
 
         <!--<p class="main_info">-->
-            <!--<span class="attr-name">Sire</span>-->
-            <!--<span class="attr-stat">{{char.main.Sire}}</span>-->
+        <!--<span class="attr-name">Sire</span>-->
+        <!--<span class="attr-stat">{{char.main.Sire}}</span>-->
         <!--</p>-->
 
         <p class="attr-space"></p>
@@ -361,53 +362,286 @@
     </div>
 </div>
 
+<div id="modalCharMain" class="modal bottom-sheet mainform">
+    <a class="close-btn modal-close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </a>
+    <div class="modal-content">
+        <h4>Creating Character</h4>
+        <h5>Main info ( step 1 of 8 )</h5>
+        <form class="col s12" name="vtm_main_form">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="c_name" type="text" class="validate" ng-model="newChar.main.Name" required>
+                    <label for="c_name">Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="c_nature" type="text" class="validate" ng-model="newChar.main.Nature">
+                    <label for="c_nature">Nature</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="c_demeanor" type="text" class="validate" ng-model="newChar.main.Demeanor">
+                    <label for="c_demeanor">Demeanor</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="c_clan" type="text" class="validate" ng-model="newChar.main.Clan">
+                    <label for="c_clan">Clan</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="c_generation" type="text" class="validate" ng-model="newChar.main.Generation">
+                    <label for="c_generation">Generation</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="c_concept" type="text" class="validate" ng-model="newChar.main.Concept">
+                    <label for="c_concept">Concept</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="c_sire" type="text" class="validate" ng-model="newChar.main.Sire">
+                    <label for="c_sire">Sire</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
+                    Close
+                </a>
+                <button ng-disabled="!vtm_main_form.$valid" ng-click="createNext('modalCharMain','modalCharAttr1')" class="waves-effect waves-green btn-flat next-modal">
+                    Next
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalCharAttr1" class="modal bottom-sheet mainform">
+    <a class="close-btn modal-close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </a>
+    <div class="modal-content">
+        <h4>Creating Character</h4>
+        <h5>Attributes cost ( step 2 of 8 )</h5>
+        <form class="col s12" name="vtm_attr1_form">
+            <div class="row">
+                <div class="col s1"></div>
+                <div class="col s1"></div>
+                <div class="col s3">
+                    Physical
+                </div>
+                <div class="col s3">
+                   Social
+                </div>
+                <div class="col s3">
+                    Mental
+                </div>
+                <div class="col s1"></div>
+
+                <div class="col s1"></div>
+                <div class="col s1">
+                    3
+                </div>
+                <div class="col s3">
+                    <input id="a1" type="radio" class="a1" name="a1" ng-model="newChar.pref.Physical" value="3"><label for="a1"></label>
+                </div>
+                <div class="col s3">
+                    <input id="a2" type="radio" class="a2" name="a1" ng-model="newChar.pref.Social" value="3"><label for="a2"></label>
+                </div>
+                <div class="col s3">
+                    <input id="a3" type="radio" class="a3" name="a1" ng-model="newChar.pref.Mental" value="3"><label for="a3"></label>
+                </div>
+                <div class="col s1"></div>
+
+                <div class="col s1"></div>
+                <div class="col s1">
+                    5
+                </div>
+                <div class="col s3">
+                    <input id="b1" type="radio" class="a1" name="a2" ng-model="newChar.pref.Physical" value="5"><label for="b1"></label>
+                </div>
+                <div class="col s3">
+                    <input id="b2" type="radio" class="a2" name="a2" ng-model="newChar.pref.Social" value="5"><label for="b2"></label>
+                </div>
+                <div class="col s3">
+                    <input id="b3" type="radio" class="a3" name="a2" ng-model="newChar.pref.Mental" value="5"><label for="b3"></label>
+                </div>
+                <div class="col s1"></div>
+
+                <div class="col s1"></div>
+                <div class="col s1">
+                    8
+                </div>
+                <div class="col s3">
+                    <input id="c1" type="radio" class="a1" name="a3" ng-model="newChar.pref.Physical" value="8"><label for="c1"></label>
+                </div>
+                <div class="col s3">
+                    <input id="c2" type="radio" class="a2" name="a3" ng-model="newChar.pref.Social" value="8"><label for="c2"></label>
+                </div>
+                <div class="col s3">
+                    <input id="c3" type="radio" class="a3" name="a3" ng-model="newChar.pref.Mental" value="8"><label for="c3"></label>
+                </div>
+                <div class="col s1"></div>
+            </div>
+        </form>
+        <h5>Attributes starting ( step 3 of 8 )</h5>
+        <form class="col s12" name="vtm_attr1_form">
+            <div class="row">
+                <div class="col s1"></div>
+                <div class="col s1"></div>
+                <div class="col s3">
+                    Physical
+                </div>
+                <div class="col s3">
+                    Social
+                </div>
+                <div class="col s3">
+                    Mental
+                </div>
+                <div class="col s1"></div>
+
+                <div class="col s1"></div>
+                <div class="col s1">
+                    3
+                </div>
+                <div class="col s3">
+                    <input id="sa1" type="radio" class="a1" name="a1" ng-model="newChar.start.Physical" value="3"><label for="sa1"></label>
+                </div>
+                <div class="col s3">
+                    <input id="sa2" type="radio" class="a2" name="a1" ng-model="newChar.start.Social" value="3"><label for="sa2"></label>
+                </div>
+                <div class="col s3">
+                    <input id="sa3" type="radio" class="a3" name="a1" ng-model="newChar.start.Mental" value="3"><label for="sa3"></label>
+                </div>
+                <div class="col s1"></div>
+
+                <div class="col s1"></div>
+                <div class="col s1">
+                    5
+                </div>
+                <div class="col s3">
+                    <input id="sb1" type="radio" class="a1" name="a2" ng-model="newChar.start.Physical" value="5"><label for="sb1"></label>
+                </div>
+                <div class="col s3">
+                    <input id="sb2" type="radio" class="a2" name="a2" ng-model="newChar.start.Social" value="5"><label for="sb2"></label>
+                </div>
+                <div class="col s3">
+                    <input id="sb3" type="radio" class="a3" name="a2" ng-model="newChar.start.Mental" value="5"><label for="sb3"></label>
+                </div>
+                <div class="col s1"></div>
+
+                <div class="col s1"></div>
+                <div class="col s1">
+                    8
+                </div>
+                <div class="col s3">
+                    <input id="sc1" type="radio" class="a1" name="a3" ng-model="newChar.start.Physical" value="8"><label for="sc1"></label>
+                </div>
+                <div class="col s3">
+                    <input id="sc2" type="radio" class="a2" name="a3" ng-model="newChar.start.Social" value="8"><label for="sc2"></label>
+                </div>
+                <div class="col s3">
+                    <input id="sc3" type="radio" class="a3" name="a3" ng-model="newChar.start.Mental" value="8"><label for="sc3"></label>
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
+                    Close
+                </a>
+                <button ng-click="createNext('modalCharAttr1','modalCharAttr1')" class="waves-effect waves-green btn-flat next-modal">
+                    Next
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <style>
+    .modal.bottom-sheet.mainform {
+        max-height: 100%;
+    }
+    .next-modal {
+        color: #fff;
+        background-color: #000;
+        font-size: 16px;
+    }
+    .next-modal[disabled] {
+        background-color: #eee;
+    }
+    .modal .modal-footer .btn-flat.close-modal {
+        float: left;
+        border: 1px solid #000;
+    }
+    #modalCharAttr1 .col {
+        min-height: 31px;
+    }
+    .close-btn {
+        position: absolute;
+        font-size: 25px;
+        right: 10px;
+        top: 5px;
+        color: #000;
+    }
     .vtm_attributes, .vtm_main {
         padding: 0 10px;
         margin: 0 10px;
         border: 2px solid #000;
     }
+
     char-list {
         float: left;
         padding-top: 10px;
     }
+
     .vtm_main {
         border-top: none;
         border-bottom: none;
         padding-top: 15px;
         margin-top: -15px;
     }
+
     .vtm_attributes {
         padding-bottom: 15px;
         border-top: none;
     }
+
     .vtm_main .col, .vtm_attributes .col {
         padding: 0;
         border-right: 1px solid #000;
     }
+
     .vtm_main .col.s12 {
         border: none;
         font-size: 20px;
         font-weight: 900;
         text-decoration: underline;
     }
+
     .vtm_attributes .col {
         min-height: 500px;
     }
+
     .vtm_main .col:last-child, .vtm_attributes .col:last-child {
         border: none;
     }
+
     .vtm_main p {
         padding-left: 5px;
         margin: 0;
     }
+
     .vtm_attributes p {
         margin: 0;
         padding: 2px 0;
     }
+
     .vtm_main .attr-stat {
         font-weight: normal;
     }
+
     .vtm_main .main_info {
         font-weight: 900;
         text-overflow: ellipsis;
@@ -416,6 +650,7 @@
         overflow: hidden;
         padding-left: 3px;
     }
+
     .vtm_attributes .attr-space {
         padding: 5px 0;
         height: 30px;
@@ -427,6 +662,7 @@
         margin-right: -1px;
         background: #fff;
     }
+
     .vtm_attributes .attr-group {
         padding: 5px 0;
         border-top: 1px solid #000;
@@ -435,11 +671,13 @@
         width: 100%;
         text-align: center;
     }
+
     .vtm_attributes .attr {
         width: 100%;
         float: left;
         padding-left: 5px;
     }
+
     .vtm_attributes .attr-stat, .vtm_main .attr-stat {
         float: right;
         margin-right: 2px;
@@ -448,6 +686,7 @@
         line-height: 17px;
         text-align: center;
     }
+
     .vtm_attributes .attr-name {
         float: left;
         max-width: 80%;
@@ -455,3 +694,94 @@
         line-height: 14px;
     }
 </style>
+
+<script>
+    $(document).ready(function () {
+
+    });
+    window.prepareCharListFunctions = function($scope, $rootScope) {
+
+        function startEditFunctions() {
+
+        }
+
+        function startCreateFunctions() {
+            $scope.newChar = {
+                main : {
+                    Name : "",
+                    Player : "",
+                    Chronicle : "",
+                    Nature : "",
+                    Demeanor : "",
+                    Concept : "",
+                    Clan : "",
+                    Generation : "",
+                    Sire : ""
+                },
+                attr : {
+                    Alertness : "",
+                    Athletics : "",
+                    Brawl : "",
+                    Dodge : "",
+                    Empathy : "",
+                    Expression : "",
+                    Intimidation : "",
+                    Leadership : "",
+                    Streetwise : "",
+                    Subterfuge : "",
+                    AnimalKen : "",
+                    Crafts : "",
+                    Drive : "",
+                    Etiquette : "",
+                    Firearms : "",
+                    Performance : "",
+                    Melee : "",
+                    Security : "",
+                    Stealth : "",
+                    Survival : "",
+                    Academics : "",
+                    Computer : "",
+                    Finance : "",
+                    Investigation : "",
+                    Law : "",
+                    Linguistics : "",
+                    Medicine : "",
+                    Occult : "",
+                    Politics : "",
+                    Science : ""
+                },
+                disciplines : {
+
+                },
+                advantages : {
+
+                },
+                virtues : {
+
+                }
+            };
+            $(".attr1table input").click(function(){
+                $(".attr1table input."+this.className).not($(this)).each(function(){
+                    this.checked = false;
+                });
+            });
+            $scope.createNext = function(from, to) {
+                console.log($scope.newChar);
+                $('#'+from).closeModal();
+                $('#'+to).openModal();
+            };
+            //$('#modalCharMain').openModal();
+            $('#modalCharAttr1').openModal();
+        }
+
+        if ($scope.char.list && $scope.char.list.concept) {
+            console.log("start edit func");
+            $scope.currentChar = angular.copy($scope.char);
+            startEditFunctions();
+        }
+        else {
+            startCreateFunctions();
+        }
+    };
+    window.prepareCharList();
+</script>

@@ -8,8 +8,8 @@
         <!-- -->
     <!--</h4>-->
 
-    <div class="panel global-panel-default" ng-show="hideLoader">
-        <char-list ng-if="currentChar" char="currentChar"></char-list>
+    <div class="panel global-panel-default" ng-show="hideLoader" ng-if="currentChar && currentSchema">
+        <char-list char="currentChar"></char-list>
     </div>
 
 </div>

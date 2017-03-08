@@ -25,8 +25,8 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "        <!-- -->\n" +
    "    <!--</h4>-->\n" +
    "\n" +
-   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\">\n" +
-   "        <char-list ng-if=\"currentChar\" char=\"currentChar\"></char-list>\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"currentChar && currentSchema\">\n" +
+   "        <char-list char=\"currentChar\"></char-list>\n" +
    "    </div>\n" +
    "\n" +
    "</div>\n" +
@@ -196,7 +196,8 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "    });\n" +
    "</script>";
 
-templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&#10; width: 100%;&#10;\" preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 2513.000000 263.000000\" height=\"100%\" width=\"100%\" version=\"1.0\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&#10; width: 100%;&#10;\" preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 2513.000000 263.000000\"\n" +
+   "     height=\"100%\" width=\"100%\" version=\"1.0\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
    "    <g transform=\"translate(0.000000,263.000000) scale(0.100000,-0.100000)\" fill=\"#000000\" stroke=\"none\">\n" +
    "        <path d=\"M4500 2383 c-40 -12 -111 -16 -267 -17 -116 0 -211 -2 -210 -2 1 -1 42 -18 90 -38 171 -70 317 -155 371 -215 l19 -21 51 29 51 28 325 -77 c179 -43 318 -80 310 -83 -8 -3 -55 -13 -105 -22 -430 -79 -1041 -233 -1950 -491 -692 -197 -680 -194 -820 -201 -108 -5 -126 -4 -168 15 -36 16 -47 26 -47 43 0 21 1 21 18 6 30 -28 89 -22 123 12 36 36 37 60 3 100 -89 106 -264 30 -264 -114 0 -46 20 -84 65 -124 l36 -31 -389 0 -388 0 -48 49 -49 50 -46 -23 c-100 -51 -268 -101 -421 -127 l-75 -12 130 -22 c155 -26 256 -55 346 -100 l67 -33 28 29 28 29 4034 0 c2870 0 4039 3 4054 11 31 17 50 71 37 108 -6 17 -19 36 -29 41 -10 5 -746 181 -1636 390 -891 209 -1639 386 -1664 393 -44 13 -43 13 100 25 580 49 1095 66 1505 52 562 -20 895 -57 1563 -172 79 -14 112 -2 112 40 0 52 -16 60 -160 87 -1013 185 -1920 212 -3185 95 -115 -11 -241 -22 -280 -26 -65 -5 -105 3 -585 116 -283 66 -523 123 -532 126 -9 3 -28 25 -43 49 -29 50 -27 49 -105 28z m2620 -829 c855 -201 1557 -367 1559 -370 2 -2 -1365 -4 -3039 -4 -1674 0 -3041 2 -3039 4 4 4 535 156 1039 297 511 143 1061 279 1435 353 178 36 446 84 475 85 8 1 715 -164 1570 -365z\"/>\n" +
    "        <path d=\"M20776 2356 c-14 -25 -34 -47 -44 -50 -9 -3 -267 -64 -572 -136 l-555 -130 -270 25 c-932 86 -1584 98 -2255 40 -449 -39 -1082 -136 -1122 -172 -37 -33 -12 -93 38 -93 13 0 128 18 256 40 390 66 758 108 1147 130 233 13 834 13 1096 0 200 -10 737 -49 742 -54 1 -1 -730 -174 -1625 -384 -1543 -363 -1628 -384 -1649 -410 -33 -39 -31 -94 3 -121 l27 -21 3990 0 3990 0 44 -41 c24 -22 47 -39 51 -37 135 71 267 112 452 140 47 7 74 14 60 16 -155 22 -346 76 -457 130 l-61 29 -38 -38 -38 -39 -364 0 -364 0 26 30 c55 66 53 149 -5 215 -56 63 -154 67 -213 9 -48 -49 -31 -107 38 -134 24 -9 36 -7 67 8 42 21 54 9 21 -21 -31 -29 -76 -39 -163 -39 -130 0 -208 19 -800 186 -1011 287 -1469 402 -2034 512 -76 15 -134 29 -127 32 6 2 170 41 364 87 l352 83 44 -28 45 -28 63 52 c69 57 211 134 342 186 45 18 82 33 82 34 0 0 -93 1 -208 1 -160 1 -222 5 -275 18 -38 9 -70 17 -72 17 -2 0 -15 -20 -29 -44z m-786 -491 c392 -68 897 -183 1425 -325 285 -76 1248 -349 1254 -355 2 -3 -1341 -5 -2985 -4 -1644 0 -2984 3 -2977 6 36 14 3013 711 3043 712 19 1 127 -15 240 -34z\"/>\n" +
@@ -224,7 +225,7 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "        <path d=\"M12515 615 c-44 -44 -22 -108 47 -135 87 -35 108 -72 67 -124 -16 -21 -29 -26 -62 -26 -31 0 -38 -3 -27 -10 8 -5 35 -10 58 -10 36 0 49 5 72 30 35 38 46 82 29 121 -9 22 -30 39 -80 65 -74 37 -88 63 -48 84 30 16 66 4 81 -26 18 -37 32 -34 39 9 5 34 4 35 -30 41 -77 13 -121 7 -146 -19z\"/>\n" +
    "    </g>\n" +
    "</svg>\n" +
-   "<div class=\"row vtm_main\">\n" +
+   "<div class=\"row vtm_main\" ng-init=\"prepareCharList()\">\n" +
    "    <div class=\"col s12 center\">\n" +
    "        {{char.main.Name}}\n" +
    "    </div>\n" +
@@ -264,18 +265,18 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    <div class=\"col s4\">\n" +
    "\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Name</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Name}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Name</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Name}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Player</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Player}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Player</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Player}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Chronicle</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Chronicle}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Chronicle</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Chronicle}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <p class=\"attr-space\"></p>\n" +
@@ -358,18 +359,18 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    </div>\n" +
    "    <div class=\"col s4\">\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Nature</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Nature}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Nature</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Nature}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Demeanor</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Demeanor}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Demeanor</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Demeanor}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Concept</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Concept}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Concept</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Concept}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <p class=\"attr-space\">Attributes</p>\n" +
@@ -451,18 +452,18 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    </div>\n" +
    "    <div class=\"col s4\">\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Clan</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Clan}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Clan</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Clan}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Generation</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Generation}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Generation</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Generation}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <!--<p class=\"main_info\">-->\n" +
-   "            <!--<span class=\"attr-name\">Sire</span>-->\n" +
-   "            <!--<span class=\"attr-stat\">{{char.main.Sire}}</span>-->\n" +
+   "        <!--<span class=\"attr-name\">Sire</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">{{char.main.Sire}}</span>-->\n" +
    "        <!--</p>-->\n" +
    "\n" +
    "        <p class=\"attr-space\"></p>\n" +
@@ -559,53 +560,286 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    </div>\n" +
    "</div>\n" +
    "\n" +
+   "<div id=\"modalCharMain\" class=\"modal bottom-sheet mainform\">\n" +
+   "    <a class=\"close-btn modal-close\">\n" +
+   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
+   "    </a>\n" +
+   "    <div class=\"modal-content\">\n" +
+   "        <h4>Creating Character</h4>\n" +
+   "        <h5>Main info ( step 1 of 8 )</h5>\n" +
+   "        <form class=\"col s12\" name=\"vtm_main_form\">\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"input-field col s12\">\n" +
+   "                    <input id=\"c_name\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Name\" required>\n" +
+   "                    <label for=\"c_name\">Name</label>\n" +
+   "                </div>\n" +
+   "            </div>\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"input-field col s6\">\n" +
+   "                    <input id=\"c_nature\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Nature\">\n" +
+   "                    <label for=\"c_nature\">Nature</label>\n" +
+   "                </div>\n" +
+   "                <div class=\"input-field col s6\">\n" +
+   "                    <input id=\"c_demeanor\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Demeanor\">\n" +
+   "                    <label for=\"c_demeanor\">Demeanor</label>\n" +
+   "                </div>\n" +
+   "            </div>\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"input-field col s6\">\n" +
+   "                    <input id=\"c_clan\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Clan\">\n" +
+   "                    <label for=\"c_clan\">Clan</label>\n" +
+   "                </div>\n" +
+   "                <div class=\"input-field col s6\">\n" +
+   "                    <input id=\"c_generation\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Generation\">\n" +
+   "                    <label for=\"c_generation\">Generation</label>\n" +
+   "                </div>\n" +
+   "            </div>\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"input-field col s6\">\n" +
+   "                    <input id=\"c_concept\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Concept\">\n" +
+   "                    <label for=\"c_concept\">Concept</label>\n" +
+   "                </div>\n" +
+   "                <div class=\"input-field col s6\">\n" +
+   "                    <input id=\"c_sire\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Sire\">\n" +
+   "                    <label for=\"c_sire\">Sire</label>\n" +
+   "                </div>\n" +
+   "            </div>\n" +
+   "            <div class=\"modal-footer\">\n" +
+   "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
+   "                    Close\n" +
+   "                </a>\n" +
+   "                <button ng-disabled=\"!vtm_main_form.$valid\" ng-click=\"createNext('modalCharMain','modalCharAttr1')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                    Next\n" +
+   "                </button>\n" +
+   "            </div>\n" +
+   "        </form>\n" +
+   "    </div>\n" +
+   "</div>\n" +
+   "\n" +
+   "<div id=\"modalCharAttr1\" class=\"modal bottom-sheet mainform\">\n" +
+   "    <a class=\"close-btn modal-close\">\n" +
+   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
+   "    </a>\n" +
+   "    <div class=\"modal-content\">\n" +
+   "        <h4>Creating Character</h4>\n" +
+   "        <h5>Attributes cost ( step 2 of 8 )</h5>\n" +
+   "        <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    Physical\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                   Social\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    Mental\n" +
+   "                </div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s1\">\n" +
+   "                    3\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"a1\" type=\"radio\" class=\"a1\" name=\"a1\" ng-model=\"newChar.pref.Physical\" value=\"3\"><label for=\"a1\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"a2\" type=\"radio\" class=\"a2\" name=\"a1\" ng-model=\"newChar.pref.Social\" value=\"3\"><label for=\"a2\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"a3\" type=\"radio\" class=\"a3\" name=\"a1\" ng-model=\"newChar.pref.Mental\" value=\"3\"><label for=\"a3\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s1\">\n" +
+   "                    5\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"b1\" type=\"radio\" class=\"a1\" name=\"a2\" ng-model=\"newChar.pref.Physical\" value=\"5\"><label for=\"b1\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"b2\" type=\"radio\" class=\"a2\" name=\"a2\" ng-model=\"newChar.pref.Social\" value=\"5\"><label for=\"b2\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"b3\" type=\"radio\" class=\"a3\" name=\"a2\" ng-model=\"newChar.pref.Mental\" value=\"5\"><label for=\"b3\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s1\">\n" +
+   "                    8\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"c1\" type=\"radio\" class=\"a1\" name=\"a3\" ng-model=\"newChar.pref.Physical\" value=\"8\"><label for=\"c1\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"c2\" type=\"radio\" class=\"a2\" name=\"a3\" ng-model=\"newChar.pref.Social\" value=\"8\"><label for=\"c2\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"c3\" type=\"radio\" class=\"a3\" name=\"a3\" ng-model=\"newChar.pref.Mental\" value=\"8\"><label for=\"c3\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "            </div>\n" +
+   "        </form>\n" +
+   "        <h5>Attributes starting ( step 3 of 8 )</h5>\n" +
+   "        <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    Physical\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    Social\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    Mental\n" +
+   "                </div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s1\">\n" +
+   "                    3\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sa1\" type=\"radio\" class=\"a1\" name=\"a1\" ng-model=\"newChar.start.Physical\" value=\"3\"><label for=\"sa1\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sa2\" type=\"radio\" class=\"a2\" name=\"a1\" ng-model=\"newChar.start.Social\" value=\"3\"><label for=\"sa2\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sa3\" type=\"radio\" class=\"a3\" name=\"a1\" ng-model=\"newChar.start.Mental\" value=\"3\"><label for=\"sa3\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s1\">\n" +
+   "                    5\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sb1\" type=\"radio\" class=\"a1\" name=\"a2\" ng-model=\"newChar.start.Physical\" value=\"5\"><label for=\"sb1\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sb2\" type=\"radio\" class=\"a2\" name=\"a2\" ng-model=\"newChar.start.Social\" value=\"5\"><label for=\"sb2\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sb3\" type=\"radio\" class=\"a3\" name=\"a2\" ng-model=\"newChar.start.Mental\" value=\"5\"><label for=\"sb3\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "                <div class=\"col s1\">\n" +
+   "                    8\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sc1\" type=\"radio\" class=\"a1\" name=\"a3\" ng-model=\"newChar.start.Physical\" value=\"8\"><label for=\"sc1\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sc2\" type=\"radio\" class=\"a2\" name=\"a3\" ng-model=\"newChar.start.Social\" value=\"8\"><label for=\"sc2\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s3\">\n" +
+   "                    <input id=\"sc3\" type=\"radio\" class=\"a3\" name=\"a3\" ng-model=\"newChar.start.Mental\" value=\"8\"><label for=\"sc3\"></label>\n" +
+   "                </div>\n" +
+   "                <div class=\"col s1\"></div>\n" +
+   "            </div>\n" +
+   "            <div class=\"modal-footer\">\n" +
+   "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
+   "                    Close\n" +
+   "                </a>\n" +
+   "                <button ng-click=\"createNext('modalCharAttr1','modalCharAttr1')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                    Next\n" +
+   "                </button>\n" +
+   "            </div>\n" +
+   "        </form>\n" +
+   "    </div>\n" +
+   "</div>\n" +
+   "\n" +
    "<style>\n" +
+   "    .modal.bottom-sheet.mainform {\n" +
+   "        max-height: 100%;\n" +
+   "    }\n" +
+   "    .next-modal {\n" +
+   "        color: #fff;\n" +
+   "        background-color: #000;\n" +
+   "        font-size: 16px;\n" +
+   "    }\n" +
+   "    .next-modal[disabled] {\n" +
+   "        background-color: #eee;\n" +
+   "    }\n" +
+   "    .modal .modal-footer .btn-flat.close-modal {\n" +
+   "        float: left;\n" +
+   "        border: 1px solid #000;\n" +
+   "    }\n" +
+   "    #modalCharAttr1 .col {\n" +
+   "        min-height: 31px;\n" +
+   "    }\n" +
+   "    .close-btn {\n" +
+   "        position: absolute;\n" +
+   "        font-size: 25px;\n" +
+   "        right: 10px;\n" +
+   "        top: 5px;\n" +
+   "        color: #000;\n" +
+   "    }\n" +
    "    .vtm_attributes, .vtm_main {\n" +
    "        padding: 0 10px;\n" +
    "        margin: 0 10px;\n" +
    "        border: 2px solid #000;\n" +
    "    }\n" +
+   "\n" +
    "    char-list {\n" +
    "        float: left;\n" +
    "        padding-top: 10px;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_main {\n" +
    "        border-top: none;\n" +
    "        border-bottom: none;\n" +
    "        padding-top: 15px;\n" +
    "        margin-top: -15px;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes {\n" +
    "        padding-bottom: 15px;\n" +
    "        border-top: none;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_main .col, .vtm_attributes .col {\n" +
    "        padding: 0;\n" +
    "        border-right: 1px solid #000;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_main .col.s12 {\n" +
    "        border: none;\n" +
    "        font-size: 20px;\n" +
    "        font-weight: 900;\n" +
    "        text-decoration: underline;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes .col {\n" +
    "        min-height: 500px;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_main .col:last-child, .vtm_attributes .col:last-child {\n" +
    "        border: none;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_main p {\n" +
    "        padding-left: 5px;\n" +
    "        margin: 0;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes p {\n" +
    "        margin: 0;\n" +
    "        padding: 2px 0;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_main .attr-stat {\n" +
    "        font-weight: normal;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_main .main_info {\n" +
    "        font-weight: 900;\n" +
    "        text-overflow: ellipsis;\n" +
@@ -614,6 +848,7 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "        overflow: hidden;\n" +
    "        padding-left: 3px;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes .attr-space {\n" +
    "        padding: 5px 0;\n" +
    "        height: 30px;\n" +
@@ -625,6 +860,7 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "        margin-right: -1px;\n" +
    "        background: #fff;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes .attr-group {\n" +
    "        padding: 5px 0;\n" +
    "        border-top: 1px solid #000;\n" +
@@ -633,11 +869,13 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "        width: 100%;\n" +
    "        text-align: center;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes .attr {\n" +
    "        width: 100%;\n" +
    "        float: left;\n" +
    "        padding-left: 5px;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes .attr-stat, .vtm_main .attr-stat {\n" +
    "        float: right;\n" +
    "        margin-right: 2px;\n" +
@@ -646,10 +884,102 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "        line-height: 17px;\n" +
    "        text-align: center;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes .attr-name {\n" +
    "        float: left;\n" +
    "        max-width: 80%;\n" +
    "        font-size: 12px;\n" +
    "        line-height: 14px;\n" +
    "    }\n" +
-   "</style>";
+   "</style>\n" +
+   "\n" +
+   "<script>\n" +
+   "    $(document).ready(function () {\n" +
+   "\n" +
+   "    });\n" +
+   "    window.prepareCharListFunctions = function($scope, $rootScope) {\n" +
+   "\n" +
+   "        function startEditFunctions() {\n" +
+   "\n" +
+   "        }\n" +
+   "\n" +
+   "        function startCreateFunctions() {\n" +
+   "            $scope.newChar = {\n" +
+   "                main : {\n" +
+   "                    Name : \"\",\n" +
+   "                    Player : \"\",\n" +
+   "                    Chronicle : \"\",\n" +
+   "                    Nature : \"\",\n" +
+   "                    Demeanor : \"\",\n" +
+   "                    Concept : \"\",\n" +
+   "                    Clan : \"\",\n" +
+   "                    Generation : \"\",\n" +
+   "                    Sire : \"\"\n" +
+   "                },\n" +
+   "                attr : {\n" +
+   "                    Alertness : \"\",\n" +
+   "                    Athletics : \"\",\n" +
+   "                    Brawl : \"\",\n" +
+   "                    Dodge : \"\",\n" +
+   "                    Empathy : \"\",\n" +
+   "                    Expression : \"\",\n" +
+   "                    Intimidation : \"\",\n" +
+   "                    Leadership : \"\",\n" +
+   "                    Streetwise : \"\",\n" +
+   "                    Subterfuge : \"\",\n" +
+   "                    AnimalKen : \"\",\n" +
+   "                    Crafts : \"\",\n" +
+   "                    Drive : \"\",\n" +
+   "                    Etiquette : \"\",\n" +
+   "                    Firearms : \"\",\n" +
+   "                    Performance : \"\",\n" +
+   "                    Melee : \"\",\n" +
+   "                    Security : \"\",\n" +
+   "                    Stealth : \"\",\n" +
+   "                    Survival : \"\",\n" +
+   "                    Academics : \"\",\n" +
+   "                    Computer : \"\",\n" +
+   "                    Finance : \"\",\n" +
+   "                    Investigation : \"\",\n" +
+   "                    Law : \"\",\n" +
+   "                    Linguistics : \"\",\n" +
+   "                    Medicine : \"\",\n" +
+   "                    Occult : \"\",\n" +
+   "                    Politics : \"\",\n" +
+   "                    Science : \"\"\n" +
+   "                },\n" +
+   "                disciplines : {\n" +
+   "\n" +
+   "                },\n" +
+   "                advantages : {\n" +
+   "\n" +
+   "                },\n" +
+   "                virtues : {\n" +
+   "\n" +
+   "                }\n" +
+   "            };\n" +
+   "            $(\".attr1table input\").click(function(){\n" +
+   "                $(\".attr1table input.\"+this.className).not($(this)).each(function(){\n" +
+   "                    this.checked = false;\n" +
+   "                });\n" +
+   "            });\n" +
+   "            $scope.createNext = function(from, to) {\n" +
+   "                console.log($scope.newChar);\n" +
+   "                $('#'+from).closeModal();\n" +
+   "                $('#'+to).openModal();\n" +
+   "            };\n" +
+   "            //$('#modalCharMain').openModal();\n" +
+   "            $('#modalCharAttr1').openModal();\n" +
+   "        }\n" +
+   "\n" +
+   "        if ($scope.char.list && $scope.char.list.concept) {\n" +
+   "            console.log(\"start edit func\");\n" +
+   "            $scope.currentChar = angular.copy($scope.char);\n" +
+   "            startEditFunctions();\n" +
+   "        }\n" +
+   "        else {\n" +
+   "            startCreateFunctions();\n" +
+   "        }\n" +
+   "    };\n" +
+   "    window.prepareCharList();\n" +
+   "</script>";

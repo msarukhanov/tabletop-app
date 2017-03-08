@@ -96,12 +96,15 @@ app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http
     }
 }]);
 app.directive('charList', ['$rootScope', function($rootScope){
-    console.log("../tabletop/view/modules/schemas/" + $rootScope.userInfo.server_info.charlist_name + ".html")
     return {
         restrict: 'E',
         scope: {
             char: '=char'
         },
-        template: templates["../tabletop/view/modules/schemas/" + $rootScope.userInfo.server_info.charlist_name + ".html"] || '<span class="login_to_server">Invalid server data.</span>'
+        controller: ['$scope', function ($scope) {
+            console.log($scope);
+            window.prepareCharListFunctions($scope, $rootScope);
+        }],
+        template: templates["../tabletop/view/modules/schemas/" + $rootScope.currentSchema + ".html"] || '<span class="login_to_server">Invalid server data.</span>'
     };
 }]);
