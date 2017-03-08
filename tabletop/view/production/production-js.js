@@ -43722,11 +43722,126 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
    "                    Close\n" +
    "                </a>\n" +
-   "                <button ng-click=\"createNext('modalCharAttr1','modalCharAttr1')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                <button ng-click=\"createNext('modalCharAttr1','modalCharAttr2')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
    "                    Next\n" +
    "                </button>\n" +
    "            </div>\n" +
    "        </form>\n" +
+   "    </div>\n" +
+   "</div>\n" +
+   "\n" +
+   "<div id=\"modalCharAttr2\" class=\"modal bottom-sheet mainform\">\n" +
+   "    <a class=\"close-btn modal-close\">\n" +
+   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
+   "    </a>\n" +
+   "    <div class=\"modal-content\">\n" +
+   "        <h4>Creating Character</h4>\n" +
+   "\n" +
+   "        <div class=\"row\">\n" +
+   "            <h5>Physical attributes ( step 4 of 8 )</h5>\n" +
+   "            <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
+   "                <div class=\"col s4\" ng-repeat=\"stat in ['Strength','Dexterity','Stamina']\">\n" +
+   "                    <div class=\"col s12\">\n" +
+   "                        {{stat}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s12\">\n" +
+   "                        <i class=\"fa fa-minus\" ng-click=\"changeAttr(-1,stat, 'social')\" aria-hidden=\"true\"></i>{{newChar.attr[\"\"+stat] || 1}}<i ng-click=\"changeAttr(-1,stat, 'social')\" class=\"fa fa-plus\" aria-hidden=\"true\"></i>\n" +
+   "                    </div>\n" +
+   "                </div>\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" ng-click=\"changeAttr(-1,stat, 'social')\" aria-hidden=\"true\"></i>{{newChar.attr[\"\"+stat] || 1}}<i ng-click=\"changeAttr(-1,stat, 'social')\" class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Strength-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Strength || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Dexterity-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Dexterity || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Stamina-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Stamina || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "            </form>\n" +
+   "            <h5>Social attributes ( step 5 of 8 )</h5>\n" +
+   "            <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
+   "                <div class=\"col s4\" ng-repeat=\"stat in ['Charisma','Manipulation','Appearance']\">\n" +
+   "                    <div class=\"col s12\">\n" +
+   "                        {{stat}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s12\">\n" +
+   "                        <i class=\"fa fa-minus\" ng-click=\"changeAttr(-1,stat, 'social')\" aria-hidden=\"true\"></i>{{newChar.attr[\"\"+stat] || 1}}<i ng-click=\"changeAttr(-1,stat, 'social')\" class=\"fa fa-plus\" aria-hidden=\"true\"></i>\n" +
+   "                    </div>\n" +
+   "                </div>\n" +
+   "\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Charisma-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Charisma || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Manipulation-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Manipulation || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Appearance-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Appearance || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "            </form>\n" +
+   "            <h5>Mental attributes ( step 6 of 8 )</h5>\n" +
+   "            <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
+   "                <div class=\"col s4\" ng-repeat=\"stat in ['Perception','Intelligence','Wits']\">\n" +
+   "                    <div class=\"col s12\">\n" +
+   "                        {{stat}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s12\">\n" +
+   "                        <i class=\"fa fa-minus\" ng-click=\"changeAttr(-1,stat, 'social')\" aria-hidden=\"true\"></i>\n" +
+   "                        {{newChar.attr[\"\"+stat] || 1}}\n" +
+   "                        <i ng-click=\"changeAttr(-1,stat, 'social')\" class=\"fa fa-plus\" aria-hidden=\"true\"></i>\n" +
+   "                    </div>\n" +
+   "                </div>\n" +
+   "\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Perception-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Perception || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Intelligence-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Intelligence || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--Wits-->\n" +
+   "                <!--</div>-->\n" +
+   "                <!--<div class=\"col s12\">-->\n" +
+   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i> {{newChar.attr.Wits || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
+   "                <!--</div>-->\n" +
+   "                <div class=\"modal-footer\">\n" +
+   "                    <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
+   "                        Close\n" +
+   "                    </a>\n" +
+   "                    <button ng-click=\"createNext('modalCharAttr2','modalCharAttr2')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                        Next\n" +
+   "                    </button>\n" +
+   "                </div>\n" +
+   "            </form>\n" +
+   "        </div>\n" +
+   "\n" +
    "    </div>\n" +
    "</div>\n" +
    "\n" +
@@ -43942,7 +44057,7 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                $('#'+to).openModal();\n" +
    "            };\n" +
    "            //$('#modalCharMain').openModal();\n" +
-   "            $('#modalCharAttr1').openModal();\n" +
+   "            $('#modalCharAttr2').openModal();\n" +
    "        }\n" +
    "\n" +
    "        if ($scope.char.list && $scope.char.list.concept) {\n" +
