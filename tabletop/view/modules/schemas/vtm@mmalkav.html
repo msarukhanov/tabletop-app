@@ -427,125 +427,51 @@
         <h5>Attributes cost ( step 2 of 8 )</h5>
         <form class="col s12" name="vtm_attr1_form">
             <div class="row">
-                <div class="col s1"></div>
-                <div class="col s1"></div>
-                <div class="col s3">
-                    Physical
-                </div>
-                <div class="col s3">
-                   Social
-                </div>
-                <div class="col s3">
-                    Mental
-                </div>
-                <div class="col s1"></div>
-
-                <div class="col s1"></div>
-                <div class="col s1">
-                    3
-                </div>
-                <div class="col s3">
-                    <input id="a1" type="radio" class="a1" name="a1" ng-model="newChar.pref.Physical" value="3"><label for="a1"></label>
-                </div>
-                <div class="col s3">
-                    <input id="a2" type="radio" class="a2" name="a1" ng-model="newChar.pref.Social" value="3"><label for="a2"></label>
-                </div>
-                <div class="col s3">
-                    <input id="a3" type="radio" class="a3" name="a1" ng-model="newChar.pref.Mental" value="3"><label for="a3"></label>
-                </div>
-                <div class="col s1"></div>
-
-                <div class="col s1"></div>
-                <div class="col s1">
-                    5
-                </div>
-                <div class="col s3">
-                    <input id="b1" type="radio" class="a1" name="a2" ng-model="newChar.pref.Physical" value="5"><label for="b1"></label>
-                </div>
-                <div class="col s3">
-                    <input id="b2" type="radio" class="a2" name="a2" ng-model="newChar.pref.Social" value="5"><label for="b2"></label>
-                </div>
-                <div class="col s3">
-                    <input id="b3" type="radio" class="a3" name="a2" ng-model="newChar.pref.Mental" value="5"><label for="b3"></label>
-                </div>
-                <div class="col s1"></div>
-
-                <div class="col s1"></div>
-                <div class="col s1">
-                    8
-                </div>
-                <div class="col s3">
-                    <input id="c1" type="radio" class="a1" name="a3" ng-model="newChar.pref.Physical" value="8"><label for="c1"></label>
-                </div>
-                <div class="col s3">
-                    <input id="c2" type="radio" class="a2" name="a3" ng-model="newChar.pref.Social" value="8"><label for="c2"></label>
-                </div>
-                <div class="col s3">
-                    <input id="c3" type="radio" class="a3" name="a3" ng-model="newChar.pref.Mental" value="8"><label for="c3"></label>
-                </div>
-                <div class="col s1"></div>
+                <span>
+                    <div class="col s1"></div>
+                    <div class="col s1"></div>
+                    <div class="col s3" ng-repeat="group in attrGroups">
+                        {{group.title}}
+                    </div>
+                    <div class="col s1"></div>
+                </span>
+                <span ng-repeat="price in attrPoints.prices track by $index">
+                    <div class="col s1"></div>
+                    <div class="col s1">
+                        {{price}}
+                    </div>
+                    <div class="col s3" ng-repeat="group in attrGroups track by $index">
+                        <input id="pr{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}" name="a{{$parent.$index}}"
+                               ng-model="newChar.pref[''+group.title]" value="{{price}}">
+                        <label for="pr{{$parent.$index}}{{$index}}"></label>
+                    </div>
+                    <div class="col s1"></div>
+                </span>
             </div>
         </form>
         <h5>Attributes starting ( step 3 of 8 )</h5>
         <form class="col s12" name="vtm_attr1_form">
             <div class="row">
-                <div class="col s1"></div>
-                <div class="col s1"></div>
-                <div class="col s3">
-                    Physical
-                </div>
-                <div class="col s3">
-                    Social
-                </div>
-                <div class="col s3">
-                    Mental
-                </div>
-                <div class="col s1"></div>
-
-                <div class="col s1"></div>
-                <div class="col s1">
-                    3
-                </div>
-                <div class="col s3">
-                    <input id="sa1" type="radio" class="a1" name="a1" ng-model="newChar.start.Physical" value="3"><label for="sa1"></label>
-                </div>
-                <div class="col s3">
-                    <input id="sa2" type="radio" class="a2" name="a1" ng-model="newChar.start.Social" value="3"><label for="sa2"></label>
-                </div>
-                <div class="col s3">
-                    <input id="sa3" type="radio" class="a3" name="a1" ng-model="newChar.start.Mental" value="3"><label for="sa3"></label>
-                </div>
-                <div class="col s1"></div>
-
-                <div class="col s1"></div>
-                <div class="col s1">
-                    5
-                </div>
-                <div class="col s3">
-                    <input id="sb1" type="radio" class="a1" name="a2" ng-model="newChar.start.Physical" value="5"><label for="sb1"></label>
-                </div>
-                <div class="col s3">
-                    <input id="sb2" type="radio" class="a2" name="a2" ng-model="newChar.start.Social" value="5"><label for="sb2"></label>
-                </div>
-                <div class="col s3">
-                    <input id="sb3" type="radio" class="a3" name="a2" ng-model="newChar.start.Mental" value="5"><label for="sb3"></label>
-                </div>
-                <div class="col s1"></div>
-
-                <div class="col s1"></div>
-                <div class="col s1">
-                    8
-                </div>
-                <div class="col s3">
-                    <input id="sc1" type="radio" class="a1" name="a3" ng-model="newChar.start.Physical" value="8"><label for="sc1"></label>
-                </div>
-                <div class="col s3">
-                    <input id="sc2" type="radio" class="a2" name="a3" ng-model="newChar.start.Social" value="8"><label for="sc2"></label>
-                </div>
-                <div class="col s3">
-                    <input id="sc3" type="radio" class="a3" name="a3" ng-model="newChar.start.Mental" value="8"><label for="sc3"></label>
-                </div>
-                <div class="col s1"></div>
+                <span>
+                    <div class="col s1"></div>
+                    <div class="col s1"></div>
+                    <div class="col s3" ng-repeat="group in attrGroups">
+                        {{group.title}}
+                    </div>
+                    <div class="col s1"></div>
+                </span>
+                <span ng-repeat="price in attrPoints.starting track by $index">
+                    <div class="col s1"></div>
+                    <div class="col s1">
+                        {{price}}
+                    </div>
+                    <div class="col s3" ng-repeat="group in attrGroups track by $index">
+                        <input id="st{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}" name="a{{$parent.$index}}"
+                               ng-model="newChar.start[''+group.title]" value="{{price}}">
+                        <label for="st{{$parent.$index}}{{$index}}"></label>
+                    </div>
+                    <div class="col s1"></div>
+                </span>
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
@@ -565,112 +491,32 @@
     </a>
     <div class="modal-content">
         <h4>Creating Character</h4>
-
-        <div class="row">
-            <h5>Physical attributes ( step 4 of 8 )</h5>
+        <h5>Attributes ( step 4 of 8 )</h5>
+        <div class="row" ng-repeat="group in attrGroups">
+            <h6 class="center">
+                {{group.title}} (Remaining : {{newChar.start[''+group.title]}})
+            </h6>
             <form class="col s12" name="vtm_attr1_form">
-                <div class="col s4" ng-repeat="stat in ['Strength','Dexterity','Stamina']">
+                <div class="col s4" ng-repeat="stat in group.array">
                     <div class="col s12">
                         {{stat}}
                     </div>
-                    <div class="col s12">
-                        <i class="fa fa-minus" ng-click="changeAttr(-1,stat, 'social')" aria-hidden="true"></i>{{newChar.attr[""+stat] || 1}}<i ng-click="changeAttr(-1,stat, 'social')" class="fa fa-plus" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" ng-click="changeAttr(-1,stat, 'social')" aria-hidden="true"></i>{{newChar.attr[""+stat] || 1}}<i ng-click="changeAttr(-1,stat, 'social')" class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--Strength-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i>{{newChar.attr.Strength || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--Dexterity-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i>{{newChar.attr.Dexterity || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--Stamina-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i>{{newChar.attr.Stamina || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-            </form>
-            <h5>Social attributes ( step 5 of 8 )</h5>
-            <form class="col s12" name="vtm_attr1_form">
-                <div class="col s4" ng-repeat="stat in ['Charisma','Manipulation','Appearance']">
-                    <div class="col s12">
-                        {{stat}}
-                    </div>
-                    <div class="col s12">
-                        <i class="fa fa-minus" ng-click="changeAttr(-1,stat, 'social')" aria-hidden="true"></i>{{newChar.attr[""+stat] || 1}}<i ng-click="changeAttr(-1,stat, 'social')" class="fa fa-plus" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <!--<div class="col s12">-->
-                <!--Charisma-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i>{{newChar.attr.Charisma || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--Manipulation-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i>{{newChar.attr.Manipulation || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--Appearance-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i>{{newChar.attr.Appearance || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-            </form>
-            <h5>Mental attributes ( step 6 of 8 )</h5>
-            <form class="col s12" name="vtm_attr1_form">
-                <div class="col s4" ng-repeat="stat in ['Perception','Intelligence','Wits']">
-                    <div class="col s12">
-                        {{stat}}
-                    </div>
-                    <div class="col s12">
-                        <i class="fa fa-minus" ng-click="changeAttr(-1,stat, 'social')" aria-hidden="true"></i>
+                    <div class="col s12 center">
+                        <i class="fa fa-minus left" ng-click="changeAttr(-1, stat, group.title)" aria-hidden="true" ng-show="newChar.attr[''+stat] > 1"></i>
                         {{newChar.attr[""+stat] || 1}}
-                        <i ng-click="changeAttr(-1,stat, 'social')" class="fa fa-plus" aria-hidden="true"></i>
+                        <i class="fa fa-plus right" ng-click="changeAttr(1, stat, group.title)" aria-hidden="true" ng-show="newChar.attr[''+stat] < 5 && newChar.start[''+group.title] > 0"></i>
                     </div>
-                </div>
-
-                <!--<div class="col s12">-->
-                <!--Perception-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i>{{newChar.attr.Perception || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--Intelligence-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i>{{newChar.attr.Intelligence || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--Wits-->
-                <!--</div>-->
-                <!--<div class="col s12">-->
-                <!--<i class="fa fa-minus" aria-hidden="true"></i> {{newChar.attr.Wits || 1}}<i class="fa fa-plus" aria-hidden="true"></i>-->
-                <!--</div>-->
-                <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
-                        Close
-                    </a>
-                    <button ng-click="createNext('modalCharAttr2','modalCharAttr2')" class="waves-effect waves-green btn-flat next-modal">
-                        Next
-                    </button>
                 </div>
             </form>
         </div>
-
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
+                Close
+            </a>
+            <button ng-click="createNext('modalCharAttr2','modalCharAttr2')" class="waves-effect waves-green btn-flat next-modal">
+                Next
+            </button>
+        </div>
     </div>
 </div>
 
@@ -692,6 +538,9 @@
     }
     #modalCharAttr1 .col {
         min-height: 31px;
+    }
+    #modalCharAttr2 i {
+        line-height: 21px;
     }
     .close-btn {
         position: absolute;
@@ -834,6 +683,17 @@
                     Sire : ""
                 },
                 attr : {
+                    Strength : 1,
+                    Dexterity : 1,
+                    Stamina : 1,
+                    Charisma : 1,
+                    Manipulation : 1,
+                    Appearance : 1,
+                    Perception : 1,
+                    Intelligence : 1,
+                    Wits : 1
+                },
+                abilities : {
                     Alertness : "",
                     Athletics : "",
                     Brawl : "",
@@ -875,7 +735,28 @@
 
                 }
             };
-            $(".attr1table input").click(function(){
+            $scope.attrPoints = {
+                prices : [3, 5, 8],
+                starting : [3, 5, 8]
+            };
+            $scope.attrGroups = [
+                {
+                    title : "Physical",
+                    text : "Physical",
+                    array : ['Strength','Dexterity','Stamina']
+                },
+                {
+                    title : "Social",
+                    text : "Social",
+                    array : ['Charisma','Manipulation','Appearance']
+                },
+                {
+                    title : "Mental",
+                    text : "Mental",
+                    array : ['Perception','Intelligence','Wits']
+                }
+            ];
+            $(".attr1table input").click(function() {
                 $(".attr1table input."+this.className).not($(this)).each(function(){
                     this.checked = false;
                 });
@@ -885,8 +766,14 @@
                 $('#'+from).closeModal();
                 $('#'+to).openModal();
             };
+            $scope.changeAttr = function(val, attr, group) {
+                if($scope.newChar.start[''+group] - val > -1 && $scope.newChar.attr[''+attr] + val > 0 && $scope.newChar.attr[''+attr] + val < 6) {
+                    $scope.newChar.start[''+group] -= val;
+                    $scope.newChar.attr[''+attr] += val;
+                }
+            };
             //$('#modalCharMain').openModal();
-            $('#modalCharAttr2').openModal();
+            $('#modalCharAttr1').openModal();
         }
 
         if ($scope.char.list && $scope.char.list.concept) {

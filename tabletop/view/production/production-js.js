@@ -43598,125 +43598,51 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "        <h5>Attributes cost ( step 2 of 8 )</h5>\n" +
    "        <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
    "            <div class=\"row\">\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    Physical\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                   Social\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    Mental\n" +
-   "                </div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s1\">\n" +
-   "                    3\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"a1\" type=\"radio\" class=\"a1\" name=\"a1\" ng-model=\"newChar.pref.Physical\" value=\"3\"><label for=\"a1\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"a2\" type=\"radio\" class=\"a2\" name=\"a1\" ng-model=\"newChar.pref.Social\" value=\"3\"><label for=\"a2\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"a3\" type=\"radio\" class=\"a3\" name=\"a1\" ng-model=\"newChar.pref.Mental\" value=\"3\"><label for=\"a3\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s1\">\n" +
-   "                    5\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"b1\" type=\"radio\" class=\"a1\" name=\"a2\" ng-model=\"newChar.pref.Physical\" value=\"5\"><label for=\"b1\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"b2\" type=\"radio\" class=\"a2\" name=\"a2\" ng-model=\"newChar.pref.Social\" value=\"5\"><label for=\"b2\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"b3\" type=\"radio\" class=\"a3\" name=\"a2\" ng-model=\"newChar.pref.Mental\" value=\"5\"><label for=\"b3\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s1\">\n" +
-   "                    8\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"c1\" type=\"radio\" class=\"a1\" name=\"a3\" ng-model=\"newChar.pref.Physical\" value=\"8\"><label for=\"c1\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"c2\" type=\"radio\" class=\"a2\" name=\"a3\" ng-model=\"newChar.pref.Social\" value=\"8\"><label for=\"c2\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"c3\" type=\"radio\" class=\"a3\" name=\"a3\" ng-model=\"newChar.pref.Mental\" value=\"8\"><label for=\"c3\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
+   "                <span>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups\">\n" +
+   "                        {{group.title}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                </span>\n" +
+   "                <span ng-repeat=\"price in attrPoints.prices track by $index\">\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s1\">\n" +
+   "                        {{price}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups track by $index\">\n" +
+   "                        <input id=\"pr{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\" name=\"a{{$parent.$index}}\"\n" +
+   "                               ng-model=\"newChar.pref[''+group.title]\" value=\"{{price}}\">\n" +
+   "                        <label for=\"pr{{$parent.$index}}{{$index}}\"></label>\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                </span>\n" +
    "            </div>\n" +
    "        </form>\n" +
    "        <h5>Attributes starting ( step 3 of 8 )</h5>\n" +
    "        <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
    "            <div class=\"row\">\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    Physical\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    Social\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    Mental\n" +
-   "                </div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s1\">\n" +
-   "                    3\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sa1\" type=\"radio\" class=\"a1\" name=\"a1\" ng-model=\"newChar.start.Physical\" value=\"3\"><label for=\"sa1\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sa2\" type=\"radio\" class=\"a2\" name=\"a1\" ng-model=\"newChar.start.Social\" value=\"3\"><label for=\"sa2\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sa3\" type=\"radio\" class=\"a3\" name=\"a1\" ng-model=\"newChar.start.Mental\" value=\"3\"><label for=\"sa3\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s1\">\n" +
-   "                    5\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sb1\" type=\"radio\" class=\"a1\" name=\"a2\" ng-model=\"newChar.start.Physical\" value=\"5\"><label for=\"sb1\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sb2\" type=\"radio\" class=\"a2\" name=\"a2\" ng-model=\"newChar.start.Social\" value=\"5\"><label for=\"sb2\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sb3\" type=\"radio\" class=\"a3\" name=\"a2\" ng-model=\"newChar.start.Mental\" value=\"5\"><label for=\"sb3\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "\n" +
-   "                <div class=\"col s1\"></div>\n" +
-   "                <div class=\"col s1\">\n" +
-   "                    8\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sc1\" type=\"radio\" class=\"a1\" name=\"a3\" ng-model=\"newChar.start.Physical\" value=\"8\"><label for=\"sc1\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sc2\" type=\"radio\" class=\"a2\" name=\"a3\" ng-model=\"newChar.start.Social\" value=\"8\"><label for=\"sc2\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s3\">\n" +
-   "                    <input id=\"sc3\" type=\"radio\" class=\"a3\" name=\"a3\" ng-model=\"newChar.start.Mental\" value=\"8\"><label for=\"sc3\"></label>\n" +
-   "                </div>\n" +
-   "                <div class=\"col s1\"></div>\n" +
+   "                <span>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups\">\n" +
+   "                        {{group.title}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                </span>\n" +
+   "                <span ng-repeat=\"price in attrPoints.starting track by $index\">\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s1\">\n" +
+   "                        {{price}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups track by $index\">\n" +
+   "                        <input id=\"st{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\" name=\"a{{$parent.$index}}\"\n" +
+   "                               ng-model=\"newChar.start[''+group.title]\" value=\"{{price}}\">\n" +
+   "                        <label for=\"st{{$parent.$index}}{{$index}}\"></label>\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                </span>\n" +
    "            </div>\n" +
    "            <div class=\"modal-footer\">\n" +
    "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
@@ -43736,112 +43662,32 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    </a>\n" +
    "    <div class=\"modal-content\">\n" +
    "        <h4>Creating Character</h4>\n" +
-   "\n" +
-   "        <div class=\"row\">\n" +
-   "            <h5>Physical attributes ( step 4 of 8 )</h5>\n" +
+   "        <h5>Attributes ( step 4 of 8 )</h5>\n" +
+   "        <div class=\"row\" ng-repeat=\"group in attrGroups\">\n" +
+   "            <h6 class=\"center\">\n" +
+   "                {{group.title}} (Remaining : {{newChar.start[''+group.title]}})\n" +
+   "            </h6>\n" +
    "            <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
-   "                <div class=\"col s4\" ng-repeat=\"stat in ['Strength','Dexterity','Stamina']\">\n" +
+   "                <div class=\"col s4\" ng-repeat=\"stat in group.array\">\n" +
    "                    <div class=\"col s12\">\n" +
    "                        {{stat}}\n" +
    "                    </div>\n" +
-   "                    <div class=\"col s12\">\n" +
-   "                        <i class=\"fa fa-minus\" ng-click=\"changeAttr(-1,stat, 'social')\" aria-hidden=\"true\"></i>{{newChar.attr[\"\"+stat] || 1}}<i ng-click=\"changeAttr(-1,stat, 'social')\" class=\"fa fa-plus\" aria-hidden=\"true\"></i>\n" +
-   "                    </div>\n" +
-   "                </div>\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" ng-click=\"changeAttr(-1,stat, 'social')\" aria-hidden=\"true\"></i>{{newChar.attr[\"\"+stat] || 1}}<i ng-click=\"changeAttr(-1,stat, 'social')\" class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Strength-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Strength || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Dexterity-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Dexterity || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Stamina-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Stamina || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "            </form>\n" +
-   "            <h5>Social attributes ( step 5 of 8 )</h5>\n" +
-   "            <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
-   "                <div class=\"col s4\" ng-repeat=\"stat in ['Charisma','Manipulation','Appearance']\">\n" +
-   "                    <div class=\"col s12\">\n" +
-   "                        {{stat}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s12\">\n" +
-   "                        <i class=\"fa fa-minus\" ng-click=\"changeAttr(-1,stat, 'social')\" aria-hidden=\"true\"></i>{{newChar.attr[\"\"+stat] || 1}}<i ng-click=\"changeAttr(-1,stat, 'social')\" class=\"fa fa-plus\" aria-hidden=\"true\"></i>\n" +
-   "                    </div>\n" +
-   "                </div>\n" +
-   "\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Charisma-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Charisma || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Manipulation-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Manipulation || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Appearance-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Appearance || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "            </form>\n" +
-   "            <h5>Mental attributes ( step 6 of 8 )</h5>\n" +
-   "            <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
-   "                <div class=\"col s4\" ng-repeat=\"stat in ['Perception','Intelligence','Wits']\">\n" +
-   "                    <div class=\"col s12\">\n" +
-   "                        {{stat}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s12\">\n" +
-   "                        <i class=\"fa fa-minus\" ng-click=\"changeAttr(-1,stat, 'social')\" aria-hidden=\"true\"></i>\n" +
+   "                    <div class=\"col s12 center\">\n" +
+   "                        <i class=\"fa fa-minus left\" ng-click=\"changeAttr(-1, stat, group.title)\" aria-hidden=\"true\" ng-show=\"newChar.attr[''+stat] > 1\"></i>\n" +
    "                        {{newChar.attr[\"\"+stat] || 1}}\n" +
-   "                        <i ng-click=\"changeAttr(-1,stat, 'social')\" class=\"fa fa-plus\" aria-hidden=\"true\"></i>\n" +
+   "                        <i class=\"fa fa-plus right\" ng-click=\"changeAttr(1, stat, group.title)\" aria-hidden=\"true\" ng-show=\"newChar.attr[''+stat] < 5 && newChar.start[''+group.title] > 0\"></i>\n" +
    "                    </div>\n" +
-   "                </div>\n" +
-   "\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Perception-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Perception || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Intelligence-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>{{newChar.attr.Intelligence || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--Wits-->\n" +
-   "                <!--</div>-->\n" +
-   "                <!--<div class=\"col s12\">-->\n" +
-   "                <!--<i class=\"fa fa-minus\" aria-hidden=\"true\"></i> {{newChar.attr.Wits || 1}}<i class=\"fa fa-plus\" aria-hidden=\"true\"></i>-->\n" +
-   "                <!--</div>-->\n" +
-   "                <div class=\"modal-footer\">\n" +
-   "                    <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
-   "                        Close\n" +
-   "                    </a>\n" +
-   "                    <button ng-click=\"createNext('modalCharAttr2','modalCharAttr2')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
-   "                        Next\n" +
-   "                    </button>\n" +
    "                </div>\n" +
    "            </form>\n" +
    "        </div>\n" +
-   "\n" +
+   "        <div class=\"modal-footer\">\n" +
+   "            <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
+   "                Close\n" +
+   "            </a>\n" +
+   "            <button ng-click=\"createNext('modalCharAttr2','modalCharAttr2')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                Next\n" +
+   "            </button>\n" +
+   "        </div>\n" +
    "    </div>\n" +
    "</div>\n" +
    "\n" +
@@ -43863,6 +43709,9 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    }\n" +
    "    #modalCharAttr1 .col {\n" +
    "        min-height: 31px;\n" +
+   "    }\n" +
+   "    #modalCharAttr2 i {\n" +
+   "        line-height: 21px;\n" +
    "    }\n" +
    "    .close-btn {\n" +
    "        position: absolute;\n" +
@@ -44005,6 +43854,17 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                    Sire : \"\"\n" +
    "                },\n" +
    "                attr : {\n" +
+   "                    Strength : 1,\n" +
+   "                    Dexterity : 1,\n" +
+   "                    Stamina : 1,\n" +
+   "                    Charisma : 1,\n" +
+   "                    Manipulation : 1,\n" +
+   "                    Appearance : 1,\n" +
+   "                    Perception : 1,\n" +
+   "                    Intelligence : 1,\n" +
+   "                    Wits : 1\n" +
+   "                },\n" +
+   "                abilities : {\n" +
    "                    Alertness : \"\",\n" +
    "                    Athletics : \"\",\n" +
    "                    Brawl : \"\",\n" +
@@ -44046,7 +43906,28 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "\n" +
    "                }\n" +
    "            };\n" +
-   "            $(\".attr1table input\").click(function(){\n" +
+   "            $scope.attrPoints = {\n" +
+   "                prices : [3, 5, 8],\n" +
+   "                starting : [3, 5, 8]\n" +
+   "            };\n" +
+   "            $scope.attrGroups = [\n" +
+   "                {\n" +
+   "                    title : \"Physical\",\n" +
+   "                    text : \"Physical\",\n" +
+   "                    array : ['Strength','Dexterity','Stamina']\n" +
+   "                },\n" +
+   "                {\n" +
+   "                    title : \"Social\",\n" +
+   "                    text : \"Social\",\n" +
+   "                    array : ['Charisma','Manipulation','Appearance']\n" +
+   "                },\n" +
+   "                {\n" +
+   "                    title : \"Mental\",\n" +
+   "                    text : \"Mental\",\n" +
+   "                    array : ['Perception','Intelligence','Wits']\n" +
+   "                }\n" +
+   "            ];\n" +
+   "            $(\".attr1table input\").click(function() {\n" +
    "                $(\".attr1table input.\"+this.className).not($(this)).each(function(){\n" +
    "                    this.checked = false;\n" +
    "                });\n" +
@@ -44056,8 +43937,14 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                $('#'+from).closeModal();\n" +
    "                $('#'+to).openModal();\n" +
    "            };\n" +
+   "            $scope.changeAttr = function(val, attr, group) {\n" +
+   "                if($scope.newChar.start[''+group] - val > -1 && $scope.newChar.attr[''+attr] + val > 0 && $scope.newChar.attr[''+attr] + val < 6) {\n" +
+   "                    $scope.newChar.start[''+group] -= val;\n" +
+   "                    $scope.newChar.attr[''+attr] += val;\n" +
+   "                }\n" +
+   "            };\n" +
    "            //$('#modalCharMain').openModal();\n" +
-   "            $('#modalCharAttr2').openModal();\n" +
+   "            $('#modalCharAttr1').openModal();\n" +
    "        }\n" +
    "\n" +
    "        if ($scope.char.list && $scope.char.list.concept) {\n" +
