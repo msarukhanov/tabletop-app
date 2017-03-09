@@ -67,7 +67,8 @@
     </div>
 </div>
 <div class="row vtm_attributes">
-    <div class="col s4" ng-repeat="col in [['','',''],['Attributes','Abilities','Advantages'],['','','']] track by $index">
+    <!-- <div class="col s4" ng-repeat="col in [['','',''],['Attributes','Abilities','Advantages'],['','','']] track by $index"> -->
+    <div class="col s4" ng-repeat="col in [['',''],['Attributes','Abilities'],['','']] track by $index">
         <p class="attr-space">{{col[0]}}</p>
         <p class="attr-group">{{attrGroups[$index].title}}</p>
         <p class="attr" ng-repeat="attr in attrGroups[$index].array">
@@ -80,7 +81,7 @@
             <span class="attr-name">{{abi}}</span>
             <span class="attr-stat">{{char.abi[''+abi]}}</span>
         </p>
-        <p class="attr-space">{{col[2]}}</p>
+        <!--<p class="attr-space">{{col[2]}}</p>-->
     </div>
         <!--<p class="attr-group">Disciplines</p>-->
     <!--<p class="attr-group">Backgrounds</p>-->
@@ -149,7 +150,7 @@
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
-                    Close
+                    Cancel
                 </a>
                 <button ng-disabled="!vtm_main_form.$valid" ng-click="createNext('modalCharMain','modalCharAttr1')"
                         class="waves-effect waves-green btn-flat next-modal">
@@ -212,9 +213,9 @@
                 <div class="col s1"></div>
             </div>
             <div class="modal-footer">
-                <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
-                    Close
-                </a>
+                <button ng-click="createNext('modalCharAttr1','modalCharMain')" class="waves-effect waves-green btn-flat close-modal">
+                    Back
+                </button>
                 <button ng-click="createNext('modalCharAttr1','modalCharAttr2')"
                         class="waves-effect waves-green btn-flat next-modal">
                     Next
@@ -251,9 +252,9 @@
             </form>
         </div>
         <div class="modal-footer">
-            <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
-                Close
-            </a>
+            <button ng-click="createNext('modalCharAttr2','modalCharAttr1')" class="waves-effect waves-green btn-flat close-modal">
+                Back
+            </button>
             <button ng-click="createNext('modalCharAttr2','modalCharAbi1')"
                     class="waves-effect waves-green btn-flat next-modal">
                 Next
@@ -314,9 +315,9 @@
                 <div class="col s1"></div>
             </div>
             <div class="modal-footer">
-                <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
-                    Close
-                </a>
+                <button ng-click="createNext('modalCharAbi1','modalCharAttr2')" class="waves-effect waves-green btn-flat close-modal">
+                    Back
+                </button>
                 <button ng-click="createNext('modalCharAbi1','modalCharAbi2')" class="waves-effect waves-green btn-flat next-modal">
                     Next
                 </button>
@@ -356,12 +357,37 @@
             </form>
         </div>
         <div class="modal-footer">
-            <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
-                Close
-            </a>
-            <button ng-click="createNext('modalCharAbi2','modalCharAttr2')" class="waves-effect waves-green btn-flat next-modal">
+            <button ng-click="createNext('modalCharAbi2','modalCharAbi1')" class="waves-effect waves-green btn-flat close-modal">
+                Back
+            </button>
+            <button ng-click="createNext('modalCharAbi2','modalCharFinish')" class="waves-effect waves-green btn-flat next-modal">
                 Next
             </button>
         </div>
+    </div>
+</div>
+
+<div id="modalCharFinish" class="modal bottom-sheet mainform">
+    <a class="close-btn modal-close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </a>
+    <div class="modal-content">
+        <h4>Creating Character</h4>
+        <h5>Finish ( 8 of 8 )</h5>
+        <form class="col s12" name="vtm_main_form">
+            <div class="row">
+                <div class="input-field col s12">
+                    Currently it's an end of character creation procedure. <br> Enjoy!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="createNext('modalCharFinish','modalCharAbi3')" class="waves-effect waves-green btn-flat close-modal">
+                    Back
+                </button>
+                <button ng-click="createCharacter('modalCharFinish')" class="waves-effect waves-green btn-flat next-modal">
+                    Next
+                </button>
+            </div>
+        </form>
     </div>
 </div>

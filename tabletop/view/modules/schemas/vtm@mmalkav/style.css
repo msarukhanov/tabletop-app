@@ -23,6 +23,13 @@
 .charmatrix .row .col {
     padding: 0;
 }
+input[type=text]:focus:not([readonly])+label {
+    color: #ff0000;
+}
+input[type=text]:focus:not([readonly]) {
+    border-bottom: 1px solid #ff0000;
+    box-shadow: 0 1px 0 0 #ff0000;
+}
 .pmtbl .row .col {
     position: relative;
 }
@@ -114,7 +121,7 @@ char-list {
 }
 
 .vtm_attributes .col {
-    min-height: 500px;
+    /*min-height: 500px;*/
 }
 
 .vtm_main .col:last-child, .vtm_attributes .col:last-child {
