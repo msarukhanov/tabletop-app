@@ -1,4 +1,4 @@
-.modal.bottom-sheet.mainform {
+.modal.bottom-sheet {
     max-height: 100%;
 }
 
@@ -20,7 +20,9 @@
 .modal .col {
     min-height: 31px;
 }
-
+.charmatrix .row .col {
+    padding: 0;
+}
 .modal i {
     line-height: 21px;
 }

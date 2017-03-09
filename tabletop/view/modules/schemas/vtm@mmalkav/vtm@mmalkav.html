@@ -109,7 +109,7 @@
     </a>
     <div class="modal-content">
         <h4>Creating Character</h4>
-        <h5>Main info ( step 1 of 8 )</h5>
+        <h5>Main info ( 1 of 8 )</h5>
         <form class="col s12" name="vtm_main_form">
             <div class="row">
                 <div class="input-field col s12">
@@ -160,62 +160,56 @@
     </div>
 </div>
 
-<div id="modalCharAttr1" class="modal bottom-sheet mainform">
+<div id="modalCharAttr1" class="modal bottom-sheet charmatrix">
     <a class="close-btn modal-close">
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
         <h4>Creating Character</h4>
-        <h5>Attributes cost ( step 2 of 8 )</h5>
+        <h5>Attributes cost ( 2 of 8 )</h5>
         <form class="col s12" name="vtm_attr1_form">
-            <div class="row">
-                <span>
-                    <div class="col s1"></div>
-                    <div class="col s1"></div>
-                    <div class="col s3" ng-repeat="group in attrGroups">
-                        {{group.title}}
-                    </div>
-                    <div class="col s1"></div>
-                </span>
-                <span ng-repeat="price in attrPoints.prices track by $index">
-                    <div class="col s1"></div>
-                    <div class="col s1">
-                        {{price}}
-                    </div>
-                    <div class="col s3" ng-repeat="group in attrGroups track by $index">
-                        <input id="pr{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
-                               name="a{{$parent.$index}}"
-                               ng-model="newChar.pref[''+group.title]" value="{{price}}">
-                        <label for="pr{{$parent.$index}}{{$index}}"></label>
-                    </div>
-                    <div class="col s1"></div>
-                </span>
+            <div class="row" style="margin-bottom: 0px">
+                <div class="col s2"></div>
+                <div class="col s3" ng-repeat="group in attrGroups">
+                    {{group.title}}
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="row" ng-repeat="price in attrPoints.prices track by $index" style="margin-bottom: 10px">
+                <div class="col s1"></div>
+                <div class="col s1">
+                    {{price}}
+                </div>
+                <div class="col s3" ng-repeat="group in attrGroups track by $index">
+                    <input id="pr{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
+                           name="a{{$parent.$index}}"
+                           ng-model="newChar.pref[''+group.title]" value="{{price}}">
+                    <label for="pr{{$parent.$index}}{{$index}}"></label>
+                </div>
+                <div class="col s1"></div>
             </div>
         </form>
-        <h5>Attributes starting ( step 3 of 8 )</h5>
+        <h5>Attributes starting ( 3 of 8 )</h5>
         <form class="col s12" name="vtm_attr1_form">
-            <div class="row">
-                <span>
-                    <div class="col s1"></div>
-                    <div class="col s1"></div>
-                    <div class="col s3" ng-repeat="group in attrGroups">
-                        {{group.title}}
-                    </div>
-                    <div class="col s1"></div>
-                </span>
-                <span ng-repeat="price in attrPoints.starting track by $index">
-                    <div class="col s1"></div>
-                    <div class="col s1">
-                        {{price}}
-                    </div>
-                    <div class="col s3" ng-repeat="group in attrGroups track by $index">
-                        <input id="st{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
-                               name="a{{$parent.$index}}"
-                               ng-model="newChar.start[''+group.title]" value="{{price}}">
-                        <label for="st{{$parent.$index}}{{$index}}"></label>
-                    </div>
-                    <div class="col s1"></div>
-                </span>
+            <div class="row" style="margin-bottom: 0px">
+                <div class="col s2"></div>
+                <div class="col s3" ng-repeat="group in attrGroups">
+                    {{group.title}}
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="row" ng-repeat="price in attrPoints.starting track by $index" style="margin-bottom: 10px">
+                <div class="col s1"></div>
+                <div class="col s1">
+                    {{price}}
+                </div>
+                <div class="col s3" ng-repeat="group in attrGroups track by $index">
+                    <input id="st{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
+                           name="a{{$parent.$index}}"
+                           ng-model="newChar.start[''+group.title]" value="{{price}}">
+                    <label for="st{{$parent.$index}}{{$index}}"></label>
+                </div>
+                <div class="col s1"></div>
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
@@ -230,13 +224,13 @@
     </div>
 </div>
 
-<div id="modalCharAttr2" class="modal bottom-sheet mainform">
+<div id="modalCharAttr2" class="modal bottom-sheet charmatrix">
     <a class="close-btn modal-close">
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
         <h4>Creating Character</h4>
-        <h5>Attributes ( step 4 of 8 )</h5>
+        <h5>Attributes ( 4 of 8 )</h5>
         <div class="row" ng-repeat="group in attrGroups">
             <h6 class="center">
                 {{group.title}} (Remaining : {{newChar.start[''+group.title]}})
@@ -268,62 +262,56 @@
     </div>
 </div>
 
-<div id="modalCharAbi1" class="modal bottom-sheet mainform">
+<div id="modalCharAbi1" class="modal bottom-sheet charmatrix">
     <a class="close-btn modal-close">
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
         <h4>Creating Character</h4>
-        <h5>Abilities cost ( step 5 of 8 )</h5>
+        <h5>Abilities cost ( 5 of 8 )</h5>
         <form class="col s12" name="vtm_abilities1_form">
-            <div class="row">
-                <span>
-                    <div class="col s1"></div>
-                    <div class="col s1"></div>
-                    <div class="col s3" ng-repeat="group in abilitiesGroups">
-                        {{group.title}}
-                    </div>
-                    <div class="col s1"></div>
-                </span>
-                <span ng-repeat="price in abilitiesPoints.prices track by $index">
-                    <div class="col s1"></div>
-                    <div class="col s1">
-                        {{price}}
-                    </div>
-                    <div class="col s3" ng-repeat="group in abilitiesGroups track by $index">
-                        <input id="apr{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
-                               name="a{{$parent.$index}}"
-                               ng-model="newChar.pref[''+group.title]" value="{{price}}">
-                        <label for="apr{{$parent.$index}}{{$index}}"></label>
-                    </div>
-                    <div class="col s1"></div>
-                </span>
+            <div class="row" style="margin-bottom: 0px">
+                <div class="col s2"></div>
+                <div class="col s3" ng-repeat="group in abilitiesGroups">
+                    {{group.title}}
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="row" ng-repeat="price in abilitiesPoints.prices track by $index" style="margin-bottom: 10px">
+                <div class="col s1"></div>
+                <div class="col s1">
+                    {{price}}
+                </div>
+                <div class="col s3" ng-repeat="group in abilitiesGroups track by $index">
+                    <input id="apr{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
+                           name="a{{$parent.$index}}"
+                           ng-model="newChar.pref[''+group.title]" value="{{price}}">
+                    <label for="apr{{$parent.$index}}{{$index}}"></label>
+                </div>
+                <div class="col s1"></div>
             </div>
         </form>
-        <h5>Abilities starting ( step 6 of 8 )</h5>
+        <h5>Abilities starting ( 6 of 8 )</h5>
         <form class="col s12" name="vtm_abilities1_form">
-            <div class="row">
-                <span>
-                    <div class="col s1"></div>
-                    <div class="col s1"></div>
-                    <div class="col s3" ng-repeat="group in abilitiesGroups">
-                        {{group.title}}
-                    </div>
-                    <div class="col s1"></div>
-                </span>
-                <span ng-repeat="price in abilitiesPoints.starting track by $index">
-                    <div class="col s1"></div>
-                    <div class="col s1">
-                        {{price}}
-                    </div>
-                    <div class="col s3" ng-repeat="group in abilitiesGroups track by $index">
-                        <input id="ast{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
-                               name="a{{$parent.$index}}"
-                               ng-model="newChar.start[''+group.title]" value="{{price}}">
-                        <label for="ast{{$parent.$index}}{{$index}}"></label>
-                    </div>
-                    <div class="col s1"></div>
-                </span>
+            <div class="row" style="margin-bottom: 0px">
+                <div class="col s2"></div>
+                <div class="col s3" ng-repeat="group in abilitiesGroups">
+                    {{group.title}}
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="row" ng-repeat="price in abilitiesPoints.starting track by $index" style="margin-bottom: 0px">
+                <div class="col s1"></div>
+                <div class="col s1">
+                    {{price}}
+                </div>
+                <div class="col s3" ng-repeat="group in abilitiesGroups track by $index">
+                    <input id="ast{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
+                           name="a{{$parent.$index}}"
+                           ng-model="newChar.start[''+group.title]" value="{{price}}">
+                    <label for="ast{{$parent.$index}}{{$index}}"></label>
+                </div>
+                <div class="col s1"></div>
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
@@ -337,13 +325,13 @@
     </div>
 </div>
 
-<div id="modalCharAbi2" class="modal bottom-sheet mainform">
+<div id="modalCharAbi2" class="modal bottom-sheet charmatrix">
     <a class="close-btn modal-close">
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
         <h4>Creating Character</h4>
-        <h5>Abilities ( step 7 of 8 )</h5>
+        <h5>Abilities ( 7 of 8 )</h5>
         <div class="row" ng-repeat="group in abilitiesGroups">
             <h6 class="center">
                 {{group.title}} (Remaining : {{newChar.start[''+group.title]}})
