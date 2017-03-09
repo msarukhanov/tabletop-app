@@ -23,6 +23,31 @@
 .charmatrix .row .col {
     padding: 0;
 }
+.pmtbl .row .col {
+    position: relative;
+}
+.pmtbl .col i {
+    position: absolute;
+    margin: 0;
+}
+.pmtbl .col i.left {
+    left: 0;
+}
+.pmtbl .col i.right {
+    right: 0;
+}
+.pmtbl .col.s4:nth-child(3n+1) {
+    padding: 0 20px 0 0;
+    text-align: center;
+}
+.pmtbl .col.s4:nth-child(3n+2) {
+    padding: 0 10px 0 10px;
+    text-align: center;
+}
+.pmtbl .col.s4:nth-child(3n+3) {
+    padding: 0 0 0 20px;
+    text-align: center;
+}
 .modal i {
     line-height: 21px;
 }

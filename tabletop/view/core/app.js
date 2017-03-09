@@ -114,6 +114,6 @@ app.directive('charList', ['$rootScope', '$compile', '$templateRequest', '$templ
 
             });
         },
-        templateUrl: "/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html"
+        //templateUrl: "/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html"
     };
 }]);
