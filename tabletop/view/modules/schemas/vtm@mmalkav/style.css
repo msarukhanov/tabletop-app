@@ -1,0 +1,161 @@
+.modal.bottom-sheet.mainform {
+    max-height: 100%;
+}
+
+.next-modal {
+    color: #fff;
+    background-color: #000;
+    font-size: 16px;
+}
+
+.next-modal[disabled] {
+    background-color: #eee;
+}
+
+.modal .modal-footer .btn-flat.close-modal {
+    float: left;
+    border: 1px solid #000;
+}
+
+.modal .col {
+    min-height: 31px;
+}
+
+.modal i {
+    line-height: 21px;
+}
+char-list .modal i {
+    color: #ff0000;
+}
+char-list [type=radio].with-gap:checked+label:after, char-list [type=radio].with-gap:checked+label:before, char-list [type=radio]:checked+label:after {
+    background-color: #ff0000;
+    border: 2px solid #ff0000;
+}
+.pm-minus, .pm-plus {
+    width: 15px;
+    min-width: 15px;
+    float: left;
+    min-height: 21px;
+    height: 15px;
+}
+.pm-center {
+    width: calc(100% - 30px);
+    float: left;
+}
+
+.close-btn {
+    position: absolute;
+    font-size: 25px;
+    right: 10px;
+    top: 5px;
+    color: #000;
+}
+
+.vtm_attributes, .vtm_main {
+    padding: 0 10px;
+    margin: 0 10px;
+    border: 2px solid #000;
+}
+
+char-list {
+    float: left;
+    padding-top: 10px;
+}
+
+.vtm_main {
+    border-top: none;
+    border-bottom: none;
+    padding-top: 15px;
+    margin-top: -15px;
+}
+
+.vtm_attributes {
+    padding-bottom: 15px;
+    border-top: none;
+}
+
+.vtm_main .col, .vtm_attributes .col {
+    padding: 0;
+    border-right: 1px solid #000;
+}
+
+.vtm_main .col.s12 {
+    border: none;
+    font-size: 20px;
+    font-weight: 900;
+    text-decoration: underline;
+}
+
+.vtm_attributes .col {
+    min-height: 500px;
+}
+
+.vtm_main .col:last-child, .vtm_attributes .col:last-child {
+    border: none;
+}
+
+.vtm_main p {
+    padding-left: 5px;
+    margin: 0;
+}
+
+.vtm_attributes p {
+    margin: 0;
+    padding: 2px 0;
+}
+
+.vtm_main .attr-stat {
+    font-weight: normal;
+}
+
+.vtm_main .main_info {
+    font-weight: 900;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-left: 3px;
+}
+
+.vtm_attributes .attr-space {
+    padding: 5px 0;
+    height: 30px;
+    float: left;
+    width: 100%;
+    text-align: center;
+    font-size: 120%;
+    margin-left: -1px;
+    margin-right: -1px;
+    background: #fff;
+}
+
+.vtm_attributes .attr-group {
+    padding: 5px 0;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    float: left;
+    width: 100%;
+    text-align: center;
+}
+
+.vtm_attributes .attr {
+    width: 100%;
+    float: left;
+    padding-left: 5px;
+}
+
+.vtm_attributes .attr-stat, .vtm_main .attr-stat {
+    float: right;
+    margin-right: 2px;
+    margin-top: 2px;
+    border-radius: 50px;
+    line-height: 17px;
+    text-align: center;
+}
+
+.vtm_attributes .attr-name {
+    float: left;
+    max-width: 80%;
+    font-size: 12px;
+    line-height: 14px;
+}

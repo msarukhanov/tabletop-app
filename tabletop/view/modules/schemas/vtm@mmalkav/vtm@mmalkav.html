@@ -27,6 +27,10 @@
         <path d="M12515 615 c-44 -44 -22 -108 47 -135 87 -35 108 -72 67 -124 -16 -21 -29 -26 -62 -26 -31 0 -38 -3 -27 -10 8 -5 35 -10 58 -10 36 0 49 5 72 30 35 38 46 82 29 121 -9 22 -30 39 -80 65 -74 37 -88 63 -48 84 30 16 66 4 81 -26 18 -37 32 -34 39 9 5 34 4 35 -30 41 -77 13 -121 7 -146 -19z"/>
     </g>
 </svg>
+
+<link rel="stylesheet" href="/files/modules/schemas/vtm@mmalkav/style.css">
+<script src="/files/modules/schemas/vtm@mmalkav/script.js"></script>
+
 <div class="row vtm_main" ng-init="prepareCharList()">
     <div class="col s12 center">
         {{char.main.Name}}
@@ -325,8 +329,7 @@
                 <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
                     Close
                 </a>
-                <button ng-click="createNext('modalCharAbi1','modalCharAbi2')"
-                        class="waves-effect waves-green btn-flat next-modal">
+                <button ng-click="createNext('modalCharAbi1','modalCharAbi2')" class="waves-effect waves-green btn-flat next-modal">
                     Next
                 </button>
             </div>
@@ -351,11 +354,15 @@
                         {{stat}}
                     </div>
                     <div class="col s12 center">
-                        <i class="fa fa-minus left" ng-click="changeStat('abilities', -1, stat, group.title)" aria-hidden="true"
-                           ng-show="newChar.abilities[''+stat] > 1"></i>
-                        {{newChar.abilities[""+stat] || 1}}
-                        <i class="fa fa-plus right" ng-click="changeStat('abilities', 1, stat, group.title)" aria-hidden="true"
-                           ng-show="newChar.abilities[''+stat] < 5 && newChar.start[''+group.title] > 0"></i>
+                        <div class="pm-minus">
+                            <i class="fa fa-minus left" ng-click="changeStat('abilities', -1, stat, group.title)" aria-hidden="true" ng-show="newChar.abilities[''+stat] > 0"></i>
+                        </div>
+                        <div class="pm-center">
+                            {{newChar.abilities[""+stat] || 0}}
+                        </div>
+                        <div class="pm-plus">
+                            <i class="fa fa-plus right" ng-click="changeStat('abilities', 1, stat, group.title)" aria-hidden="true" ng-show="newChar.abilities[''+stat] < 5 && newChar.start[''+group.title] > 0"></i>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -364,296 +371,9 @@
             <a class="modal-action modal-close waves-effect waves-green btn-flat close-modal">
                 Close
             </a>
-            <button ng-click="createNext('modalCharAbi2','modalCharAttr2')"
-                    class="waves-effect waves-green btn-flat next-modal">
+            <button ng-click="createNext('modalCharAbi2','modalCharAttr2')" class="waves-effect waves-green btn-flat next-modal">
                 Next
             </button>
         </div>
     </div>
 </div>
-
-<style>
-    .modal.bottom-sheet.mainform {
-        max-height: 100%;
-    }
-
-    .next-modal {
-        color: #fff;
-        background-color: #000;
-        font-size: 16px;
-    }
-
-    .next-modal[disabled] {
-        background-color: #eee;
-    }
-
-    .modal .modal-footer .btn-flat.close-modal {
-        float: left;
-        border: 1px solid #000;
-    }
-
-    .modal .col {
-        min-height: 31px;
-    }
-
-    #modalCharAttr2 i {
-        line-height: 21px;
-    }
-
-    .close-btn {
-        position: absolute;
-        font-size: 25px;
-        right: 10px;
-        top: 5px;
-        color: #000;
-    }
-
-    .vtm_attributes, .vtm_main {
-        padding: 0 10px;
-        margin: 0 10px;
-        border: 2px solid #000;
-    }
-
-    char-list {
-        float: left;
-        padding-top: 10px;
-    }
-
-    .vtm_main {
-        border-top: none;
-        border-bottom: none;
-        padding-top: 15px;
-        margin-top: -15px;
-    }
-
-    .vtm_attributes {
-        padding-bottom: 15px;
-        border-top: none;
-    }
-
-    .vtm_main .col, .vtm_attributes .col {
-        padding: 0;
-        border-right: 1px solid #000;
-    }
-
-    .vtm_main .col.s12 {
-        border: none;
-        font-size: 20px;
-        font-weight: 900;
-        text-decoration: underline;
-    }
-
-    .vtm_attributes .col {
-        min-height: 500px;
-    }
-
-    .vtm_main .col:last-child, .vtm_attributes .col:last-child {
-        border: none;
-    }
-
-    .vtm_main p {
-        padding-left: 5px;
-        margin: 0;
-    }
-
-    .vtm_attributes p {
-        margin: 0;
-        padding: 2px 0;
-    }
-
-    .vtm_main .attr-stat {
-        font-weight: normal;
-    }
-
-    .vtm_main .main_info {
-        font-weight: 900;
-        text-overflow: ellipsis;
-        word-break: break-all;
-        white-space: nowrap;
-        overflow: hidden;
-        padding-left: 3px;
-    }
-
-    .vtm_attributes .attr-space {
-        padding: 5px 0;
-        height: 30px;
-        float: left;
-        width: 100%;
-        text-align: center;
-        font-size: 120%;
-        margin-left: -1px;
-        margin-right: -1px;
-        background: #fff;
-    }
-
-    .vtm_attributes .attr-group {
-        padding: 5px 0;
-        border-top: 1px solid #000;
-        border-bottom: 1px solid #000;
-        float: left;
-        width: 100%;
-        text-align: center;
-    }
-
-    .vtm_attributes .attr {
-        width: 100%;
-        float: left;
-        padding-left: 5px;
-    }
-
-    .vtm_attributes .attr-stat, .vtm_main .attr-stat {
-        float: right;
-        margin-right: 2px;
-        margin-top: 2px;
-        border-radius: 50px;
-        line-height: 17px;
-        text-align: center;
-    }
-
-    .vtm_attributes .attr-name {
-        float: left;
-        max-width: 80%;
-        font-size: 12px;
-        line-height: 14px;
-    }
-</style>
-
-<script>
-    $(document).ready(function () {
-
-    });
-    window.prepareCharListFunctions = function ($scope, $rootScope) {
-
-        function startEditFunctions() {
-
-        }
-
-        function startCreateFunctions() {
-            $scope.newChar = {
-                main: {
-                    Name: "",
-                    Player: "",
-                    Chronicle: "",
-                    Nature: "",
-                    Demeanor: "",
-                    Concept: "",
-                    Clan: "",
-                    Generation: "",
-                    Sire: ""
-                },
-                attr: {
-                    Strength: 1,
-                    Dexterity: 1,
-                    Stamina: 1,
-                    Charisma: 1,
-                    Manipulation: 1,
-                    Appearance: 1,
-                    Perception: 1,
-                    Intelligence: 1,
-                    Wits: 1
-                },
-                abilities: {
-                    Alertness: 0,
-                    Athletics: 0,
-                    Brawl: 0,
-                    Dodge: 0,
-                    Empathy: 0,
-                    Expression: 0,
-                    Intimidation: 0,
-                    Leadership: 0,
-                    Streetwise: 0,
-                    Subterfuge: 0,
-                    
-                    AnimalKen: 0,
-                    Crafts: 0,
-                    Drive: 0,
-                    Etiquette: 0,
-                    Firearms: 0,
-                    Performance: 0,
-                    Melee: 0,
-                    Security: 0,
-                    Stealth: 0,
-                    Survival: 0,
-                    
-                    Academics: 0,
-                    Computer: 0,
-                    Finance: 0,
-                    Investigation: 0,
-                    Law: 0,
-                    Linguistics: 0,
-                    Medicine: 0,
-                    Occult: 0,
-                    Politics: 0,
-                    Science: 0
-                },
-                disciplines: {},
-                advantages: {},
-                virtues: {}
-            };
-            $scope.attrPoints = {
-                prices: [3, 5, 8],
-                starting: [3, 5, 8]
-            };
-            $scope.abilitiesPoints = {
-                prices: [3, 5, 8],
-                starting: [8, 12, 20]
-            };
-            $scope.attrGroups = [
-                {
-                    title: "Physical",
-                    array: ['Strength', 'Dexterity', 'Stamina']
-                },
-                {
-                    title: "Social",
-                    array: ['Charisma', 'Manipulation', 'Appearance']
-                },
-                {
-                    title: "Mental",
-                    array: ['Perception', 'Intelligence', 'Wits']
-                }
-            ];
-            $scope.abilitiesGroups = [
-                {
-                    title: "Talents",
-                    array: ["Alertness","Athletics","Brawl","Dodge","Empathy","Expression","Intimidation","Leadership","Streetwise","Subterfuge"]
-                },
-                {
-                    title: "Skills",
-                    array: ["AnimalKen","Crafts","Drive","Etiquette","Firearms","Performance","Melee","Security","Stealth","Survival"]
-                },
-                {
-                    title: "Knowledges",
-                    array: ["Academics","Computer","Finance","Investigation","Law","Linguistics","Medicine","Occult","Politics","Science"]
-                }
-            ];
-            $(".attr1table input").click(function () {
-                $(".attr1table input." + this.className).not($(this)).each(function () {
-                    this.checked = false;
-                });
-            });
-            $scope.createNext = function (from, to) {
-                console.log($scope.newChar);
-                $('#' + from).closeModal();
-                $('#' + to).openModal();
-            };
-            $scope.changeStat = function (type, val, attr, group) {
-                if ($scope.newChar.start['' + group] - val > -1 && $scope.newChar[''+type]['' + attr] + val > 0 && $scope.newChar[''+type]['' + attr] + val < 6) {
-                    $scope.newChar.start['' + group] -= val;
-                    $scope.newChar[''+type]['' + attr] += val;
-                }
-            };
-            //$('#modalCharMain').openModal();
-            $('#modalCharAbi1').openModal();
-        }
-
-        if ($scope.char.list && $scope.char.list.concept) {
-            console.log("start edit func");
-            $scope.currentChar = angular.copy($scope.char);
-            startEditFunctions();
-        }
-        else {
-            startCreateFunctions();
-        }
-    };
-    window.prepareCharList();
-</script>

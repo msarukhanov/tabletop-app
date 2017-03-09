@@ -14,9 +14,6 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', 'userRequest
                     if (!data.error) {
                         $rootScope.currentSchema = data.data.schema;
                         $scope.currentChar = data.data.char.list;
-                        window.prepareCharList = function() {
-                           // window.prepareCharListFunctions($scope, $rootScope, data.data.char);
-                        };
                     }
                     else {
                         //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
@@ -26,9 +23,6 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', 'userRequest
             else {
                 $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name;
                 $scope.currentChar = $rootScope.userInfo.char_info.charlist.list;
-                window.prepareCharList = function() {
-                    //window.prepareCharListFunctions($scope, $rootScope, $rootScope.userInfo.char_info.charlist);
-                };
                 $rootScope.hideLoader = true;
             }
         }

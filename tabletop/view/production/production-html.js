@@ -261,303 +261,40 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    </div>\n" +
    "</div>\n" +
    "<div class=\"row vtm_attributes\">\n" +
-   "\n" +
-   "    <div class=\"col s4\">\n" +
-   "\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Name</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Name}}</span>-->\n" +
-   "        <!--</p>-->\n" +
-   "\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Player</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Player}}</span>-->\n" +
-   "        <!--</p>-->\n" +
-   "\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Chronicle</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Chronicle}}</span>-->\n" +
-   "        <!--</p>-->\n" +
-   "\n" +
-   "        <p class=\"attr-space\"></p>\n" +
-   "\n" +
-   "        <p class=\"attr-group\">Physical</p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Strength</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Strength}}</span>\n" +
+   "    <div class=\"col s4\" ng-repeat=\"col in [['','',''],['Attributes','Abilities','Advantages'],['','','']] track by $index\">\n" +
+   "        <p class=\"attr-space\">{{col[0]}}</p>\n" +
+   "        <p class=\"attr-group\">{{attrGroups[$index].title}}</p>\n" +
+   "        <p class=\"attr\" ng-repeat=\"attr in attrGroups[$index].array\">\n" +
+   "            <span class=\"attr-name\">{{attr}}</span>\n" +
+   "            <span class=\"attr-stat\">{{char.attr[''+attr]}}</span>\n" +
    "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Dexterity</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Dexterity}}</span>\n" +
+   "        <p class=\"attr-space\">{{col[1]}}</p>\n" +
+   "        <p class=\"attr-group\">{{abilitiesGroups[$index].title}}</p>\n" +
+   "        <p class=\"attr\" ng-repeat=\"abi in abilitiesGroups[$index].array\">\n" +
+   "            <span class=\"attr-name\">{{abi}}</span>\n" +
+   "            <span class=\"attr-stat\">{{char.abi[''+abi]}}</span>\n" +
    "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Stamina</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Stamina}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr-space\"></p>\n" +
-   "\n" +
-   "        <p class=\"attr-group\">Talents</p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Alertness</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Alertness}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Athletics</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Athletics}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Brawl</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Brawl}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Dodge</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Dodge}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Empathy</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Empathy}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Expression</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Expression}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Intimidation</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Intimidation}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Leadership</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Leadership}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Streetwise</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Streetwise}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Subterfuge</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Subterfuge}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr-space\"></p>\n" +
-   "\n" +
-   "        <p class=\"attr-group\">Disciplines</p>\n" +
-   "\n" +
+   "        <p class=\"attr-space\">{{col[2]}}</p>\n" +
    "    </div>\n" +
-   "    <div class=\"col s4\">\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Nature</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Nature}}</span>-->\n" +
-   "        <!--</p>-->\n" +
+   "        <!--<p class=\"attr-group\">Disciplines</p>-->\n" +
+   "    <!--<p class=\"attr-group\">Backgrounds</p>-->\n" +
+   "    <!--<p class=\"attr-group\">Virtues</p>-->\n" +
    "\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Demeanor</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Demeanor}}</span>-->\n" +
-   "        <!--</p>-->\n" +
+   "    <!--<p class=\"attr\">-->\n" +
+   "        <!--<span class=\"attr-name\">Conscience / Conviction</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">5</span>-->\n" +
+   "    <!--</p>-->\n" +
    "\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Concept</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Concept}}</span>-->\n" +
-   "        <!--</p>-->\n" +
+   "    <!--<p class=\"attr\">-->\n" +
+   "        <!--<span class=\"attr-name\">Self-Control / Instinct</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">4</span>-->\n" +
+   "    <!--</p>-->\n" +
    "\n" +
-   "        <p class=\"attr-space\">Attributes</p>\n" +
+   "    <!--<p class=\"attr\">-->\n" +
+   "        <!--<span class=\"attr-name\">Courage</span>-->\n" +
+   "        <!--<span class=\"attr-stat\">4</span>-->\n" +
+   "    <!--</p>-->\n" +
    "\n" +
-   "        <p class=\"attr-group\">Social</p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Charisma</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Charisma}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Manipulation</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Manipulation}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Appearance</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Appearance}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr-space\">Abilities</p>\n" +
-   "\n" +
-   "        <p class=\"attr-group\">Skills</p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">AnimalKen</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.AnimalKen}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Crafts</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Crafts}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Drive</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Drive}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Etiquette</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Etiquette}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Firearms</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Firearms}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Performance</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Performance}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Melee</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Melee}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Security</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Security}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Stealth</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Stealth}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Survival</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Survival}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr-space\">Advantages</p>\n" +
-   "\n" +
-   "        <p class=\"attr-group\">Backgrounds</p>\n" +
-   "    </div>\n" +
-   "    <div class=\"col s4\">\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Clan</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Clan}}</span>-->\n" +
-   "        <!--</p>-->\n" +
-   "\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Generation</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Generation}}</span>-->\n" +
-   "        <!--</p>-->\n" +
-   "\n" +
-   "        <!--<p class=\"main_info\">-->\n" +
-   "        <!--<span class=\"attr-name\">Sire</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">{{char.main.Sire}}</span>-->\n" +
-   "        <!--</p>-->\n" +
-   "\n" +
-   "        <p class=\"attr-space\"></p>\n" +
-   "\n" +
-   "        <p class=\"attr-group\">Mental</p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Perception</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Perception}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Intelligence</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Intelligence}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Wits</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr.Wits}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr-space\"></p>\n" +
-   "\n" +
-   "        <p class=\"attr-group\">Knowledges</p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Academics</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Academics}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Computer</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Computer}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Finance</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Finance}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Investigation</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Investigation}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Law</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Law}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Linguistics</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Linguistics}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Medicine</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Medicine}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Occult</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Occult}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Politics</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Politics}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Science</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi.Science}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr-space\"></p>\n" +
-   "\n" +
-   "        <p class=\"attr-group\">Virtues</p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Conscience / Conviction</span>\n" +
-   "            <span class=\"attr-stat\">5</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Self-Control / Instinct</span>\n" +
-   "            <span class=\"attr-stat\">4</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"attr\">\n" +
-   "            <span class=\"attr-name\">Courage</span>\n" +
-   "            <span class=\"attr-stat\">4</span>\n" +
-   "        </p>\n" +
-   "    </div>\n" +
    "</div>\n" +
    "\n" +
    "<div id=\"modalCharMain\" class=\"modal bottom-sheet mainform\">\n" +
@@ -608,7 +345,8 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
    "                    Close\n" +
    "                </a>\n" +
-   "                <button ng-disabled=\"!vtm_main_form.$valid\" ng-click=\"createNext('modalCharMain','modalCharAttr1')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                <button ng-disabled=\"!vtm_main_form.$valid\" ng-click=\"createNext('modalCharMain','modalCharAttr1')\"\n" +
+   "                        class=\"waves-effect waves-green btn-flat next-modal\">\n" +
    "                    Next\n" +
    "                </button>\n" +
    "            </div>\n" +
@@ -639,7 +377,8 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                        {{price}}\n" +
    "                    </div>\n" +
    "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups track by $index\">\n" +
-   "                        <input id=\"pr{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\" name=\"a{{$parent.$index}}\"\n" +
+   "                        <input id=\"pr{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\"\n" +
+   "                               name=\"a{{$parent.$index}}\"\n" +
    "                               ng-model=\"newChar.pref[''+group.title]\" value=\"{{price}}\">\n" +
    "                        <label for=\"pr{{$parent.$index}}{{$index}}\"></label>\n" +
    "                    </div>\n" +
@@ -664,7 +403,8 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                        {{price}}\n" +
    "                    </div>\n" +
    "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups track by $index\">\n" +
-   "                        <input id=\"st{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\" name=\"a{{$parent.$index}}\"\n" +
+   "                        <input id=\"st{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\"\n" +
+   "                               name=\"a{{$parent.$index}}\"\n" +
    "                               ng-model=\"newChar.start[''+group.title]\" value=\"{{price}}\">\n" +
    "                        <label for=\"st{{$parent.$index}}{{$index}}\"></label>\n" +
    "                    </div>\n" +
@@ -675,7 +415,8 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
    "                    Close\n" +
    "                </a>\n" +
-   "                <button ng-click=\"createNext('modalCharAttr1','modalCharAttr2')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                <button ng-click=\"createNext('modalCharAttr1','modalCharAttr2')\"\n" +
+   "                        class=\"waves-effect waves-green btn-flat next-modal\">\n" +
    "                    Next\n" +
    "                </button>\n" +
    "            </div>\n" +
@@ -700,9 +441,11 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "                        {{stat}}\n" +
    "                    </div>\n" +
    "                    <div class=\"col s12 center\">\n" +
-   "                        <i class=\"fa fa-minus left\" ng-click=\"changeAttr(-1, stat, group.title)\" aria-hidden=\"true\" ng-show=\"newChar.attr[''+stat] > 1\"></i>\n" +
+   "                        <i class=\"fa fa-minus left\" ng-click=\"changeStat('attr', -1, stat, group.title)\" aria-hidden=\"true\"\n" +
+   "                           ng-show=\"newChar.attr[''+stat] > 1\"></i>\n" +
    "                        {{newChar.attr[\"\"+stat] || 1}}\n" +
-   "                        <i class=\"fa fa-plus right\" ng-click=\"changeAttr(1, stat, group.title)\" aria-hidden=\"true\" ng-show=\"newChar.attr[''+stat] < 5 && newChar.start[''+group.title] > 0\"></i>\n" +
+   "                        <i class=\"fa fa-plus right\" ng-click=\"changeStat('attr', 1, stat, group.title)\" aria-hidden=\"true\"\n" +
+   "                           ng-show=\"newChar.attr[''+stat] < 5 && newChar.start[''+group.title] > 0\"></i>\n" +
    "                    </div>\n" +
    "                </div>\n" +
    "            </form>\n" +
@@ -711,7 +454,116 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "            <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
    "                Close\n" +
    "            </a>\n" +
-   "            <button ng-click=\"createNext('modalCharAttr2','modalCharAttr2')\" class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "            <button ng-click=\"createNext('modalCharAttr2','modalCharAbi1')\"\n" +
+   "                    class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                Next\n" +
+   "            </button>\n" +
+   "        </div>\n" +
+   "    </div>\n" +
+   "</div>\n" +
+   "\n" +
+   "<div id=\"modalCharAbi1\" class=\"modal bottom-sheet mainform\">\n" +
+   "    <a class=\"close-btn modal-close\">\n" +
+   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
+   "    </a>\n" +
+   "    <div class=\"modal-content\">\n" +
+   "        <h4>Creating Character</h4>\n" +
+   "        <h5>Abilities cost ( step 5 of 8 )</h5>\n" +
+   "        <form class=\"col s12\" name=\"vtm_abilities1_form\">\n" +
+   "            <div class=\"row\">\n" +
+   "                <span>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s3\" ng-repeat=\"group in abilitiesGroups\">\n" +
+   "                        {{group.title}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                </span>\n" +
+   "                <span ng-repeat=\"price in abilitiesPoints.prices track by $index\">\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s1\">\n" +
+   "                        {{price}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s3\" ng-repeat=\"group in abilitiesGroups track by $index\">\n" +
+   "                        <input id=\"apr{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\"\n" +
+   "                               name=\"a{{$parent.$index}}\"\n" +
+   "                               ng-model=\"newChar.pref[''+group.title]\" value=\"{{price}}\">\n" +
+   "                        <label for=\"apr{{$parent.$index}}{{$index}}\"></label>\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                </span>\n" +
+   "            </div>\n" +
+   "        </form>\n" +
+   "        <h5>Abilities starting ( step 6 of 8 )</h5>\n" +
+   "        <form class=\"col s12\" name=\"vtm_abilities1_form\">\n" +
+   "            <div class=\"row\">\n" +
+   "                <span>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s3\" ng-repeat=\"group in abilitiesGroups\">\n" +
+   "                        {{group.title}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                </span>\n" +
+   "                <span ng-repeat=\"price in abilitiesPoints.starting track by $index\">\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                    <div class=\"col s1\">\n" +
+   "                        {{price}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s3\" ng-repeat=\"group in abilitiesGroups track by $index\">\n" +
+   "                        <input id=\"ast{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\"\n" +
+   "                               name=\"a{{$parent.$index}}\"\n" +
+   "                               ng-model=\"newChar.start[''+group.title]\" value=\"{{price}}\">\n" +
+   "                        <label for=\"ast{{$parent.$index}}{{$index}}\"></label>\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s1\"></div>\n" +
+   "                </span>\n" +
+   "            </div>\n" +
+   "            <div class=\"modal-footer\">\n" +
+   "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
+   "                    Close\n" +
+   "                </a>\n" +
+   "                <button ng-click=\"createNext('modalCharAbi1','modalCharAbi2')\"\n" +
+   "                        class=\"waves-effect waves-green btn-flat next-modal\">\n" +
+   "                    Next\n" +
+   "                </button>\n" +
+   "            </div>\n" +
+   "        </form>\n" +
+   "    </div>\n" +
+   "</div>\n" +
+   "\n" +
+   "<div id=\"modalCharAbi2\" class=\"modal bottom-sheet mainform\">\n" +
+   "    <a class=\"close-btn modal-close\">\n" +
+   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
+   "    </a>\n" +
+   "    <div class=\"modal-content\">\n" +
+   "        <h4>Creating Character</h4>\n" +
+   "        <h5>Abilities ( step 7 of 8 )</h5>\n" +
+   "        <div class=\"row\" ng-repeat=\"group in abilitiesGroups\">\n" +
+   "            <h6 class=\"center\">\n" +
+   "                {{group.title}} (Remaining : {{newChar.start[''+group.title]}})\n" +
+   "            </h6>\n" +
+   "            <form class=\"col s12\" name=\"vtm_abilities1_form\">\n" +
+   "                <div class=\"col s4\" ng-repeat=\"stat in group.array\">\n" +
+   "                    <div class=\"col s12\">\n" +
+   "                        {{stat}}\n" +
+   "                    </div>\n" +
+   "                    <div class=\"col s12 center\">\n" +
+   "                        <i class=\"fa fa-minus left\" ng-click=\"changeStat('abilities', -1, stat, group.title)\" aria-hidden=\"true\"\n" +
+   "                           ng-show=\"newChar.abilities[''+stat] > 1\"></i>\n" +
+   "                        {{newChar.abilities[\"\"+stat] || 1}}\n" +
+   "                        <i class=\"fa fa-plus right\" ng-click=\"changeStat('abilities', 1, stat, group.title)\" aria-hidden=\"true\"\n" +
+   "                           ng-show=\"newChar.abilities[''+stat] < 5 && newChar.start[''+group.title] > 0\"></i>\n" +
+   "                    </div>\n" +
+   "                </div>\n" +
+   "            </form>\n" +
+   "        </div>\n" +
+   "        <div class=\"modal-footer\">\n" +
+   "            <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
+   "                Close\n" +
+   "            </a>\n" +
+   "            <button ng-click=\"createNext('modalCharAbi2','modalCharAttr2')\"\n" +
+   "                    class=\"waves-effect waves-green btn-flat next-modal\">\n" +
    "                Next\n" +
    "            </button>\n" +
    "        </div>\n" +
@@ -722,24 +574,30 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    .modal.bottom-sheet.mainform {\n" +
    "        max-height: 100%;\n" +
    "    }\n" +
+   "\n" +
    "    .next-modal {\n" +
    "        color: #fff;\n" +
    "        background-color: #000;\n" +
    "        font-size: 16px;\n" +
    "    }\n" +
+   "\n" +
    "    .next-modal[disabled] {\n" +
    "        background-color: #eee;\n" +
    "    }\n" +
+   "\n" +
    "    .modal .modal-footer .btn-flat.close-modal {\n" +
    "        float: left;\n" +
    "        border: 1px solid #000;\n" +
    "    }\n" +
-   "    #modalCharAttr1 .col {\n" +
+   "\n" +
+   "    .modal .col {\n" +
    "        min-height: 31px;\n" +
    "    }\n" +
+   "\n" +
    "    #modalCharAttr2 i {\n" +
    "        line-height: 21px;\n" +
    "    }\n" +
+   "\n" +
    "    .close-btn {\n" +
    "        position: absolute;\n" +
    "        font-size: 25px;\n" +
@@ -747,6 +605,7 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "        top: 5px;\n" +
    "        color: #000;\n" +
    "    }\n" +
+   "\n" +
    "    .vtm_attributes, .vtm_main {\n" +
    "        padding: 0 10px;\n" +
    "        margin: 0 10px;\n" +
@@ -861,7 +720,7 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "    $(document).ready(function () {\n" +
    "\n" +
    "    });\n" +
-   "    window.prepareCharListFunctions = function($scope, $rootScope) {\n" +
+   "    window.prepareCharListFunctions = function ($scope, $rootScope) {\n" +
    "\n" +
    "        function startEditFunctions() {\n" +
    "\n" +
@@ -869,109 +728,120 @@ templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&
    "\n" +
    "        function startCreateFunctions() {\n" +
    "            $scope.newChar = {\n" +
-   "                main : {\n" +
-   "                    Name : \"\",\n" +
-   "                    Player : \"\",\n" +
-   "                    Chronicle : \"\",\n" +
-   "                    Nature : \"\",\n" +
-   "                    Demeanor : \"\",\n" +
-   "                    Concept : \"\",\n" +
-   "                    Clan : \"\",\n" +
-   "                    Generation : \"\",\n" +
-   "                    Sire : \"\"\n" +
+   "                main: {\n" +
+   "                    Name: \"\",\n" +
+   "                    Player: \"\",\n" +
+   "                    Chronicle: \"\",\n" +
+   "                    Nature: \"\",\n" +
+   "                    Demeanor: \"\",\n" +
+   "                    Concept: \"\",\n" +
+   "                    Clan: \"\",\n" +
+   "                    Generation: \"\",\n" +
+   "                    Sire: \"\"\n" +
    "                },\n" +
-   "                attr : {\n" +
-   "                    Strength : 1,\n" +
-   "                    Dexterity : 1,\n" +
-   "                    Stamina : 1,\n" +
-   "                    Charisma : 1,\n" +
-   "                    Manipulation : 1,\n" +
-   "                    Appearance : 1,\n" +
-   "                    Perception : 1,\n" +
-   "                    Intelligence : 1,\n" +
-   "                    Wits : 1\n" +
+   "                attr: {\n" +
+   "                    Strength: 1,\n" +
+   "                    Dexterity: 1,\n" +
+   "                    Stamina: 1,\n" +
+   "                    Charisma: 1,\n" +
+   "                    Manipulation: 1,\n" +
+   "                    Appearance: 1,\n" +
+   "                    Perception: 1,\n" +
+   "                    Intelligence: 1,\n" +
+   "                    Wits: 1\n" +
    "                },\n" +
-   "                abilities : {\n" +
-   "                    Alertness : \"\",\n" +
-   "                    Athletics : \"\",\n" +
-   "                    Brawl : \"\",\n" +
-   "                    Dodge : \"\",\n" +
-   "                    Empathy : \"\",\n" +
-   "                    Expression : \"\",\n" +
-   "                    Intimidation : \"\",\n" +
-   "                    Leadership : \"\",\n" +
-   "                    Streetwise : \"\",\n" +
-   "                    Subterfuge : \"\",\n" +
-   "                    AnimalKen : \"\",\n" +
-   "                    Crafts : \"\",\n" +
-   "                    Drive : \"\",\n" +
-   "                    Etiquette : \"\",\n" +
-   "                    Firearms : \"\",\n" +
-   "                    Performance : \"\",\n" +
-   "                    Melee : \"\",\n" +
-   "                    Security : \"\",\n" +
-   "                    Stealth : \"\",\n" +
-   "                    Survival : \"\",\n" +
-   "                    Academics : \"\",\n" +
-   "                    Computer : \"\",\n" +
-   "                    Finance : \"\",\n" +
-   "                    Investigation : \"\",\n" +
-   "                    Law : \"\",\n" +
-   "                    Linguistics : \"\",\n" +
-   "                    Medicine : \"\",\n" +
-   "                    Occult : \"\",\n" +
-   "                    Politics : \"\",\n" +
-   "                    Science : \"\"\n" +
+   "                abilities: {\n" +
+   "                    Alertness: 0,\n" +
+   "                    Athletics: 0,\n" +
+   "                    Brawl: 0,\n" +
+   "                    Dodge: 0,\n" +
+   "                    Empathy: 0,\n" +
+   "                    Expression: 0,\n" +
+   "                    Intimidation: 0,\n" +
+   "                    Leadership: 0,\n" +
+   "                    Streetwise: 0,\n" +
+   "                    Subterfuge: 0,\n" +
+   "                    \n" +
+   "                    AnimalKen: 0,\n" +
+   "                    Crafts: 0,\n" +
+   "                    Drive: 0,\n" +
+   "                    Etiquette: 0,\n" +
+   "                    Firearms: 0,\n" +
+   "                    Performance: 0,\n" +
+   "                    Melee: 0,\n" +
+   "                    Security: 0,\n" +
+   "                    Stealth: 0,\n" +
+   "                    Survival: 0,\n" +
+   "                    \n" +
+   "                    Academics: 0,\n" +
+   "                    Computer: 0,\n" +
+   "                    Finance: 0,\n" +
+   "                    Investigation: 0,\n" +
+   "                    Law: 0,\n" +
+   "                    Linguistics: 0,\n" +
+   "                    Medicine: 0,\n" +
+   "                    Occult: 0,\n" +
+   "                    Politics: 0,\n" +
+   "                    Science: 0\n" +
    "                },\n" +
-   "                disciplines : {\n" +
-   "\n" +
-   "                },\n" +
-   "                advantages : {\n" +
-   "\n" +
-   "                },\n" +
-   "                virtues : {\n" +
-   "\n" +
-   "                }\n" +
+   "                disciplines: {},\n" +
+   "                advantages: {},\n" +
+   "                virtues: {}\n" +
    "            };\n" +
    "            $scope.attrPoints = {\n" +
-   "                prices : [3, 5, 8],\n" +
-   "                starting : [3, 5, 8]\n" +
+   "                prices: [3, 5, 8],\n" +
+   "                starting: [3, 5, 8]\n" +
+   "            };\n" +
+   "            $scope.abilitiesPoints = {\n" +
+   "                prices: [3, 5, 8],\n" +
+   "                starting: [8, 12, 20]\n" +
    "            };\n" +
    "            $scope.attrGroups = [\n" +
    "                {\n" +
-   "                    title : \"Physical\",\n" +
-   "                    text : \"Physical\",\n" +
-   "                    array : ['Strength','Dexterity','Stamina']\n" +
+   "                    title: \"Physical\",\n" +
+   "                    array: ['Strength', 'Dexterity', 'Stamina']\n" +
    "                },\n" +
    "                {\n" +
-   "                    title : \"Social\",\n" +
-   "                    text : \"Social\",\n" +
-   "                    array : ['Charisma','Manipulation','Appearance']\n" +
+   "                    title: \"Social\",\n" +
+   "                    array: ['Charisma', 'Manipulation', 'Appearance']\n" +
    "                },\n" +
    "                {\n" +
-   "                    title : \"Mental\",\n" +
-   "                    text : \"Mental\",\n" +
-   "                    array : ['Perception','Intelligence','Wits']\n" +
+   "                    title: \"Mental\",\n" +
+   "                    array: ['Perception', 'Intelligence', 'Wits']\n" +
    "                }\n" +
    "            ];\n" +
-   "            $(\".attr1table input\").click(function() {\n" +
-   "                $(\".attr1table input.\"+this.className).not($(this)).each(function(){\n" +
+   "            $scope.abilitiesGroups = [\n" +
+   "                {\n" +
+   "                    title: \"Talents\",\n" +
+   "                    array: [\"Alertness\",\"Athletics\",\"Brawl\",\"Dodge\",\"Empathy\",\"Expression\",\"Intimidation\",\"Leadership\",\"Streetwise\",\"Subterfuge\"]\n" +
+   "                },\n" +
+   "                {\n" +
+   "                    title: \"Skills\",\n" +
+   "                    array: [\"AnimalKen\",\"Crafts\",\"Drive\",\"Etiquette\",\"Firearms\",\"Performance\",\"Melee\",\"Security\",\"Stealth\",\"Survival\"]\n" +
+   "                },\n" +
+   "                {\n" +
+   "                    title: \"Knowledges\",\n" +
+   "                    array: [\"Academics\",\"Computer\",\"Finance\",\"Investigation\",\"Law\",\"Linguistics\",\"Medicine\",\"Occult\",\"Politics\",\"Science\"]\n" +
+   "                }\n" +
+   "            ];\n" +
+   "            $(\".attr1table input\").click(function () {\n" +
+   "                $(\".attr1table input.\" + this.className).not($(this)).each(function () {\n" +
    "                    this.checked = false;\n" +
    "                });\n" +
    "            });\n" +
-   "            $scope.createNext = function(from, to) {\n" +
+   "            $scope.createNext = function (from, to) {\n" +
    "                console.log($scope.newChar);\n" +
-   "                $('#'+from).closeModal();\n" +
-   "                $('#'+to).openModal();\n" +
+   "                $('#' + from).closeModal();\n" +
+   "                $('#' + to).openModal();\n" +
    "            };\n" +
-   "            $scope.changeAttr = function(val, attr, group) {\n" +
-   "                if($scope.newChar.start[''+group] - val > -1 && $scope.newChar.attr[''+attr] + val > 0 && $scope.newChar.attr[''+attr] + val < 6) {\n" +
-   "                    $scope.newChar.start[''+group] -= val;\n" +
-   "                    $scope.newChar.attr[''+attr] += val;\n" +
+   "            $scope.changeStat = function (type, val, attr, group) {\n" +
+   "                if ($scope.newChar.start['' + group] - val > -1 && $scope.newChar[''+type]['' + attr] + val > 0 && $scope.newChar[''+type]['' + attr] + val < 6) {\n" +
+   "                    $scope.newChar.start['' + group] -= val;\n" +
+   "                    $scope.newChar[''+type]['' + attr] += val;\n" +
    "                }\n" +
    "            };\n" +
    "            //$('#modalCharMain').openModal();\n" +
-   "            $('#modalCharAttr1').openModal();\n" +
+   "            $('#modalCharAbi1').openModal();\n" +
    "        }\n" +
    "\n" +
    "        if ($scope.char.list && $scope.char.list.concept) {\n" +

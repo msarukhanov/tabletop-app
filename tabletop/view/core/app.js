@@ -95,16 +95,25 @@ app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http
         }
     }
 }]);
-app.directive('charList', ['$rootScope', function($rootScope){
+app.directive('charList', ['$rootScope', '$compile', '$templateRequest', '$templateCache', function($rootScope, $compile, $templateRequest, $templateCache){
     return {
         restrict: 'E',
         scope: {
             char: '=char'
         },
-        controller: function ($scope) {
-            console.log($scope);
-            window.prepareCharListFunctions($scope, $rootScope);
+        link: function(scope, element){
+            window.prepareCharList = function() {
+                console.log("preparing charlist controller");
+                window.prepareCharListFunctions(scope, $rootScope);
+            };
+            $templateRequest("/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html").then(function(html){
+                var template = angular.element(html);
+                $templateCache.put("/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html", html);
+                element.append(template);
+                $compile(template)(scope);
+
+            });
         },
-        template: templates["../tabletop/view/modules/schemas/" + $rootScope.currentSchema + ".html"] || '<span class="login_to_server">Invalid server data.</span>'
+        templateUrl: "/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html"
     };
 }]);
