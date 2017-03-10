@@ -100,6 +100,20 @@ window.prepareCharListFunctions = function ($scope, $rootScope) {
                 array: ["Academics","Computer","Finance","Investigation","Law","Linguistics","Medicine","Occult","Politics","Science"]
             }
         ];
+        $scope.userType = $rootScope.userInfo.type;
+        $scope.saveCharacterProceed = function(newChar) {
+            window.saveCharacterProceed(newChar);
+        };
+        if($scope.userType != 'player') {
+            $scope.newChar.start = {
+                "Talents" : 999,
+                "Skills" : 999,
+                "Knowledges" : 999,
+                "Physical" : 999,
+                "Social" : 999,
+                "Mental" : 999
+            };
+        }
         $(".attr1table input").click(function () {
             $(".attr1table input." + this.className).not($(this)).each(function () {
                 this.checked = false;
@@ -118,14 +132,18 @@ window.prepareCharListFunctions = function ($scope, $rootScope) {
         };
         $('#modalCharMain').openModal();
     }
-
-    if ($scope.char.list && $scope.char.list.concept) {
-        console.log("start edit func");
-        $scope.currentChar = angular.copy($scope.char);
-        startEditFunctions();
+    if($scope.char) {
+        if ($scope.char.list && $scope.char.list.Name) {
+            console.log("start edit func");
+            $scope.currentChar = angular.copy($scope.char);
+            startEditFunctions();
+        }
+        else {
+            startCreateFunctions();
+        }
     }
-    else {
+    window.createCharacterDialog = function() {
         startCreateFunctions();
-    }
+    };
 };
 window.prepareCharList();

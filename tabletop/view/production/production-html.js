@@ -1,31 +1,85 @@
 var templates = {};
 
-templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
+templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper bio\" ng-init=\"getCharacterBio()\">\n" +
    "    <h4 class=\"page-header global-page-header center\">{{\"BIO\" | translate}}</h4>\n" +
    "\n" +
    "    <div class=\"panel global-panel-default\">\n" +
    "        <div class=\"row\">\n" +
    "            <div class=\"col s12\">\n" +
-   "                <textarea></textarea>\n" +
+   "                <textarea ng-model=\"bio\"></textarea>\n" +
+   "            </div>\n" +
+   "        </div>\n" +
+   "        <div class=\"row\">\n" +
+   "            <div class=\"col s12 center\">\n" +
+   "                <a ng-show=\"isNew\" ng-click=\"saveCharacterBio()\" class=\"btn waves-effect waves-light red\">\n" +
+   "                    Save\n" +
+   "                </a>\n" +
+   "                <a ng-show=\"!isNew\" ng-click=\"updateCharacterBio()\" class=\"btn waves-effect waves-light red\">\n" +
+   "                    Save\n" +
+   "                </a>\n" +
    "            </div>\n" +
    "        </div>\n" +
    "    </div>\n" +
    "    <!--<div class=\"pre-loader global-loader global-wrapper center valign-wrapper\" ng-show=\"!hideLoader\">-->\n" +
    "    <!--<i class=\"fa fa-cog fa-spin fa-3x pre-loader  valign center-block\"></i>-->\n" +
    "    <!--</div>-->\n" +
+   "</div>\n" +
+   "\n" +
+   "<div id=\"modalNewBio\" class=\"modal bottom-sheet mainform\">\n" +
+   "    <a class=\"close-btn-m modal-close\">\n" +
+   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
+   "    </a>\n" +
+   "    <div class=\"modal-content\">\n" +
+   "        <h4>Creating Character</h4>\n" +
+   "        <h5>Bio</h5>\n" +
+   "        <form class=\"col s12\" name=\"vtm_main_form\">\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"input-field col s12\">\n" +
+   "                    And finally give your character unique and beautiful biography.\n" +
+   "                </div>\n" +
+   "            </div>\n" +
+   "            <div class=\"modal-footer center\">\n" +
+   "                <button class=\"modal-action modal-close waves-effect waves-green btn-flat btn-modal-m\">\n" +
+   "                    Close\n" +
+   "                </button>\n" +
+   "            </div>\n" +
+   "        </form>\n" +
+   "    </div>\n" +
    "</div>";
 
 templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
    "\n" +
-   "    <h4 class=\"page-header global-page-header center\" ng-show=\"!hideLoader\">\n" +
+   "    <h4 class=\"page-header global-page-header center\">\n" +
    "        {{\"Character\" | translate}}\n" +
    "    </h4>\n" +
    "\n" +
    "    <!--<h4 class=\"page-header global-page-header center\" ng-show=\"hideLoader\">-->\n" +
    "        <!-- -->\n" +
    "    <!--</h4>-->\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"userInfo.type != 'player'\">\n" +
+   "        <!--<button class=\"waves-effect waves-green btn-flat next-modal\">-->\n" +
+   "           <!---->\n" +
+   "        <!--</button>-->\n" +
+   "        <div class=\"panel-body global-panel-body\" ng-show=\"hideLoader\">\n" +
+   "            <a ng-click=\"createCharacterDialog()\" class=\"btn waves-effect waves-light red\">\n" +
+   "                New Char <i class=\"material-icons right\">add</i>\n" +
+   "            </a>\n" +
+   "        </div>\n" +
    "\n" +
-   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"currentChar && currentSchema\">\n" +
+   "        <!--<div class=\"fixed-action-btn horizontal\">-->\n" +
+   "            <!--<a class=\"btn-floating btn-large red\">-->\n" +
+   "                <!--<i class=\"large material-icons\">mode_edit</i>-->\n" +
+   "            <!--</a>-->\n" +
+   "            <!--<ul>-->\n" +
+   "                <!--<li><a class=\"btn-floating red\"><i class=\"material-icons\">insert_chart</i></a></li>-->\n" +
+   "                <!--<li><a class=\"btn-floating yellow darken-1\"><i class=\"material-icons\">format_quote</i></a></li>-->\n" +
+   "                <!--<li><a class=\"btn-floating green\"><i class=\"material-icons\">publish</i></a></li>-->\n" +
+   "                <!--<li><a class=\"btn-floating blue\"><i class=\"material-icons\">attach_file</i></a></li>-->\n" +
+   "            <!--</ul>-->\n" +
+   "        <!--</div>-->\n" +
+   "    </div>\n" +
+   "\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"currentSchema\">\n" +
    "        <char-list char=\"currentChar\"></char-list>\n" +
    "    </div>\n" +
    "\n" +

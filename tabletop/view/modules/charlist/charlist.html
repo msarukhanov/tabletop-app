@@ -1,14 +1,36 @@
 <div class="global-wrapper" ng-init="getCharacterData()">
 
-    <h4 class="page-header global-page-header center" ng-show="!hideLoader">
+    <h4 class="page-header global-page-header center">
         {{"Character" | translate}}
     </h4>
 
     <!--<h4 class="page-header global-page-header center" ng-show="hideLoader">-->
         <!-- -->
     <!--</h4>-->
+    <div class="panel global-panel-default" ng-show="hideLoader" ng-if="userInfo.type != 'player'">
+        <!--<button class="waves-effect waves-green btn-flat next-modal">-->
+           <!---->
+        <!--</button>-->
+        <div class="panel-body global-panel-body" ng-show="hideLoader">
+            <a ng-click="createCharacterDialog()" class="btn waves-effect waves-light red">
+                New Char <i class="material-icons right">add</i>
+            </a>
+        </div>
 
-    <div class="panel global-panel-default" ng-show="hideLoader" ng-if="currentChar && currentSchema">
+        <!--<div class="fixed-action-btn horizontal">-->
+            <!--<a class="btn-floating btn-large red">-->
+                <!--<i class="large material-icons">mode_edit</i>-->
+            <!--</a>-->
+            <!--<ul>-->
+                <!--<li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>-->
+                <!--<li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>-->
+                <!--<li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>-->
+                <!--<li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    </div>
+
+    <div class="panel global-panel-default" ng-show="hideLoader" ng-if="currentSchema">
         <char-list char="currentChar"></char-list>
     </div>
 

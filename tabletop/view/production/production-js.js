@@ -42973,32 +42973,86 @@ var b=a(this).index();c(k,b,d),i.find("li").eq(b).find(":checkbox").prop("checke
 })+' title="'+c.labelMonthSelect+'"'):"short_months"==d?null!=i?f.node("div",e[i.month]):f.node("div",e[k.month]):f.node("div",e[k.month],c.klass.month)},r=function(d){var e=k.year,g=c.selectYears===!0?5:~~(c.selectYears/2);if(g){var h=m.year,i=n.year,j=e-g,l=e+g;if(h>j&&(l+=h-j,j=h),l>i){var o=j-h,p=l-i;j-=o>p?p:o,l=i}if(c.selectYears&&void 0==d)return f.node("select",f.group({min:j,max:l,i:1,node:"option",item:function(a){return[a,0,"value="+a+(e==a?" selected":"")]}}),c.klass.selectYear+" browser-default",(a?"":"disabled")+" "+f.ariaAttr({controls:b.$node[0].id+"_table"})+' title="'+c.labelYearSelect+'"')}return"raw"==d?f.node("div",e):f.node("div",e,c.klass.year)};return createDayLabel=function(){return null!=i?f.node("div",i.date):f.node("div",h.date)},createWeekdayLabel=function(){var a;a=null!=i?i.day:h.day;var b=c.weekdaysFull[a];return b},f.node("div",f.node("div",createWeekdayLabel(),"picker__weekday-display")+f.node("div",q("short_months"),c.klass.month_display)+f.node("div",createDayLabel(),c.klass.day_display)+f.node("div",r("raw"),c.klass.year_display),c.klass.date_display)+f.node("div",f.node("div",(c.selectYears?q()+r():q()+r())+p()+p(1),c.klass.header)+f.node("table",o+f.node("tbody",f.group({min:0,max:e-1,i:1,node:"tr",item:function(a){var e=c.firstDay&&0===b.create([k.year,k.month,1]).day?-7:0;return[f.group({min:d*a-k.day+e+1,max:function(){return this.min+d-1},i:1,node:"td",item:function(a){a=b.create([k.year,k.month,a+(c.firstDay?1:0)]);var d=i&&i.pick==a.pick,e=j&&j.pick==a.pick,g=l&&b.disabled(a)||a.pick<m.pick||a.pick>n.pick,o=f.trigger(b.formats.toString,b,[c.format,a]);return[f.node("div",a.date,function(b){return b.push(k.month==a.month?c.klass.infocus:c.klass.outfocus),h.pick==a.pick&&b.push(c.klass.now),d&&b.push(c.klass.selected),e&&b.push(c.klass.highlighted),g&&b.push(c.klass.disabled),b.join(" ")}([c.klass.day]),"data-pick="+a.pick+" "+f.ariaAttr({role:"gridcell",label:o,selected:d&&b.$node.val()===o?!0:null,activedescendant:e?!0:null,disabled:g?!0:null})),"",f.ariaAttr({role:"presentation"})]}})]}})),c.klass.table,'id="'+b.$node[0].id+'_table" '+f.ariaAttr({role:"grid",controls:b.$node[0].id,readonly:!0})),c.klass.calendar_container)+f.node("div",f.node("button",c.today,"btn-flat picker__today","type=button data-pick="+h.pick+(a&&!b.disabled(h)?"":" disabled")+" "+f.ariaAttr({controls:b.$node[0].id}))+f.node("button",c.clear,"btn-flat picker__clear","type=button data-clear=1"+(a?"":" disabled")+" "+f.ariaAttr({controls:b.$node[0].id}))+f.node("button",c.close,"btn-flat picker__close","type=button data-close=true "+(a?"":" disabled")+" "+f.ariaAttr({controls:b.$node[0].id})),c.klass.footer)},c.defaults=function(a){return{labelMonthNext:"Next month",labelMonthPrev:"Previous month",labelMonthSelect:"Select a month",labelYearSelect:"Select a year",monthsFull:["January","February","March","April","May","June","July","August","September","October","November","December"],monthsShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],weekdaysFull:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],weekdaysShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],weekdaysLetter:["S","M","T","W","T","F","S"],today:"Today",clear:"Clear",close:"Close",format:"d mmmm, yyyy",klass:{table:a+"table",header:a+"header",date_display:a+"date-display",day_display:a+"day-display",month_display:a+"month-display",year_display:a+"year-display",calendar_container:a+"calendar-container",navPrev:a+"nav--prev",navNext:a+"nav--next",navDisabled:a+"nav--disabled",month:a+"month",year:a+"year",selectMonth:a+"select--month",selectYear:a+"select--year",weekdays:a+"weekday",day:a+"day",disabled:a+"day--disabled",selected:a+"day--selected",highlighted:a+"day--highlighted",now:a+"day--today",infocus:a+"day--infocus",outfocus:a+"day--outfocus",footer:a+"footer",buttonClear:a+"button--clear",buttonToday:a+"button--today",buttonClose:a+"button--close"}}}(a.klasses().picker+"__"),a.extend("pickadate",c)}),function(a){function b(){var b=+a(this).attr("length"),c=+a(this).val().length,d=b>=c;a(this).parent().find('span[class="character-counter"]').html(c+"/"+b),e(d,a(this))}function c(b){var c=b.parent().find('span[class="character-counter"]');c.length||(c=a("<span/>").addClass("character-counter").css("float","right").css("font-size","12px").css("height",1),b.parent().append(c))}function d(){a(this).parent().find('span[class="character-counter"]').html("")}function e(a,b){var c=b.hasClass("invalid");a&&c?b.removeClass("invalid"):a||c||(b.removeClass("valid"),b.addClass("invalid"))}a.fn.characterCounter=function(){return this.each(function(){var e=a(this),f=e.parent().find('span[class="character-counter"]');if(!f.length){var g=void 0!==e.attr("length");g&&(e.on("input",b),e.on("focus",b),e.on("blur",d),c(e))}})},a(document).ready(function(){a("input, textarea").characterCounter()})}(jQuery),function(a){var b={init:function(b){var c={time_constant:200,dist:-100,shift:0,padding:0,full_width:!1,indicators:!1,no_wrap:!1};return b=a.extend(c,b),this.each(function(){function c(){"undefined"!=typeof window.ontouchstart&&(H[0].addEventListener("touchstart",l),H[0].addEventListener("touchmove",m),H[0].addEventListener("touchend",n)),H[0].addEventListener("mousedown",l),H[0].addEventListener("mousemove",m),H[0].addEventListener("mouseup",n),H[0].addEventListener("mouseleave",n),H[0].addEventListener("click",j)}function d(a){return a.targetTouches&&a.targetTouches.length>=1?a.targetTouches[0].clientX:a.clientX}function e(a){return a.targetTouches&&a.targetTouches.length>=1?a.targetTouches[0].clientY:a.clientY}function f(a){return a>=t?a%t:0>a?f(t+a%t):a}function g(a){var c,d,e,g,h,i,j;if(p="number"==typeof a?a:p,q=Math.floor((p+s/2)/s),e=p-q*s,g=0>e?1:-1,h=-g*e*2/s,d=t>>1,b.full_width?j="translateX(0)":(j="translateX("+(H[0].clientWidth-item_width)/2+"px) ",j+="translateY("+(H[0].clientHeight-item_width)/2+"px)"),I){var k=q%t,l=G.find(".indicator-item.active");l.index()!==k&&(l.removeClass("active"),G.find(".indicator-item").eq(k).addClass("active"))}for((!b.no_wrap||q>=0&&t>q)&&(i=o[f(q)],i.style[A]=j+" translateX("+-e/2+"px) translateX("+g*b.shift*h*c+"px) translateZ("+b.dist*h+"px)",i.style.zIndex=0,b.full_width?tweenedOpacity=1:tweenedOpacity=1-.2*h,i.style.opacity=tweenedOpacity,i.style.display="block"),c=1;d>=c;++c)b.full_width?(zTranslation=b.dist,tweenedOpacity=c===d&&0>e?1-h:1):(zTranslation=b.dist*(2*c+h*g),tweenedOpacity=1-.2*(2*c+h*g)),(!b.no_wrap||t>q+c)&&(i=o[f(q+c)],i.style[A]=j+" translateX("+(b.shift+(s*c-e)/2)+"px) translateZ("+zTranslation+"px)",i.style.zIndex=-c,i.style.opacity=tweenedOpacity,i.style.display="block"),b.full_width?(zTranslation=b.dist,tweenedOpacity=c===d&&e>0?1-h:1):(zTranslation=b.dist*(2*c-h*g),tweenedOpacity=1-.2*(2*c-h*g)),(!b.no_wrap||q-c>=0)&&(i=o[f(q-c)],i.style[A]=j+" translateX("+(-b.shift+(-s*c-e)/2)+"px) translateZ("+zTranslation+"px)",i.style.zIndex=-c,i.style.opacity=tweenedOpacity,i.style.display="block");(!b.no_wrap||q>=0&&t>q)&&(i=o[f(q)],i.style[A]=j+" translateX("+-e/2+"px) translateX("+g*b.shift*h+"px) translateZ("+b.dist*h+"px)",i.style.zIndex=0,b.full_width?tweenedOpacity=1:tweenedOpacity=1-.2*h,i.style.opacity=tweenedOpacity,i.style.display="block")}function h(){var a,b,c,d;a=Date.now(),b=a-C,C=a,c=p-B,B=p,d=1e3*c/(1+b),z=.8*d+.2*z}function i(){var a,c;w&&(a=Date.now()-C,c=w*Math.exp(-a/b.time_constant),c>2||-2>c?(g(x-c),requestAnimationFrame(i)):g(x))}function j(c){if(E)return c.preventDefault(),c.stopPropagation(),!1;if(!b.full_width){var d=a(c.target).closest(".carousel-item").index(),e=q%t-d;0!==e&&(c.preventDefault(),c.stopPropagation()),k(d)}}function k(a){var c=q%t-a;b.no_wrap||(0>c?Math.abs(c+t)<Math.abs(c)&&(c+=t):c>0&&Math.abs(c-t)<c&&(c-=t)),0>c?H.trigger("carouselNext",[Math.abs(c)]):c>0&&H.trigger("carouselPrev",[c])}function l(a){r=!0,E=!1,F=!1,u=d(a),v=e(a),z=w=0,B=p,C=Date.now(),clearInterval(D),D=setInterval(h,100)}function m(a){var b,c,f;if(r)if(b=d(a),y=e(a),c=u-b,f=Math.abs(v-y),30>f&&!F)(c>2||-2>c)&&(E=!0,u=b,g(p+c));else{if(E)return a.preventDefault(),a.stopPropagation(),!1;F=!0}return E?(a.preventDefault(),a.stopPropagation(),!1):void 0}function n(a){return r?(r=!1,clearInterval(D),x=p,(z>10||-10>z)&&(w=.9*z,x=p+w),x=Math.round(x/s)*s,b.no_wrap&&(x>=s*(t-1)?x=s*(t-1):0>x&&(x=0)),w=x-p,C=Date.now(),requestAnimationFrame(i),E&&(a.preventDefault(),a.stopPropagation()),!1):void 0}var o,p,q,r,s,t,u,v,w,x,z,A,B,C,D,E,F,G=a('<ul class="indicators"></ul>'),H=a(this),I=H.attr("data-indicators")||b.indicators;if(H.hasClass("initialized"))return a(this).trigger("carouselNext",[1e-6]),!0;if(b.full_width){b.dist=0;var J=H.find(".carousel-item img").first();J.length?imageHeight=J.load(function(){H.css("height",a(this).height())}):(imageHeight=H.find(".carousel-item").first().height(),H.css("height",imageHeight)),I&&H.find(".carousel-fixed-item").addClass("with-indicators")}H.addClass("initialized"),r=!1,p=x=0,o=[],item_width=H.find(".carousel-item").first().innerWidth(),s=2*item_width+b.padding,H.find(".carousel-item").each(function(b){if(o.push(a(this)[0]),I){var c=a('<li class="indicator-item"></li>');0===b&&c.addClass("active"),c.click(function(){var b=a(this).index();k(b)}),G.append(c)}}),I&&H.append(G),t=o.length,A="transform",["webkit","Moz","O","ms"].every(function(a){var b=a+"Transform";return"undefined"!=typeof document.body.style[b]?(A=b,!1):!0}),window.onresize=g,c(),g(p),a(this).on("carouselNext",function(a,b){void 0===b&&(b=1),x=p+s*b,p!==x&&(w=x-p,C=Date.now(),requestAnimationFrame(i))}),a(this).on("carouselPrev",function(a,b){void 0===b&&(b=1),x=p-s*b,p!==x&&(w=x-p,C=Date.now(),requestAnimationFrame(i))}),a(this).on("carouselSet",function(a,b){void 0===b&&(b=0),k(b)})})},next:function(b){a(this).trigger("carouselNext",[b])},prev:function(b){a(this).trigger("carouselPrev",[b])},set:function(b){a(this).trigger("carouselSet",[b])}};a.fn.carousel=function(c){return b[c]?b[c].apply(this,Array.prototype.slice.call(arguments,1)):"object"!=typeof c&&c?void a.error("Method "+c+" does not exist on jQuery.carousel"):b.init.apply(this,arguments)}}(jQuery);
 var templates = {};
 
-templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
+templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper bio\" ng-init=\"getCharacterBio()\">\n" +
    "    <h4 class=\"page-header global-page-header center\">{{\"BIO\" | translate}}</h4>\n" +
    "\n" +
    "    <div class=\"panel global-panel-default\">\n" +
    "        <div class=\"row\">\n" +
    "            <div class=\"col s12\">\n" +
-   "                <textarea></textarea>\n" +
+   "                <textarea ng-model=\"bio\"></textarea>\n" +
+   "            </div>\n" +
+   "        </div>\n" +
+   "        <div class=\"row\">\n" +
+   "            <div class=\"col s12 center\">\n" +
+   "                <a ng-show=\"isNew\" ng-click=\"saveCharacterBio()\" class=\"btn waves-effect waves-light red\">\n" +
+   "                    Save\n" +
+   "                </a>\n" +
+   "                <a ng-show=\"!isNew\" ng-click=\"updateCharacterBio()\" class=\"btn waves-effect waves-light red\">\n" +
+   "                    Save\n" +
+   "                </a>\n" +
    "            </div>\n" +
    "        </div>\n" +
    "    </div>\n" +
    "    <!--<div class=\"pre-loader global-loader global-wrapper center valign-wrapper\" ng-show=\"!hideLoader\">-->\n" +
    "    <!--<i class=\"fa fa-cog fa-spin fa-3x pre-loader  valign center-block\"></i>-->\n" +
    "    <!--</div>-->\n" +
+   "</div>\n" +
+   "\n" +
+   "<div id=\"modalNewBio\" class=\"modal bottom-sheet mainform\">\n" +
+   "    <a class=\"close-btn-m modal-close\">\n" +
+   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
+   "    </a>\n" +
+   "    <div class=\"modal-content\">\n" +
+   "        <h4>Creating Character</h4>\n" +
+   "        <h5>Bio</h5>\n" +
+   "        <form class=\"col s12\" name=\"vtm_main_form\">\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"input-field col s12\">\n" +
+   "                    And finally give your character unique and beautiful biography.\n" +
+   "                </div>\n" +
+   "            </div>\n" +
+   "            <div class=\"modal-footer center\">\n" +
+   "                <button class=\"modal-action modal-close waves-effect waves-green btn-flat btn-modal-m\">\n" +
+   "                    Close\n" +
+   "                </button>\n" +
+   "            </div>\n" +
+   "        </form>\n" +
+   "    </div>\n" +
    "</div>";
 
 templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
    "\n" +
-   "    <h4 class=\"page-header global-page-header center\" ng-show=\"!hideLoader\">\n" +
+   "    <h4 class=\"page-header global-page-header center\">\n" +
    "        {{\"Character\" | translate}}\n" +
    "    </h4>\n" +
    "\n" +
    "    <!--<h4 class=\"page-header global-page-header center\" ng-show=\"hideLoader\">-->\n" +
    "        <!-- -->\n" +
    "    <!--</h4>-->\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"userInfo.type != 'player'\">\n" +
+   "        <!--<button class=\"waves-effect waves-green btn-flat next-modal\">-->\n" +
+   "           <!---->\n" +
+   "        <!--</button>-->\n" +
+   "        <div class=\"panel-body global-panel-body\" ng-show=\"hideLoader\">\n" +
+   "            <a ng-click=\"createCharacterDialog()\" class=\"btn waves-effect waves-light red\">\n" +
+   "                New Char <i class=\"material-icons right\">add</i>\n" +
+   "            </a>\n" +
+   "        </div>\n" +
    "\n" +
-   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"currentChar && currentSchema\">\n" +
+   "        <!--<div class=\"fixed-action-btn horizontal\">-->\n" +
+   "            <!--<a class=\"btn-floating btn-large red\">-->\n" +
+   "                <!--<i class=\"large material-icons\">mode_edit</i>-->\n" +
+   "            <!--</a>-->\n" +
+   "            <!--<ul>-->\n" +
+   "                <!--<li><a class=\"btn-floating red\"><i class=\"material-icons\">insert_chart</i></a></li>-->\n" +
+   "                <!--<li><a class=\"btn-floating yellow darken-1\"><i class=\"material-icons\">format_quote</i></a></li>-->\n" +
+   "                <!--<li><a class=\"btn-floating green\"><i class=\"material-icons\">publish</i></a></li>-->\n" +
+   "                <!--<li><a class=\"btn-floating blue\"><i class=\"material-icons\">attach_file</i></a></li>-->\n" +
+   "            <!--</ul>-->\n" +
+   "        <!--</div>-->\n" +
+   "    </div>\n" +
+   "\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"currentSchema\">\n" +
    "        <char-list char=\"currentChar\"></char-list>\n" +
    "    </div>\n" +
    "\n" +
@@ -43854,7 +43908,7 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
             })
             .when("/bio?:char_id", {
                 template : templates["../tabletop/view/modules/bio/bio.html"],
-                controller: 'Home'
+                controller: 'Bio'
             })
             .when("/games", {
                 template : templates["../tabletop/view/modules/home/home.html"],
@@ -43942,19 +43996,103 @@ app.directive('charList', ['$rootScope', '$compile', '$templateRequest', '$templ
                 $templateCache.put("/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html", html);
                 element.append(template);
                 $compile(template)(scope);
-
             });
-        },
-        //templateUrl: "/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html"
+        }
     };
 }]);
 
-app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', 'userRequests',
-    function ($scope, $rootScope, $routeParams, userRequests) {
+app.controller('Bio', ['$scope', '$rootScope', '$routeParams', '$location', 'userRequests',
+    function ($scope, $rootScope, $routeParams, $location, userRequests) {
 
         $rootScope.hideLoader = false;
 
-        if($rootScope.userInfo && $rootScope.userInfo.char_id) {
+        $scope.isNew = ($location.url().indexOf("new") > -1);
+        var char_id = ($rootScope.userInfo && $rootScope.userInfo.char_id) ?
+            $rootScope.userInfo.char_id : $routeParams.char_id;
+
+        $scope.getCharacterBio = function() {
+            userRequests.CRUDUser('getCharacterBio', {
+                char_id : char_id
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                $rootScope.hideLoader = true;
+                if (!data.error) {
+                    $scope.bio = data.data;
+                }
+                else {
+
+                }
+            });
+        };
+        $scope.saveCharacterBio = function() {
+            userRequests.CRUDUser('saveCharacterBio', {
+                bio : $scope.bio,
+                char_id : char_id
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                $rootScope.hideLoader = true;
+                if (!data.error) {
+                    $scope.isNew = false;
+                }
+                else {
+
+                }
+            });
+        };
+        $scope.updateCharacterBio = function() {
+            userRequests.CRUDUser('updateCharacterBio', {
+                bio : $scope.bio,
+                char_id : char_id
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                $rootScope.hideLoader = true;
+                if (!data.error) {
+
+                }
+                else {
+
+                }
+            });
+        };
+
+        console.log($scope.isNew)
+        if($scope.isNew) {
+            $('#modalNewBio').openModal();
+        }
+
+    }
+]);
+app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location', 'userRequests',
+    function ($scope, $rootScope, $routeParams, $location, userRequests) {
+
+        $rootScope.hideLoader = false;
+
+        window.saveCharacterProceed = function(newChar) {
+            userRequests.CRUDUser('saveCharacterList', {
+                newChar : newChar,
+                schema_id : $rootScope.userInfo.server_info.schema_id
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                $rootScope.hideLoader = true;
+                if (!data.error) {
+                    $('#modalCharFinish').openModal();
+                    $scope.currentChar = data.data.char.list;
+                    $location.path('/bio' + data.data.char.id + "?new");
+                }
+                else {
+
+                }
+            });
+        };
+        $scope.createCharacterDialog = function() {
+            window.createCharacterDialog();
+        };
+
+        if($rootScope.userInfo && $rootScope.userInfo.char_id && $rootScope.userInfo.char_info) {
             if(!$rootScope.userInfo.char_info.charlist || !$rootScope.userInfo.server_info.charlist_name) {
                 userRequests.CRUDUser('getCharacterList', {
                     char_id : $rootScope.userInfo.char_id
@@ -43965,6 +44103,7 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', 'userRequest
                     if (!data.error) {
                         $rootScope.currentSchema = data.data.schema;
                         $scope.currentChar = data.data.char.list;
+                        $rootScope.getUserData();
                     }
                     else {
                         //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
@@ -43976,9 +44115,26 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', 'userRequest
                 $scope.currentChar = $rootScope.userInfo.char_info.charlist.list;
                 $rootScope.hideLoader = true;
             }
+
         }
-        else if($rootScope.userInfo && !$rootScope.userInfo.char_id) {
-            //TODO create character dialog
+        else if($rootScope.userInfo && (!$rootScope.userInfo.char_id || !$rootScope.userInfo.char_info)) {
+            $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name;
+            userRequests.CRUDUser('getCharactersList', {
+                users : $rootScope.userInfo.server_info.users
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                $rootScope.hideLoader = true;
+                if (!data.error) {
+                    $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name || data.data.schema;
+                    $scope.charList = data.data.chars;
+                    $rootScope.getUserData();
+                }
+                else {
+                    //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
+                }
+            });
+
         }
     }
 ]);

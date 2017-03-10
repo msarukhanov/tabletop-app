@@ -61,3 +61,19 @@ nav .button-collapse i {
     padding: 0 10px;
     width: 100%;
 }
+.bio textarea {
+    min-height: 200px;
+}
+
+.close-btn-m {
+    position: absolute;
+    font-size: 25px;
+    right: 10px;
+    top: 5px;
+    color: #000;
+}
+.btn-modal-m {
+    color: #fff;
+    background-color: #000;
+    font-size: 16px;
+}

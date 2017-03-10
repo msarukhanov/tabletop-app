@@ -16,17 +16,6 @@ var knex = require('knex')({
 
 var redisRequests = require('./redisRequests');
 
-
-
-//knex('charlists')
-//    .update({list: JSON.stringify(charJson)})
-//    .where({id : 1})
-//    .then(function(rows) {
-//        //console.log(rows[0]);
-//    }, function(error) {
-//        //console.log(error);
-//    });
-
 global.appRoute = function(app, route, callback, permissions) {
     return app.post('/api/'+route, function (req, res) {
         if (req.headers.authorization == undefined) {
@@ -70,7 +59,7 @@ global.userToRedis = function(user, cookieExpireTime, callback) {
     });
 };
 
-function getServer(currentUser, cb_success, cb_error) {
+global.getServer = function(currentUser, cb_success, cb_error) {
     var select = currentUser.type == 'player' ? ['server_id', 'schema_id', 'name'] : ['server_id', 'schema_id', 'users', 'name'] ;
     knex('servers').select(select)
         .where({
@@ -81,8 +70,8 @@ function getServer(currentUser, cb_success, cb_error) {
         }, function(error) {
             cb_error(error);
         })
-}
-function getCharacter(currentUser, cb_success, cb_error) {
+};
+global.getCharacter = function(currentUser, cb_success, cb_error) {
     if(currentUser.type == 'player') {
         knex('chars').select(['char_name', 'charlist_id', 'bio_id', 'id as char_id'])
             .where({
@@ -107,128 +96,21 @@ function getCharacter(currentUser, cb_success, cb_error) {
 
             })
     }
-}
+};
 
 module.exports = function (app) {
 
-    //var Account = require('./models/account')(app, knex, md5, crypto, generators);
-    //Account.regRoutes();
+    var Account = require('./models/account')(app, knex);
+    Account.regRoutes();
 
-    app.post('/api/signIn', function (req, res) {
-        if (req.headers.authorization == undefined) {
-            knex('users').select('*')
-                .where({
-                    username: req.body.username,
-                    password: req.body.password
-                })
-                .then(function (rows) {
-                    if (_.isEmpty(rows)) {
-                        res.send({error: true, message: 'Email or Password is Wrong', data: null})
-                    }
-                    else {
-                        var timestamp = (moment().unix()*1000+moment().millisecond());
-                        var uniqueID = "";
-                        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                        for (var i = 0; i < 6; i++) uniqueID += possible.charAt(Math.floor(Math.random() * possible.length));
-                        rows[0].user_token = uniqueID+'T'+rows[0].user_id+'T'+timestamp;
-                        userToRedis(rows[0], 30000, function(data) { res.send(data) });
-                        knex('users').update({login_at : new Date()}).where({username: req.body.username}).then(function(a){}, function(e){})
-                    }
-                }, function (error) {
-                    res.send({error: true, message: 'Database error' + error.toString().split("at")[0], data: null})
-                });
-        }
-        else {
-            res.send({error: true, message: 'Already logged in.', error_code: 'auth_1'}).end();
-        }
-    });
+    var CharList = require('./models/charlist')(app, knex);
+    CharList.regRoutes();
 
-    appRoute(app, 'accountInfo', function(req,res,currentUser) {
-        if(currentUser) {
-            currentUser = _.omit(currentUser, ["password","joined_at","login_at"]);
-            if(currentUser.server_id && !currentUser.server_info) {
-                getServer(currentUser, function(server) {
-                    currentUser.server_info = server;
-                    if(currentUser.type = 'player') {
-                        if(!currentUser.char_info) {
-                            getCharacter(currentUser, function(player_char) {
-                                currentUser.char_info = player_char;
-                                userToRedis(currentUser, 30000, function(data) {
-                                    res.send({error: false, data: currentUser}).end();
-                                });
-                            }, function(error) {
-                                res.send({error: true, message: 'db error chars'}).end();
-                            });
-                        }
-                        else {
-                            res.send({error: false, data: currentUser}).end();
-                        }
-                    }
-                    else {
-                        currentUser.server_info.users = currentUser.server_info.users.split(",");
-                        userToRedis(currentUser, 30000, function(data) {});
-                        res.send({error: false, data: currentUser}).end();
-                    }
-                }, function(error) {
-                    res.send({error: true, message: 'db error servers'}).end();
-                });
-            }
-            else {
-                res.send({error: false, data: currentUser}).end();
-            }
-        }
-        else {
-            res.send({error: true, message: 'Authorization token required', error_code: 'auth_1'}).end();
-        }
-    });
-
-    appRoute(app, 'getCharacterList', function(req,res,currentUser) {
-        if(currentUser) {
-            if(currentUser.server_id) {
-                knex('charlists').select(["id","list","schema_id"])
-                    .where({
-                        char_id: req.body.char_id
-                    })
-                    .then(function(rows) {
-                        currentUser.char_info.charlist = rows[0];
-                        if(!currentUser.server_info.charlist_name) {
-                            knex('schemas').select(["charlist_name"])
-                                .where({
-                                    schema_id: currentUser.server_info.schema_id
-                                })
-                                .then(function(rows) {
-                                    var charlist_name = rows[0].charlist_name;
-                                    currentUser.server_info.charlist_name = charlist_name;
-                                    userToRedis(currentUser, 30000, function(data, err) {});
-                                    res.send({error: false, data: {
-                                        schema : charlist_name,
-                                        char : currentUser.char_info.charlist
-                                    }}).end();
-                                }, function(error) {
-                                    res.send({error: true, message: 'db error schemas'}).end();
-                                });
-                        }
-                        else {
-                            userToRedis(currentUser, 30000, function(data) {});
-                            res.send({error: false, data: rows[0]}).end();
-                        }
-                    }, function(error) {
-                        res.send({error: true, message: 'db error charlists'}).end();
-                    });
-            }
-            else {
-                res.send({error: true, message: 'No active server.'}).end();
-            }
-        }
-        else {
-            res.send({error: true, message: 'Authorization token required', error_code: 'auth_1'}).end();
-        }
-    });
-
-
+    var Bio = require('./models/bio')(app, knex);
+    Bio.regRoutes();
 
 	app.get('/', function (req, res) {
-		res.render('./index', {title: 'TableTap App'});
+		res.render('./index', {title: 'TableTapp'});
 	});
 
 	app.get('/files/*', function (req, res) {
