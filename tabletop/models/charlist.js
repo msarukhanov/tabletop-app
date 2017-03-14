@@ -36,7 +36,7 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
                             char_id: req.body.char_id
                         })
                         .then(function(rows) {
-                            currentUser.char_info.charlist = rows[0];
+                            if(currentUser.char_info) currentUser.char_info.charlist = rows[0];
                             if(!currentUser.server_info.charlist_name) {
                                 knex('schemas').select(["charlist_name"])
                                     .where({
@@ -74,8 +74,11 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
         getCharactersList: function (req, currentUser, callback) {
             if(currentUser) {
                 if(currentUser.server_id) {
-                    knex('chars').select(["chars.id","chars.charlist_id","charlists.list"])
-                        .leftJoin('charlists', 'chars.charlist_id', 'charlists.id')
+                    //knex('chars').select(["chars.id","chars.charlist_id","charlists.list"])
+                    //    .leftJoin('charlists', 'chars.charlist_id', 'charlists.id')
+                    //    .whereIn('user_id', req.body.users)
+                    knex('chars').select(["chars.id","chars.charlist_id","chars.char_name","chars.npc"])
+                        //.leftJoin('charlists', 'chars.charlist_id', 'charlists.id')
                         .whereIn('user_id', req.body.users)
                         .then(function(rows) {
                             var chars = rows;
@@ -90,7 +93,8 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
                                         userToRedis(currentUser, 30000, function(data, err) {});
                                         callback({error: false, data: {
                                             schema : charlist_name,
-                                            chars : chars
+                                            players : _.filter(chars, function(char){return !char.npc}),
+                                            npc : _.filter(chars, function(char){return char.npc})
                                         }});
                                     }, function(error) {
                                         callback({error: true, message: 'db error schemas'});
@@ -98,7 +102,10 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
                             }
                             else {
                                 userToRedis(currentUser, 30000, function(data) {});
-                                callback({error: false, data: rows});
+                                callback({error: false, data: {
+                                    players : _.filter(chars, function(char){return !char.npc}),
+                                    npc : _.filter(chars, function(char){return char.npc})
+                                }});
                             }
                         }, function(error) {
                             console.log(error);
