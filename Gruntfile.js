@@ -117,5 +117,6 @@ module.exports = function(grunt) {
     //grunt.registerTask('terminal-dev', ['ngAnnotate', 'htmlConvert', 'concat:dist_libs', 'concat:dist_terminal', 'cssmin', 'uglify']);
     grunt.registerTask('libs', ['concat:dist_libs']);
     grunt.registerTask('dev', ['ngAnnotate', 'htmlConvert', 'concat:dist_terminal', 'cssmin', 'clean', 'watch']);
+    grunt.registerTask('min', ['uglify', 'cssmin']);
 
 };
