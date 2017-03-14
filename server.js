@@ -56,31 +56,44 @@ app.io = require('socket.io')();
 app.io.listen(server);
 
 app.io.on('connection', function(socket){
-
-    console.log('a user connected');
-    socket.on('new message', function(msg){
-        console.log('new message: ' + msg);
-    });
     socket.on('ucon', function (msg) {
-        console.log(msg);
-        socket.json.send(["sm", {connected : true}])
+        socket.UserInfo = msg;
+        socket.json.send(["sm", 'connected'])
     });
     socket.on('message', function (msg) {
         if (msg[0]) {
             switch (msg[0]) {
                 case 'start':
-                    switch (msg[1]) {
-                        case 'tv':
-                            socket.join('live_tv');
-                            socket.json.send(['start', JSON.stringify(events)]);
+                    socket.join('server_' + socket.UserInfo.server_id, function() {
+                       // console.log(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id]);
+                       //  var clients = app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].sockets;
+                       //  for (var clientId in clients) {
+                       //      console.log(app.io.sockets.connected[clientId].UserInfo);
+                       //  }
+                       // // console.log(app.io);
+                        socket.json.send(["sm", 'joined', 'server_' + socket.UserInfo.server_id])
+                    });
+                    break;
+                case 'log-s':
+                    app.io.sockets.to('server_' + socket.UserInfo.server_id).emit('message', ['log-s', app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs || []]);
+                    break;
+                case 'upd':
+                    switch(msg[1]) {
+                        case 'chat':
+                            msg[2].dt = new Date();
+                            msg[2].username = socket.UserInfo.username;
+                            if(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs) {
+                                app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.push(msg[2]);
+                                if(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.length > 50) {
+                                    app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.shift();
+                                }
+                            }
+                            else app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs = [msg[2]];
+                            app.io.sockets.to('server_' + socket.UserInfo.server_id).emit('message', ['log-u', msg[2]]);
+                            break;
+                        case 'log':
                             break;
                     }
-                    break;
-                case 'sub':
-                    socket.join(msg[1] + msg[2]);
-                    break;
-                case 'unsub':
-                    socket.leave(msg[1] + msg[2]);
                     break;
                 case 'dev':
                     switch (msg[1]) {

@@ -51174,7 +51174,73 @@ return /******/ (function(modules) { // webpackBootstrap
 //# sourceMappingURL=socket.io.js.map
 var templates = {};
 
-templates["../tabletop/view/modules/actions/actions.html"] = "";
+templates["../tabletop/view/modules/actions/actions.html"] = "<div class=\"global-wrapper\">\n" +
+   "\n" +
+   "    <h4 class=\"page-header global-page-header center\">\n" +
+   "        <span>\n" +
+   "            {{\"Actions\" | translate}}\n" +
+   "        </span>\n" +
+   "    </h4>\n" +
+   "\n" +
+   "    <div class=\"chat-wrapper\">\n" +
+   "        <div class=\"chat-body\">\n" +
+   "            <ul class=\"chat-list\">\n" +
+   "                <li class=\"chat-msg\" ng-repeat=\"msg in chatMsgs\">\n" +
+   "                    <span>\n" +
+   "                        {{msg.username}} - {{msg.dt | date:'HH:mm:ss'}} : {{msg.text}}\n" +
+   "                        <!--mmalkav - (11:11:11) : ActionName=8,7,3,4,5,6,7,8,9,4-->\n" +
+   "                    </span>\n" +
+   "                </li>\n" +
+   "            </ul>\n" +
+   "        </div>\n" +
+   "        <div class=\"chat-footer\">\n" +
+   "            <span class=\"type-select\">\n" +
+   "                <div class=\"fixed-action-btn horizontal click-to-toggle actions-bot\">\n" +
+   "                    <a class=\"btn-floating black\">\n" +
+   "                        <i class=\"large material-icons\">settings</i>\n" +
+   "                    </a>\n" +
+   "                    <ul>\n" +
+   "                        <li>\n" +
+   "                            <a class=\"btn-floating red\" ng-click=\"actionMode('fight')\">\n" +
+   "                                <i class=\"material-icons\">pages</i>\n" +
+   "                            </a>\n" +
+   "                        </li>\n" +
+   "                        <li>\n" +
+   "                            <a class=\"btn-floating yellow darken-1\" ng-click=\"actionMode('chat')\">\n" +
+   "                                <i class=\"material-icons\">chat</i>\n" +
+   "                            </a>\n" +
+   "                        </li>\n" +
+   "                        <li>\n" +
+   "                            <a class=\"btn-floating blue\" ng-click=\"actionMode('party')\">\n" +
+   "                                <i class=\"material-icons\">group</i>\n" +
+   "                            </a>\n" +
+   "                        </li>\n" +
+   "                        <li>\n" +
+   "                            <a class=\"btn-floating green\" ng-click=\"actionMode('global')\">\n" +
+   "                                <i class=\"material-icons\">language</i>\n" +
+   "                            </a>\n" +
+   "                        </li>\n" +
+   "                    </ul>\n" +
+   "                </div>\n" +
+   "            </span>\n" +
+   "            <span class=\"type-msg-textbox\">\n" +
+   "                <input type=\"text\" placeholder=\"Type message here\" ng-model=\"textMsg\"/>\n" +
+   "            </span>\n" +
+   "            <span class=\"type-msg-send\">\n" +
+   "                <button class=\"btn-floating red\" ng-click=\"sendMessage(textMsg, 'chat')\">\n" +
+   "                    <i class=\"material-icons right\">input</i>\n" +
+   "                </button>\n" +
+   "            </span>\n" +
+   "            <!--<span class=\"type-msg-btn\"></span>-->\n" +
+   "            <!--<span class=\"roll-btn\"></span>-->\n" +
+   "            <!--<span class=\"roll-dselect\"></span>-->\n" +
+   "            <!--<span class=\"roll-cselect\"></span>-->\n" +
+   "        </div>\n" +
+   "    </div>\n" +
+   "\n" +
+   "\n" +
+   "</div>\n" +
+   "";
 
 templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper bio\" ng-init=\"getCharacterBio()\">\n" +
    "    <h4 class=\"page-header global-page-header center\">{{\"BIO\" | translate}}</h4>\n" +
@@ -51291,7 +51357,7 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "\n" +
    "        </ul>\n" +
    "\n" +
-   "        <!--<div class=\"fixed-action-btn horizontal\">-->\n" +
+   "        <!--<div class=\"fixed-action-btn horizontal click-to-toggle\">-->\n" +
    "            <!--<a class=\"btn-floating btn-large red\">-->\n" +
    "                <!--<i class=\"large material-icons\">mode_edit</i>-->\n" +
    "            <!--</a>-->\n" +
@@ -51465,6 +51531,20 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "    <div class=\"pre-loader global-loader global-wrapper center valign-wrapper\" ng-show=\"!hideLoader\">\n" +
    "        <i class=\"fa fa-cog fa-spin fa-3x pre-loader  valign center-block\"></i>\n" +
    "    </div>\n" +
+   "\n" +
+   "    <footer class=\"page-footer\">\n" +
+   "        <div class=\"footer-copyright\">\n" +
+   "            <div class=\"container\">\n" +
+   "                <a href=\"https://www.facebook.com/msarukhanov\"> © 2017 Sarukhanov </a>\n" +
+   "                <a class=\"grey-text text-lighten-4 right\" href=\"https://www.facebook.com/tabletopbymmalkav/\">\n" +
+   "                    <i class=\"fa fa-facebook-official\"></i>\n" +
+   "                </a>\n" +
+   "                <a class=\"grey-text text-lighten-4 right\" href=\"https://www.facebook.com/tabletopbymmalkav/\">\n" +
+   "                    <i class=\"fa fa-twitter-square\"></i>\n" +
+   "                </a>\n" +
+   "            </div>\n" +
+   "        </div>\n" +
+   "    </footer>\n" +
    "\n" +
    "</div>\n" +
    "\n" +
@@ -52262,21 +52342,44 @@ app.controller('Actions', ['$scope', '$rootScope', '$routeParams', '$location', 
 
         $rootScope.hideLoader = false;
 
+        $scope.chatMsgs = [];
+        $scope.textMsg = '';
+
         var socket = io.connect(location.origin);
         socket.on("connect", function(){
-            console.log("connected");
             socket.emit('ucon', $rootScope.userInfo);
             socket.on('message', function(msg){
-                if(msg.length) {
-                    switch(msg[0]) {
-                        case 'sm':
-                            console.log("Server Message", msg[1]);
-                            break;
-                        case 'um':
-                            console.log("User Message", msg[1]);
-                            break;
+                $rootScope.$apply(function() {
+                    if(msg.length) {
+                        switch(msg[0]) {
+                            case 'sm':
+                                console.log("Server Message", msg[1]);
+                                switch(msg[1]) {
+                                    case 'connected':
+                                        console.log("connected");
+                                        socket.json.send(['start']);
+                                        $rootScope.hideLoader = true;
+                                        break;
+                                    case 'joined':
+                                        console.log("joined : " + msg[2]);
+                                        $rootScope.sendMessage = function(text, type) {
+                                            socket.json.send(['upd', type, {text : text}]);
+                                            if(type=='chat') $scope.textMsg = '';
+                                        };
+                                        socket.json.send(['log-s']);
+                                        break;
+                                }
+                                break;
+                            case 'log-s':
+                                $scope.chatMsgs = msg[1];
+                                break;
+                            case 'log-u':
+                                $scope.chatMsgs.push(msg[1]);
+                                if($scope.chatMsgs.length > 50) $scope.chatMsgs.shift();
+                                break;
+                        }
                     }
-                }
+                });
             });
         });
 

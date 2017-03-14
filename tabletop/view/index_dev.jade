@@ -1,0 +1,18 @@
+doctype html
+html(lang='en' ng-app="tabletapApp")
+    head
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name='viewport', content='user-scalable=no, width=device-width, initial-scale=1')
+        meta(name='format-detection', content='telephone=no')
+
+        title #{title}
+        link(rel="shortcut icon" type="image/x-icon" href="/files/images/theweave.ico")
+        link(rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons")
+        link(rel='stylesheet', href='/files/styles/font-awesome/css/font-awesome.min.css')
+        link(rel='stylesheet', href='/files/production/production-css.min.css?v=2.008')
+
+        script(src='/files/production/production-js.js?v=2.008')
+
+        script var menu = '#{menu}';
+
+    body(ng-controller="MainCtrl" ng-include="isLoggedIn && 'main' || 'login'")

@@ -109,7 +109,7 @@ module.exports = function (app) {
     Bio.regRoutes();
 
 	app.get('/', function (req, res) {
-		res.render('./index', {title: 'TableTapp'});
+        process.env.PORT ? res.render('./index', {title: 'TableTapp'}) : res.render('./index_dev', {title: 'TableTapp'});
 	});
 
 	app.get('/files/*', function (req, res) {

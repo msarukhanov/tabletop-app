@@ -88,10 +88,7 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
                                         var charlist_name = rows[0].charlist_name;
                                         currentUser.server_info.charlist_name = charlist_name;
                                         userToRedis(currentUser, 30000, function(data, err) {});
-                                        callback({error: false, data: {
-                                            schema : charlist_name,
-                                            chars : chars
-                                        }});
+                                        callback({error: false, data: {schema : charlist_name, chars : chars}});
                                     }, function(error) {
                                         callback({error: true, message: 'db error schemas'});
                                     });
