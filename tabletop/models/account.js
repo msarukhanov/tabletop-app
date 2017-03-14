@@ -2,7 +2,7 @@
  * Created by Mark Sarukhanov on 21.11.2016.
  */
 
-module.exports = function(app, knex){
+module.exports = function(app, knex, moment){
     return {
         regRoutes: function () {
             var _this = this;

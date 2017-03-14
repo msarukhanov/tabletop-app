@@ -8,7 +8,6 @@ var moment_timezone = require('moment-timezone');
 moment_timezone.tz.load(latestData);
 
 var http = require('http');
-//var wait = require('wait.for');
 var knex = require('knex')({
     client: 'pg',
     connection: 'postgres://gxlwcegldechzz:073cc0afaa097f77f818c89d3d3e9d1a2309ba743977e63a78c86bb5662b9afc@ec2-54-225-230-243.compute-1.amazonaws.com:5432/d12ief33mdff9t?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory',
@@ -100,7 +99,7 @@ global.getCharacter = function(currentUser, cb_success, cb_error) {
 
 module.exports = function (app) {
 
-    var Account = require('./models/account')(app, knex);
+    var Account = require('./models/account')(app, knex, moment);
     Account.regRoutes();
 
     var CharList = require('./models/charlist')(app, knex);

@@ -25,6 +25,10 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
                 template : templates["../tabletop/view/modules/bio/bio.html"],
                 controller: 'Bio'
             })
+            .when("/actions", {
+                template : templates["../tabletop/view/modules/actions/actions.html"],
+                controller: 'Actions'
+            })
             .when("/games", {
                 template : templates["../tabletop/view/modules/home/home.html"],
                 controller: 'Home'

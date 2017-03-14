@@ -27,6 +27,8 @@ redisClient.on('error', redisLog('Redis Connection Error ...'));
 redisClient.on('end', redisLog('Redis Connection End ...'));
 
 var app = express();
+
+
 app.set('view engine', 'jade');
 app.use(cookieParser('theweavenodejsmylongsecretkey!@#$%'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -44,7 +46,49 @@ app.use('/favicon.ico', express.static('/images/theweave.ico'));
 require('./tabletop')('routes', app);
 
 var port = parseInt(process.env.PORT) || 8877;
-app.listen(port, function() {
+
+var server = app.listen(port, function() {
     console.log( 'Server listening on port %d in %s mode', port, 'dev' );
 });
 
+app.io = require('socket.io')();
+//var server = require('http').createServer(app);
+app.io.listen(server);
+
+app.io.on('connection', function(socket){
+
+    console.log('a user connected');
+    socket.on('new message', function(msg){
+        console.log('new message: ' + msg);
+    });
+    socket.on('ucon', function (msg) {
+        console.log(msg);
+        socket.json.send(["sm", {connected : true}])
+    });
+    socket.on('message', function (msg) {
+        if (msg[0]) {
+            switch (msg[0]) {
+                case 'start':
+                    switch (msg[1]) {
+                        case 'tv':
+                            socket.join('live_tv');
+                            socket.json.send(['start', JSON.stringify(events)]);
+                            break;
+                    }
+                    break;
+                case 'sub':
+                    socket.join(msg[1] + msg[2]);
+                    break;
+                case 'unsub':
+                    socket.leave(msg[1] + msg[2]);
+                    break;
+                case 'dev':
+                    switch (msg[1]) {
+                        case 'check':
+                            console.log(socket);
+                            break;
+                    }
+            }
+        }
+    });
+});
