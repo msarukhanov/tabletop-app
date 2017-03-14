@@ -27,6 +27,8 @@ redisClient.on('error', redisLog('Redis Connection Error ...'));
 redisClient.on('end', redisLog('Redis Connection End ...'));
 
 var app = express();
+
+
 app.set('view engine', 'jade');
 app.use(cookieParser('theweavenodejsmylongsecretkey!@#$%'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -44,7 +46,62 @@ app.use('/favicon.ico', express.static('/images/theweave.ico'));
 require('./tabletop')('routes', app);
 
 var port = parseInt(process.env.PORT) || 8877;
-app.listen(port, function() {
+
+var server = app.listen(port, function() {
     console.log( 'Server listening on port %d in %s mode', port, 'dev' );
 });
 
+app.io = require('socket.io')();
+//var server = require('http').createServer(app);
+app.io.listen(server);
+
+app.io.on('connection', function(socket){
+    socket.on('ucon', function (msg) {
+        socket.UserInfo = msg;
+        socket.json.send(["sm", 'connected'])
+    });
+    socket.on('message', function (msg) {
+        if (msg[0]) {
+            switch (msg[0]) {
+                case 'start':
+                    socket.join('server_' + socket.UserInfo.server_id, function() {
+                       // console.log(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id]);
+                       //  var clients = app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].sockets;
+                       //  for (var clientId in clients) {
+                       //      console.log(app.io.sockets.connected[clientId].UserInfo);
+                       //  }
+                       // // console.log(app.io);
+                        socket.json.send(["sm", 'joined', 'server_' + socket.UserInfo.server_id])
+                    });
+                    break;
+                case 'log-s':
+                    app.io.sockets.to('server_' + socket.UserInfo.server_id).emit('message', ['log-s', app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs || []]);
+                    break;
+                case 'upd':
+                    switch(msg[1]) {
+                        case 'chat':
+                            msg[2].dt = new Date();
+                            msg[2].username = socket.UserInfo.username;
+                            if(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs) {
+                                app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.push(msg[2]);
+                                if(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.length > 50) {
+                                    app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.shift();
+                                }
+                            }
+                            else app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs = [msg[2]];
+                            app.io.sockets.to('server_' + socket.UserInfo.server_id).emit('message', ['log-u', msg[2]]);
+                            break;
+                        case 'log':
+                            break;
+                    }
+                    break;
+                case 'dev':
+                    switch (msg[1]) {
+                        case 'check':
+                            console.log(socket);
+                            break;
+                    }
+            }
+        }
+    });
+});

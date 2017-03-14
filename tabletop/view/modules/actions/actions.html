@@ -1,0 +1,66 @@
+<div class="global-wrapper">
+
+    <h4 class="page-header global-page-header center">
+        <span>
+            {{"Actions" | translate}}
+        </span>
+    </h4>
+
+    <div class="chat-wrapper">
+        <div class="chat-body">
+            <ul class="chat-list">
+                <li class="chat-msg" ng-repeat="msg in chatMsgs">
+                    <span>
+                        {{msg.username}} - {{msg.dt | date:'HH:mm:ss'}} : {{msg.text}}
+                        <!--mmalkav - (11:11:11) : ActionName=8,7,3,4,5,6,7,8,9,4-->
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div class="chat-footer">
+            <span class="type-select">
+                <div class="fixed-action-btn horizontal click-to-toggle actions-bot">
+                    <a class="btn-floating black">
+                        <i class="large material-icons">settings</i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="btn-floating red" ng-click="actionMode('fight')">
+                                <i class="material-icons">pages</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn-floating yellow darken-1" ng-click="actionMode('chat')">
+                                <i class="material-icons">chat</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn-floating blue" ng-click="actionMode('party')">
+                                <i class="material-icons">group</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn-floating green" ng-click="actionMode('global')">
+                                <i class="material-icons">language</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </span>
+            <span class="type-msg-textbox">
+                <input type="text" placeholder="Type message here" ng-model="textMsg"/>
+            </span>
+            <span class="type-msg-send">
+                <button class="btn-floating red" ng-click="sendMessage(textMsg, 'chat')">
+                    <i class="material-icons right">input</i>
+                </button>
+            </span>
+            <!--<span class="type-msg-btn"></span>-->
+            <!--<span class="roll-btn"></span>-->
+            <!--<span class="roll-dselect"></span>-->
+            <!--<span class="roll-cselect"></span>-->
+        </div>
+    </div>
+
+
+</div>
