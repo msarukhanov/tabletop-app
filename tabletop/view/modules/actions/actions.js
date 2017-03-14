@@ -3,7 +3,7 @@ app.controller('Actions', ['$scope', '$rootScope', '$routeParams', '$location', 
 
         $rootScope.hideLoader = false;
 
-        var socket = io.connect("http://localhost:8877");
+        var socket = io.connect(location.origin);
         socket.on("connect", function(){
             console.log("connected");
             socket.emit('ucon', $rootScope.userInfo);

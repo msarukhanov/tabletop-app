@@ -1,5 +1,7 @@
 var templates = {};
 
+templates["../tabletop/view/modules/actions/actions.html"] = "";
+
 templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper bio\" ng-init=\"getCharacterBio()\">\n" +
    "    <h4 class=\"page-header global-page-header center\">{{\"BIO\" | translate}}</h4>\n" +
    "\n" +
@@ -65,6 +67,55 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                New Char <i class=\"material-icons right\">add</i>\n" +
    "            </a>\n" +
    "        </div>\n" +
+   "        <ul class=\"collapsible\" data-collapsible=\"expandable\">\n" +
+   "            <li>\n" +
+   "                <div class=\"collapsible-header\">\n" +
+   "                    Players' chars.\n" +
+   "                </div>\n" +
+   "                <div class=\"collapsible-body\">\n" +
+   "                    <table>\n" +
+   "                        <thead>\n" +
+   "                        <tr>\n" +
+   "                            <th data-field=\"id\">Name</th>\n" +
+   "                            <th data-field=\"name\">Item Name</th>\n" +
+   "                            <th data-field=\"price\">Item Price</th>\n" +
+   "                        </tr>\n" +
+   "                        </thead>\n" +
+   "                        <tbody>\n" +
+   "                        <tr>\n" +
+   "                            <td>Alvin</td>\n" +
+   "                            <td>Eclair</td>\n" +
+   "                            <td>$0.87</td>\n" +
+   "                        </tr>\n" +
+   "                        </tbody>\n" +
+   "                    </table>\n" +
+   "                </div>\n" +
+   "            </li>\n" +
+   "            <li>\n" +
+   "                <div class=\"collapsible-header\">\n" +
+   "                    NPCs.\n" +
+   "                </div>\n" +
+   "                <div class=\"collapsible-body\">\n" +
+   "                    <table>\n" +
+   "                        <thead>\n" +
+   "                        <tr>\n" +
+   "                            <th data-field=\"id\">Name</th>\n" +
+   "                            <th data-field=\"name\">Item Name</th>\n" +
+   "                            <th data-field=\"price\">Item Price</th>\n" +
+   "                        </tr>\n" +
+   "                        </thead>\n" +
+   "                        <tbody>\n" +
+   "                        <tr>\n" +
+   "                            <td>Alvin</td>\n" +
+   "                            <td>Eclair</td>\n" +
+   "                            <td>$0.87</td>\n" +
+   "                        </tr>\n" +
+   "                        </tbody>\n" +
+   "                    </table>\n" +
+   "                </div>\n" +
+   "            </li>\n" +
+   "\n" +
+   "        </ul>\n" +
    "\n" +
    "        <!--<div class=\"fixed-action-btn horizontal\">-->\n" +
    "            <!--<a class=\"btn-floating btn-large red\">-->\n" +
