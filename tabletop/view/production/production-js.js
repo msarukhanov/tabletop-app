@@ -39239,244 +39239,6 @@
     return 'pascalprecht.translate';
 
 }));
-(function (root, factory) {
-    'use strict';
-
-    if (typeof define === 'function' && define.amd) {
-        define(['angular'], factory);
-    } else if (typeof exports === 'object') {
-        factory(require('angular'));
-        module.exports = 'ngStorage';
-    } else {
-        // Browser globals (root is window), we don't register it.
-        factory(root.angular);
-    }
-}(this , function (angular) {
-    'use strict';
-
-    // In cases where Angular does not get passed or angular is a truthy value
-    // but misses .module we can fall back to using window.
-    angular = (angular && angular.module ) ? angular : window.angular;
-
-
-    function isStorageSupported($window, storageType) {
-
-        // Some installations of IE, for an unknown reason, throw "SCRIPT5: Error: Access is denied"
-        // when accessing window.localStorage. This happens before you try to do anything with it. Catch
-        // that error and allow execution to continue.
-
-        // fix 'SecurityError: DOM Exception 18' exception in Desktop Safari, Mobile Safari
-        // when "Block cookies": "Always block" is turned on
-        var supported;
-        try {
-            supported = $window[storageType];
-        }
-        catch(err) {
-            supported = false;
-        }
-
-        // When Safari (OS X or iOS) is in private browsing mode, it appears as though localStorage and sessionStorage
-        // is available, but trying to call .setItem throws an exception below:
-        // "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to add something to storage that exceeded the quota."
-        if(supported) {
-            var key = '__' + Math.round(Math.random() * 1e7);
-            try {
-                $window[storageType].setItem(key, key);
-                $window[storageType].removeItem(key, key);
-            }
-            catch(err) {
-                supported = false;
-            }
-        }
-
-        return supported;
-    }
-
-    /**
-     * @ngdoc overview
-     * @name ngStorage
-     */
-
-    return angular.module('ngStorage', [])
-
-    /**
-     * @ngdoc object
-     * @name ngStorage.$localStorage
-     * @requires $rootScope
-     * @requires $window
-     */
-
-        .provider('$localStorage', _storageProvider('localStorage'))
-
-        /**
-         * @ngdoc object
-         * @name ngStorage.$sessionStorage
-         * @requires $rootScope
-         * @requires $window
-         */
-
-        .provider('$sessionStorage', _storageProvider('sessionStorage'));
-
-    function _storageProvider(storageType) {
-        var providerWebStorage = isStorageSupported(window, storageType);
-
-        return function () {
-            var storageKeyPrefix = 'ngStorage-';
-
-            this.setKeyPrefix = function (prefix) {
-                if (typeof prefix !== 'string') {
-                    throw new TypeError('[ngStorage] - ' + storageType + 'Provider.setKeyPrefix() expects a String.');
-                }
-                storageKeyPrefix = prefix;
-            };
-
-            var serializer = angular.toJson;
-            var deserializer = angular.fromJson;
-
-            this.setSerializer = function (s) {
-                if (typeof s !== 'function') {
-                    throw new TypeError('[ngStorage] - ' + storageType + 'Provider.setSerializer expects a function.');
-                }
-
-                serializer = s;
-            };
-
-            this.setDeserializer = function (d) {
-                if (typeof d !== 'function') {
-                    throw new TypeError('[ngStorage] - ' + storageType + 'Provider.setDeserializer expects a function.');
-                }
-
-                deserializer = d;
-            };
-
-            this.supported = function() {
-                return !!providerWebStorage;
-            };
-
-            // Note: This is not very elegant at all.
-            this.get = function (key) {
-                return providerWebStorage && deserializer(providerWebStorage.getItem(storageKeyPrefix + key));
-            };
-
-            // Note: This is not very elegant at all.
-            this.set = function (key, value) {
-                return providerWebStorage && providerWebStorage.setItem(storageKeyPrefix + key, serializer(value));
-            };
-
-            this.remove = function (key) {
-                providerWebStorage && providerWebStorage.removeItem(storageKeyPrefix + key);
-            }
-
-            this.$get = [
-                '$rootScope',
-                '$window',
-                '$log',
-                '$timeout',
-                '$document',
-
-                function(
-                    $rootScope,
-                    $window,
-                    $log,
-                    $timeout,
-                    $document
-                ){
-
-                    // The magic number 10 is used which only works for some keyPrefixes...
-                    // See https://github.com/gsklee/ngStorage/issues/137
-                    var prefixLength = storageKeyPrefix.length;
-
-                    // #9: Assign a placeholder object if Web Storage is unavailable to prevent breaking the entire AngularJS app
-                    // Note: recheck mainly for testing (so we can use $window[storageType] rather than window[storageType])
-                    var isSupported = isStorageSupported($window, storageType),
-                        webStorage = isSupported || ($log.warn('This browser does not support Web Storage!'), {setItem: angular.noop, getItem: angular.noop, removeItem: angular.noop}),
-                        $storage = {
-                            $default: function(items) {
-                                for (var k in items) {
-                                    angular.isDefined($storage[k]) || ($storage[k] = angular.copy(items[k]) );
-                                }
-
-                                $storage.$sync();
-                                return $storage;
-                            },
-                            $reset: function(items) {
-                                for (var k in $storage) {
-                                    '$' === k[0] || (delete $storage[k] && webStorage.removeItem(storageKeyPrefix + k));
-                                }
-
-                                return $storage.$default(items);
-                            },
-                            $sync: function () {
-                                for (var i = 0, l = webStorage.length, k; i < l; i++) {
-                                    // #8, #10: `webStorage.key(i)` may be an empty string (or throw an exception in IE9 if `webStorage` is empty)
-                                    (k = webStorage.key(i)) && storageKeyPrefix === k.slice(0, prefixLength) && ($storage[k.slice(prefixLength)] = deserializer(webStorage.getItem(k)));
-                                }
-                            },
-                            $apply: function() {
-                                var temp$storage;
-
-                                _debounce = null;
-
-                                if (!angular.equals($storage, _last$storage)) {
-                                    temp$storage = angular.copy(_last$storage);
-                                    angular.forEach($storage, function(v, k) {
-                                        if (angular.isDefined(v) && '$' !== k[0]) {
-                                            webStorage.setItem(storageKeyPrefix + k, serializer(v));
-                                            delete temp$storage[k];
-                                        }
-                                    });
-
-                                    for (var k in temp$storage) {
-                                        webStorage.removeItem(storageKeyPrefix + k);
-                                    }
-
-                                    _last$storage = angular.copy($storage);
-                                }
-                            },
-                            $supported: function() {
-                                return !!isSupported;
-                            }
-                        },
-                        _last$storage,
-                        _debounce;
-
-                    $storage.$sync();
-
-                    _last$storage = angular.copy($storage);
-
-                    $rootScope.$watch(function() {
-                        _debounce || (_debounce = $timeout($storage.$apply, 100, false));
-                    });
-
-                    // #6: Use `$window.addEventListener` instead of `angular.element` to avoid the jQuery-specific `event.originalEvent`
-                    $window.addEventListener && $window.addEventListener('storage', function(event) {
-                        if (!event.key) {
-                            return;
-                        }
-
-                        // Reference doc.
-                        var doc = $document[0];
-
-                        if ( (!doc.hasFocus || !doc.hasFocus()) && storageKeyPrefix === event.key.slice(0, prefixLength) ) {
-                            event.newValue ? $storage[event.key.slice(prefixLength)] = deserializer(event.newValue) : delete $storage[event.key.slice(prefixLength)];
-
-                            _last$storage = angular.copy($storage);
-
-                            $rootScope.$apply();
-                        }
-                    });
-
-                    $window.addEventListener && $window.addEventListener('beforeunload', function() {
-                        $storage.$apply();
-                    });
-
-                    return $storage;
-                }
-            ];
-        };
-    }
-
-}));
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2017 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -41160,1807 +40922,6 @@
         });
     }
 }());
-/* =========================================================
- * bootstrap-datepicker.js
- * Repo: https://github.com/eternicode/bootstrap-datepicker/
- * Demo: http://eternicode.github.io/bootstrap-datepicker/
- * Docs: http://bootstrap-datepicker.readthedocs.org/
- * Forked from http://www.eyecon.ro/bootstrap-datepicker
- * =========================================================
- * Started by Stefan Petre; improvements by Andrew Rowls + contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================= */
-
-(function($, undefined){
-
-	function UTCDate(){
-		return new Date(Date.UTC.apply(Date, arguments));
-	}
-	function UTCToday(){
-		var today = new Date();
-		return UTCDate(today.getFullYear(), today.getMonth(), today.getDate());
-	}
-	function isUTCEquals(date1, date2) {
-		return (
-			date1.getUTCFullYear() === date2.getUTCFullYear() &&
-			date1.getUTCMonth() === date2.getUTCMonth() &&
-			date1.getUTCDate() === date2.getUTCDate()
-		);
-	}
-	function alias(method){
-		return function(){
-			return this[method].apply(this, arguments);
-		};
-	}
-
-	var DateArray = (function(){
-		var extras = {
-			get: function(i){
-				return this.slice(i)[0];
-			},
-			contains: function(d){
-				// Array.indexOf is not cross-browser;
-				// $.inArray doesn't work with Dates
-				var val = d && d.valueOf();
-				for (var i=0, l=this.length; i < l; i++)
-					if (this[i].valueOf() === val)
-						return i;
-				return -1;
-			},
-			remove: function(i){
-				this.splice(i,1);
-			},
-			replace: function(new_array){
-				if (!new_array)
-					return;
-				if (!$.isArray(new_array))
-					new_array = [new_array];
-				this.clear();
-				this.push.apply(this, new_array);
-			},
-			clear: function(){
-				this.length = 0;
-			},
-			copy: function(){
-				var a = new DateArray();
-				a.replace(this);
-				return a;
-			}
-		};
-
-		return function(){
-			var a = [];
-			a.push.apply(a, arguments);
-			$.extend(a, extras);
-			return a;
-		};
-	})();
-
-
-	// Picker object
-
-	var Datepicker = function(element, options){
-		this._process_options(options);
-
-		this.dates = new DateArray();
-		this.viewDate = this.o.defaultViewDate;
-		this.focusDate = null;
-
-		this.element = $(element);
-		this.isInline = false;
-		this.isInput = this.element.is('input');
-		this.component = this.element.hasClass('date') ? this.element.find('.add-on, .input-group-addon, .btn') : false;
-		this.hasInput = this.component && this.element.find('input').length;
-		if (this.component && this.component.length === 0)
-			this.component = false;
-
-		this.picker = $(DPGlobal.template);
-		this._buildEvents();
-		this._attachEvents();
-
-		if (this.isInline){
-			this.picker.addClass('datepicker-inline').appendTo(this.element);
-		}
-		else {
-			this.picker.addClass('datepicker-dropdown dropdown-menu');
-		}
-
-		if (this.o.rtl){
-			this.picker.addClass('datepicker-rtl');
-		}
-
-		this.viewMode = this.o.startView;
-
-		if (this.o.calendarWeeks)
-			this.picker.find('tfoot .today, tfoot .clear')
-						.attr('colspan', function(i, val){
-							return parseInt(val) + 1;
-						});
-
-		this._allow_update = false;
-
-		this.setStartDate(this._o.startDate);
-		this.setEndDate(this._o.endDate);
-		this.setDaysOfWeekDisabled(this.o.daysOfWeekDisabled);
-		this.setDatesDisabled(this.o.datesDisabled);
-
-		this.fillDow();
-		this.fillMonths();
-
-		this._allow_update = true;
-
-		this.update();
-		this.showMode();
-
-		if (this.isInline){
-			this.show();
-		}
-	};
-
-	Datepicker.prototype = {
-		constructor: Datepicker,
-
-		_process_options: function(opts){
-			// Store raw options for reference
-			this._o = $.extend({}, this._o, opts);
-			// Processed options
-			var o = this.o = $.extend({}, this._o);
-
-			// Check if "de-DE" style date is available, if not language should
-			// fallback to 2 letter code eg "de"
-			var lang = o.language;
-			if (!dates[lang]){
-				lang = lang.split('-')[0];
-				if (!dates[lang])
-					lang = defaults.language;
-			}
-			o.language = lang;
-
-			switch (o.startView){
-				case 2:
-				case 'decade':
-					o.startView = 2;
-					break;
-				case 1:
-				case 'year':
-					o.startView = 1;
-					break;
-				default:
-					o.startView = 0;
-			}
-
-			switch (o.minViewMode){
-				case 1:
-				case 'months':
-					o.minViewMode = 1;
-					break;
-				case 2:
-				case 'years':
-					o.minViewMode = 2;
-					break;
-				default:
-					o.minViewMode = 0;
-			}
-
-			o.startView = Math.max(o.startView, o.minViewMode);
-
-			// true, false, or Number > 0
-			if (o.multidate !== true){
-				o.multidate = Number(o.multidate) || false;
-				if (o.multidate !== false)
-					o.multidate = Math.max(0, o.multidate);
-			}
-			o.multidateSeparator = String(o.multidateSeparator);
-
-			o.weekStart %= 7;
-			o.weekEnd = ((o.weekStart + 6) % 7);
-
-			var format = DPGlobal.parseFormat(o.format);
-			if (o.startDate !== -Infinity){
-				if (!!o.startDate){
-					if (o.startDate instanceof Date)
-						o.startDate = this._local_to_utc(this._zero_time(o.startDate));
-					else
-						o.startDate = DPGlobal.parseDate(o.startDate, format, o.language);
-				}
-				else {
-					o.startDate = -Infinity;
-				}
-			}
-			if (o.endDate !== Infinity){
-				if (!!o.endDate){
-					if (o.endDate instanceof Date)
-						o.endDate = this._local_to_utc(this._zero_time(o.endDate));
-					else
-						o.endDate = DPGlobal.parseDate(o.endDate, format, o.language);
-				}
-				else {
-					o.endDate = Infinity;
-				}
-			}
-
-			o.daysOfWeekDisabled = o.daysOfWeekDisabled||[];
-			if (!$.isArray(o.daysOfWeekDisabled))
-				o.daysOfWeekDisabled = o.daysOfWeekDisabled.split(/[,\s]*/);
-			o.daysOfWeekDisabled = $.map(o.daysOfWeekDisabled, function(d){
-				return parseInt(d, 10);
-			});
-
-			o.datesDisabled = o.datesDisabled||[];
-			if (!$.isArray(o.datesDisabled)) {
-				var datesDisabled = [];
-				datesDisabled.push(DPGlobal.parseDate(o.datesDisabled, format, o.language));
-				o.datesDisabled = datesDisabled;
-			}
-			o.datesDisabled = $.map(o.datesDisabled,function(d){
-				return DPGlobal.parseDate(d, format, o.language);
-			});
-
-			var plc = String(o.orientation).toLowerCase().split(/\s+/g),
-				_plc = o.orientation.toLowerCase();
-			plc = $.grep(plc, function(word){
-				return /^auto|left|right|top|bottom$/.test(word);
-			});
-			o.orientation = {x: 'auto', y: 'auto'};
-			if (!_plc || _plc === 'auto')
-				; // no action
-			else if (plc.length === 1){
-				switch (plc[0]){
-					case 'top':
-					case 'bottom':
-						o.orientation.y = plc[0];
-						break;
-					case 'left':
-					case 'right':
-						o.orientation.x = plc[0];
-						break;
-				}
-			}
-			else {
-				_plc = $.grep(plc, function(word){
-					return /^left|right$/.test(word);
-				});
-				o.orientation.x = _plc[0] || 'auto';
-
-				_plc = $.grep(plc, function(word){
-					return /^top|bottom$/.test(word);
-				});
-				o.orientation.y = _plc[0] || 'auto';
-			}
-			if (o.defaultViewDate) {
-				var year = o.defaultViewDate.year || new Date().getFullYear();
-				var month = o.defaultViewDate.month || 0;
-				var day = o.defaultViewDate.day || 1;
-				o.defaultViewDate = UTCDate(year, month, day);
-			} else {
-				o.defaultViewDate = UTCToday();
-			}
-			o.showOnFocus = o.showOnFocus !== undefined ? o.showOnFocus : true;
-		},
-		_events: [],
-		_secondaryEvents: [],
-		_applyEvents: function(evs){
-			for (var i=0, el, ch, ev; i < evs.length; i++){
-				el = evs[i][0];
-				if (evs[i].length === 2){
-					ch = undefined;
-					ev = evs[i][1];
-				}
-				else if (evs[i].length === 3){
-					ch = evs[i][1];
-					ev = evs[i][2];
-				}
-				el.on(ev, ch);
-			}
-		},
-		_unapplyEvents: function(evs){
-			for (var i=0, el, ev, ch; i < evs.length; i++){
-				el = evs[i][0];
-				if (evs[i].length === 2){
-					ch = undefined;
-					ev = evs[i][1];
-				}
-				else if (evs[i].length === 3){
-					ch = evs[i][1];
-					ev = evs[i][2];
-				}
-				el.off(ev, ch);
-			}
-		},
-		_buildEvents: function(){
-            var events = {
-                keyup: $.proxy(function(e){
-                    if ($.inArray(e.keyCode, [27, 37, 39, 38, 40, 32, 13, 9]) === -1)
-                        this.update();
-                }, this),
-                keydown: $.proxy(this.keydown, this)
-            };
-
-            if (this.o.showOnFocus === true) {
-                events.focus = $.proxy(this.show, this);
-            }
-
-            if (this.isInput) { // single input
-                this._events = [
-                    [this.element, events]
-                ];
-            }
-            else if (this.component && this.hasInput) { // component: input + button
-                this._events = [
-                    // For components that are not readonly, allow keyboard nav
-                    [this.element.find('input'), events],
-                    [this.component, {
-                        click: $.proxy(this.show, this)
-                    }]
-                ];
-            }
-			else if (this.element.is('div')){  // inline datepicker
-				this.isInline = true;
-			}
-			else {
-				this._events = [
-					[this.element, {
-						click: $.proxy(this.show, this)
-					}]
-				];
-			}
-			this._events.push(
-				// Component: listen for blur on element descendants
-				[this.element, '*', {
-					blur: $.proxy(function(e){
-						this._focused_from = e.target;
-					}, this)
-				}],
-				// Input: listen for blur on element
-				[this.element, {
-					blur: $.proxy(function(e){
-						this._focused_from = e.target;
-					}, this)
-				}]
-			);
-
-			this._secondaryEvents = [
-				[this.picker, {
-					click: $.proxy(this.click, this)
-				}],
-				[$(window), {
-					resize: $.proxy(this.place, this)
-				}],
-				[$(document), {
-					'mousedown touchstart': $.proxy(function(e){
-						// Clicked outside the datepicker, hide it
-						if (!(
-							this.element.is(e.target) ||
-							this.element.find(e.target).length ||
-							this.picker.is(e.target) ||
-							this.picker.find(e.target).length
-						)){
-							this.hide();
-						}
-					}, this)
-				}]
-			];
-		},
-		_attachEvents: function(){
-			this._detachEvents();
-			this._applyEvents(this._events);
-		},
-		_detachEvents: function(){
-			this._unapplyEvents(this._events);
-		},
-		_attachSecondaryEvents: function(){
-			this._detachSecondaryEvents();
-			this._applyEvents(this._secondaryEvents);
-		},
-		_detachSecondaryEvents: function(){
-			this._unapplyEvents(this._secondaryEvents);
-		},
-		_trigger: function(event, altdate){
-			var date = altdate || this.dates.get(-1),
-				local_date = this._utc_to_local(date);
-
-			this.element.trigger({
-				type: event,
-				date: local_date,
-				dates: $.map(this.dates, this._utc_to_local),
-				format: $.proxy(function(ix, format){
-					if (arguments.length === 0){
-						ix = this.dates.length - 1;
-						format = this.o.format;
-					}
-					else if (typeof ix === 'string'){
-						format = ix;
-						ix = this.dates.length - 1;
-					}
-					format = format || this.o.format;
-					var date = this.dates.get(ix);
-					return DPGlobal.formatDate(date, format, this.o.language);
-				}, this)
-			});
-		},
-
-		show: function(){
-			if (this.element.attr('readonly') && this.o.enableOnReadonly === false)
-				return;
-			if (!this.isInline)
-				this.picker.appendTo(this.o.container);
-			this.place();
-			this.picker.show();
-			this._attachSecondaryEvents();
-			this._trigger('show');
-			if ((window.navigator.msMaxTouchPoints || 'ontouchstart' in document) && this.o.disableTouchKeyboard) {
-				$(this.element).blur();
-			}
-			return this;
-		},
-
-		hide: function(){
-			if (this.isInline)
-				return this;
-			if (!this.picker.is(':visible'))
-				return this;
-			this.focusDate = null;
-			this.picker.hide().detach();
-			this._detachSecondaryEvents();
-			this.viewMode = this.o.startView;
-			this.showMode();
-
-			if (
-				this.o.forceParse &&
-				(
-					this.isInput && this.element.val() ||
-					this.hasInput && this.element.find('input').val()
-				)
-			)
-				this.setValue();
-			this._trigger('hide');
-			return this;
-		},
-
-		remove: function(){
-			this.hide();
-			this._detachEvents();
-			this._detachSecondaryEvents();
-			this.picker.remove();
-			delete this.element.data().datepicker;
-			if (!this.isInput){
-				delete this.element.data().date;
-			}
-			return this;
-		},
-
-		_utc_to_local: function(utc){
-			return utc && new Date(utc.getTime() + (utc.getTimezoneOffset()*60000));
-		},
-		_local_to_utc: function(local){
-			return local && new Date(local.getTime() - (local.getTimezoneOffset()*60000));
-		},
-		_zero_time: function(local){
-			return local && new Date(local.getFullYear(), local.getMonth(), local.getDate());
-		},
-		_zero_utc_time: function(utc){
-			return utc && new Date(Date.UTC(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate()));
-		},
-
-		getDates: function(){
-			return $.map(this.dates, this._utc_to_local);
-		},
-
-		getUTCDates: function(){
-			return $.map(this.dates, function(d){
-				return new Date(d);
-			});
-		},
-
-		getDate: function(){
-			return this._utc_to_local(this.getUTCDate());
-		},
-
-		getUTCDate: function(){
-			var selected_date = this.dates.get(-1);
-			if (typeof selected_date !== 'undefined') {
-				return new Date(selected_date);
-			} else {
-				return null;
-			}
-		},
-
-		clearDates: function(){
-			var element;
-			if (this.isInput) {
-				element = this.element;
-			} else if (this.component) {
-				element = this.element.find('input');
-			}
-
-			if (element) {
-				element.val('').change();
-			}
-
-			this.update();
-			this._trigger('changeDate');
-
-			if (this.o.autoclose) {
-				this.hide();
-			}
-		},
-		setDates: function(){
-			var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
-			this.update.apply(this, args);
-			this._trigger('changeDate');
-			this.setValue();
-			return this;
-		},
-
-		setUTCDates: function(){
-			var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
-			this.update.apply(this, $.map(args, this._utc_to_local));
-			this._trigger('changeDate');
-			this.setValue();
-			return this;
-		},
-
-		setDate: alias('setDates'),
-		setUTCDate: alias('setUTCDates'),
-
-		setValue: function(){
-			var formatted = this.getFormattedDate();
-			if (!this.isInput){
-				if (this.component){
-					this.element.find('input').val(formatted).change();
-				}
-			}
-			else {
-				this.element.val(formatted).change();
-			}
-			return this;
-		},
-
-		getFormattedDate: function(format){
-			if (format === undefined)
-				format = this.o.format;
-
-			var lang = this.o.language;
-			return $.map(this.dates, function(d){
-				return DPGlobal.formatDate(d, format, lang);
-			}).join(this.o.multidateSeparator);
-		},
-
-		setStartDate: function(startDate){
-			this._process_options({startDate: startDate});
-			this.update();
-			this.updateNavArrows();
-			return this;
-		},
-
-		setEndDate: function(endDate){
-			this._process_options({endDate: endDate});
-			this.update();
-			this.updateNavArrows();
-			return this;
-		},
-
-		setDaysOfWeekDisabled: function(daysOfWeekDisabled){
-			this._process_options({daysOfWeekDisabled: daysOfWeekDisabled});
-			this.update();
-			this.updateNavArrows();
-			return this;
-		},
-
-		setDatesDisabled: function(datesDisabled){
-			this._process_options({datesDisabled: datesDisabled});
-			this.update();
-			this.updateNavArrows();
-		},
-
-		place: function(){
-			if (this.isInline)
-				return this;
-			var calendarWidth = this.picker.outerWidth(),
-				calendarHeight = this.picker.outerHeight(),
-				visualPadding = 10,
-				windowWidth = $(this.o.container).width(),
-				windowHeight = $(this.o.container).height(),
-				scrollTop = $(this.o.container).scrollTop(),
-				appendOffset = $(this.o.container).offset();
-
-			var parentsZindex = [];
-			this.element.parents().each(function(){
-				var itemZIndex = $(this).css('z-index');
-				if (itemZIndex !== 'auto' && itemZIndex !== 0) parentsZindex.push(parseInt(itemZIndex));
-			});
-			var zIndex = Math.max.apply(Math, parentsZindex) + 10;
-			var offset = this.component ? this.component.parent().offset() : this.element.offset();
-			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
-			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
-			var left = offset.left - appendOffset.left,
-				top = offset.top - appendOffset.top;
-
-			this.picker.removeClass(
-				'datepicker-orient-top datepicker-orient-bottom '+
-				'datepicker-orient-right datepicker-orient-left'
-			);
-
-			if (this.o.orientation.x !== 'auto'){
-				this.picker.addClass('datepicker-orient-' + this.o.orientation.x);
-				if (this.o.orientation.x === 'right')
-					left -= calendarWidth - width;
-			}
-			// auto x orientation is best-placement: if it crosses a window
-			// edge, fudge it sideways
-			else {
-				if (offset.left < 0) {
-					// component is outside the window on the left side. Move it into visible range
-					this.picker.addClass('datepicker-orient-left');
-					left -= offset.left - visualPadding;
-				} else if (left + calendarWidth > windowWidth) {
-					// the calendar passes the widow right edge. Align it to component right side
-					this.picker.addClass('datepicker-orient-right');
-					left = offset.left + width - calendarWidth;
-				} else {
-					// Default to left
-					this.picker.addClass('datepicker-orient-left');
-				}
-			}
-
-			// auto y orientation is best-situation: top or bottom, no fudging,
-			// decision based on which shows more of the calendar
-			var yorient = this.o.orientation.y,
-				top_overflow, bottom_overflow;
-			if (yorient === 'auto'){
-				top_overflow = -scrollTop + top - calendarHeight;
-				bottom_overflow = scrollTop + windowHeight - (top + height + calendarHeight);
-				if (Math.max(top_overflow, bottom_overflow) === bottom_overflow)
-					yorient = 'top';
-				else
-					yorient = 'bottom';
-			}
-			this.picker.addClass('datepicker-orient-' + yorient);
-			if (yorient === 'top')
-				top += height;
-			else
-				top -= calendarHeight + parseInt(this.picker.css('padding-top'));
-
-			if (this.o.rtl) {
-				var right = windowWidth - (left + width);
-				this.picker.css({
-					top: top,
-					right: right,
-					zIndex: zIndex
-				});
-			} else {
-				this.picker.css({
-					top: top,
-					left: left,
-					zIndex: zIndex
-				});
-			}
-			return this;
-		},
-
-		_allow_update: true,
-		update: function(){
-			if (!this._allow_update)
-				return this;
-
-			var oldDates = this.dates.copy(),
-				dates = [],
-				fromArgs = false;
-			if (arguments.length){
-				$.each(arguments, $.proxy(function(i, date){
-					if (date instanceof Date)
-						date = this._local_to_utc(date);
-					dates.push(date);
-				}, this));
-				fromArgs = true;
-			}
-			else {
-				dates = this.isInput
-						? this.element.val()
-						: this.element.data('date') || this.element.find('input').val();
-				if (dates && this.o.multidate)
-					dates = dates.split(this.o.multidateSeparator);
-				else
-					dates = [dates];
-				delete this.element.data().date;
-			}
-
-			dates = $.map(dates, $.proxy(function(date){
-				return DPGlobal.parseDate(date, this.o.format, this.o.language);
-			}, this));
-			dates = $.grep(dates, $.proxy(function(date){
-				return (
-					date < this.o.startDate ||
-					date > this.o.endDate ||
-					!date
-				);
-			}, this), true);
-			this.dates.replace(dates);
-
-			if (this.dates.length)
-				this.viewDate = new Date(this.dates.get(-1));
-			else if (this.viewDate < this.o.startDate)
-				this.viewDate = new Date(this.o.startDate);
-			else if (this.viewDate > this.o.endDate)
-				this.viewDate = new Date(this.o.endDate);
-
-			if (fromArgs){
-				// setting date by clicking
-				this.setValue();
-			}
-			else if (dates.length){
-				// setting date by typing
-				if (String(oldDates) !== String(this.dates))
-					this._trigger('changeDate');
-			}
-			if (!this.dates.length && oldDates.length)
-				this._trigger('clearDate');
-
-			this.fill();
-			return this;
-		},
-
-		fillDow: function(){
-			var dowCnt = this.o.weekStart,
-				html = '<tr>';
-			if (this.o.calendarWeeks){
-				this.picker.find('.datepicker-days thead tr:first-child .datepicker-switch')
-					.attr('colspan', function(i, val){
-						return parseInt(val) + 1;
-					});
-				var cell = '<th class="cw">&#160;</th>';
-				html += cell;
-			}
-			while (dowCnt < this.o.weekStart + 7){
-				html += '<th class="dow">'+dates[this.o.language].daysMin[(dowCnt++)%7]+'</th>';
-			}
-			html += '</tr>';
-			this.picker.find('.datepicker-days thead').append(html);
-		},
-
-		fillMonths: function(){
-			var html = '',
-			i = 0;
-			while (i < 12){
-				html += '<span class="month">'+dates[this.o.language].monthsShort[i++]+'</span>';
-			}
-			this.picker.find('.datepicker-months td').html(html);
-		},
-
-		setRange: function(range){
-			if (!range || !range.length)
-				delete this.range;
-			else
-				this.range = $.map(range, function(d){
-					return d.valueOf();
-				});
-			this.fill();
-		},
-
-		getClassNames: function(date){
-			var cls = [],
-				year = this.viewDate.getUTCFullYear(),
-				month = this.viewDate.getUTCMonth(),
-				today = new Date();
-			if (date.getUTCFullYear() < year || (date.getUTCFullYear() === year && date.getUTCMonth() < month)){
-				cls.push('old');
-			}
-			else if (date.getUTCFullYear() > year || (date.getUTCFullYear() === year && date.getUTCMonth() > month)){
-				cls.push('new');
-			}
-			if (this.focusDate && date.valueOf() === this.focusDate.valueOf())
-				cls.push('focused');
-			// Compare internal UTC date with local today, not UTC today
-			if (this.o.todayHighlight &&
-				date.getUTCFullYear() === today.getFullYear() &&
-				date.getUTCMonth() === today.getMonth() &&
-				date.getUTCDate() === today.getDate()){
-				cls.push('today');
-			}
-			if (this.dates.contains(date) !== -1)
-				cls.push('active');
-			if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
-				$.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1){
-				cls.push('disabled');
-			}
-			if (this.o.datesDisabled.length > 0 &&
-				$.grep(this.o.datesDisabled, function(d){
-					return isUTCEquals(date, d); }).length > 0) {
-				cls.push('disabled', 'disabled-date');
-			}
-
-			if (this.range){
-				if (date > this.range[0] && date < this.range[this.range.length-1]){
-					cls.push('range');
-				}
-				if ($.inArray(date.valueOf(), this.range) !== -1){
-					cls.push('selected');
-				}
-			}
-			return cls;
-		},
-
-		fill: function(){
-			var d = new Date(this.viewDate),
-				year = d.getUTCFullYear(),
-				month = d.getUTCMonth(),
-				startYear = this.o.startDate !== -Infinity ? this.o.startDate.getUTCFullYear() : -Infinity,
-				startMonth = this.o.startDate !== -Infinity ? this.o.startDate.getUTCMonth() : -Infinity,
-				endYear = this.o.endDate !== Infinity ? this.o.endDate.getUTCFullYear() : Infinity,
-				endMonth = this.o.endDate !== Infinity ? this.o.endDate.getUTCMonth() : Infinity,
-				todaytxt = dates[this.o.language].today || dates['en'].today || '',
-				cleartxt = dates[this.o.language].clear || dates['en'].clear || '',
-				tooltip;
-			if (isNaN(year) || isNaN(month))
-				return;
-			this.picker.find('.datepicker-days thead .datepicker-switch')
-						.text(dates[this.o.language].months[month]+' '+year);
-			this.picker.find('tfoot .today')
-						.text(todaytxt)
-						.toggle(this.o.todayBtn !== false);
-			this.picker.find('tfoot .clear')
-						.text(cleartxt)
-						.toggle(this.o.clearBtn !== false);
-			this.updateNavArrows();
-			this.fillMonths();
-			var prevMonth = UTCDate(year, month-1, 28),
-				day = DPGlobal.getDaysInMonth(prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
-			prevMonth.setUTCDate(day);
-			prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.o.weekStart + 7)%7);
-			var nextMonth = new Date(prevMonth);
-			nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
-			nextMonth = nextMonth.valueOf();
-			var html = [];
-			var clsName;
-			while (prevMonth.valueOf() < nextMonth){
-				if (prevMonth.getUTCDay() === this.o.weekStart){
-					html.push('<tr>');
-					if (this.o.calendarWeeks){
-						// ISO 8601: First week contains first thursday.
-						// ISO also states week starts on Monday, but we can be more abstract here.
-						var
-							// Start of current week: based on weekstart/current date
-							ws = new Date(+prevMonth + (this.o.weekStart - prevMonth.getUTCDay() - 7) % 7 * 864e5),
-							// Thursday of this week
-							th = new Date(Number(ws) + (7 + 4 - ws.getUTCDay()) % 7 * 864e5),
-							// First Thursday of year, year from thursday
-							yth = new Date(Number(yth = UTCDate(th.getUTCFullYear(), 0, 1)) + (7 + 4 - yth.getUTCDay())%7*864e5),
-							// Calendar week: ms between thursdays, div ms per day, div 7 days
-							calWeek =  (th - yth) / 864e5 / 7 + 1;
-						html.push('<td class="cw">'+ calWeek +'</td>');
-
-					}
-				}
-				clsName = this.getClassNames(prevMonth);
-				clsName.push('day');
-
-				if (this.o.beforeShowDay !== $.noop){
-					var before = this.o.beforeShowDay(this._utc_to_local(prevMonth));
-					if (before === undefined)
-						before = {};
-					else if (typeof(before) === 'boolean')
-						before = {enabled: before};
-					else if (typeof(before) === 'string')
-						before = {classes: before};
-					if (before.enabled === false)
-						clsName.push('disabled');
-					if (before.classes)
-						clsName = clsName.concat(before.classes.split(/\s+/));
-					if (before.tooltip)
-						tooltip = before.tooltip;
-				}
-
-				clsName = $.unique(clsName);
-				html.push('<td class="'+clsName.join(' ')+'"' + (tooltip ? ' title="'+tooltip+'"' : '') + '>'+prevMonth.getUTCDate() + '</td>');
-				tooltip = null;
-				if (prevMonth.getUTCDay() === this.o.weekEnd){
-					html.push('</tr>');
-				}
-				prevMonth.setUTCDate(prevMonth.getUTCDate()+1);
-			}
-			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
-
-			var months = this.picker.find('.datepicker-months')
-						.find('th:eq(1)')
-							.text(year)
-							.end()
-						.find('span').removeClass('active');
-
-			$.each(this.dates, function(i, d){
-				if (d.getUTCFullYear() === year)
-					months.eq(d.getUTCMonth()).addClass('active');
-			});
-
-			if (year < startYear || year > endYear){
-				months.addClass('disabled');
-			}
-			if (year === startYear){
-				months.slice(0, startMonth).addClass('disabled');
-			}
-			if (year === endYear){
-				months.slice(endMonth+1).addClass('disabled');
-			}
-
-			if (this.o.beforeShowMonth !== $.noop){
-				var that = this;
-				$.each(months, function(i, month){
-					if (!$(month).hasClass('disabled')) {
-						var moDate = new Date(year, i, 1);
-						var before = that.o.beforeShowMonth(moDate);
-						if (before === false)
-							$(month).addClass('disabled');
-					}
-				});
-			}
-
-			html = '';
-			year = parseInt(year/10, 10) * 10;
-			var yearCont = this.picker.find('.datepicker-years')
-								.find('th:eq(1)')
-									.text(year + '-' + (year + 9))
-									.end()
-								.find('td');
-			year -= 1;
-			var years = $.map(this.dates, function(d){
-					return d.getUTCFullYear();
-				}),
-				classes;
-			for (var i = -1; i < 11; i++){
-				classes = ['year'];
-				if (i === -1)
-					classes.push('old');
-				else if (i === 10)
-					classes.push('new');
-				if ($.inArray(year, years) !== -1)
-					classes.push('active');
-				if (year < startYear || year > endYear)
-					classes.push('disabled');
-				html += '<span class="' + classes.join(' ') + '">' + year + '</span>';
-				year += 1;
-			}
-			yearCont.html(html);
-		},
-
-		updateNavArrows: function(){
-			if (!this._allow_update)
-				return;
-
-			var d = new Date(this.viewDate),
-				year = d.getUTCFullYear(),
-				month = d.getUTCMonth();
-			switch (this.viewMode){
-				case 0:
-					if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear() && month <= this.o.startDate.getUTCMonth()){
-						this.picker.find('.prev').css({visibility: 'hidden'});
-					}
-					else {
-						this.picker.find('.prev').css({visibility: 'visible'});
-					}
-					if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear() && month >= this.o.endDate.getUTCMonth()){
-						this.picker.find('.next').css({visibility: 'hidden'});
-					}
-					else {
-						this.picker.find('.next').css({visibility: 'visible'});
-					}
-					break;
-				case 1:
-				case 2:
-					if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear()){
-						this.picker.find('.prev').css({visibility: 'hidden'});
-					}
-					else {
-						this.picker.find('.prev').css({visibility: 'visible'});
-					}
-					if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear()){
-						this.picker.find('.next').css({visibility: 'hidden'});
-					}
-					else {
-						this.picker.find('.next').css({visibility: 'visible'});
-					}
-					break;
-			}
-		},
-
-		click: function(e){
-			e.preventDefault();
-			var target = $(e.target).closest('span, td, th'),
-				year, month, day;
-			if (target.length === 1){
-				switch (target[0].nodeName.toLowerCase()){
-					case 'th':
-						switch (target[0].className){
-							case 'datepicker-switch':
-								this.showMode(1);
-								break;
-							case 'prev':
-							case 'next':
-								var dir = DPGlobal.modes[this.viewMode].navStep * (target[0].className === 'prev' ? -1 : 1);
-								switch (this.viewMode){
-									case 0:
-										this.viewDate = this.moveMonth(this.viewDate, dir);
-										this._trigger('changeMonth', this.viewDate);
-										break;
-									case 1:
-									case 2:
-										this.viewDate = this.moveYear(this.viewDate, dir);
-										if (this.viewMode === 1)
-											this._trigger('changeYear', this.viewDate);
-										break;
-								}
-								this.fill();
-								break;
-							case 'today':
-								var date = new Date();
-								date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-
-								this.showMode(-2);
-								var which = this.o.todayBtn === 'linked' ? null : 'view';
-								this._setDate(date, which);
-								break;
-							case 'clear':
-								this.clearDates();
-								break;
-						}
-						break;
-					case 'span':
-						if (!target.hasClass('disabled')){
-							this.viewDate.setUTCDate(1);
-							if (target.hasClass('month')){
-								day = 1;
-								month = target.parent().find('span').index(target);
-								year = this.viewDate.getUTCFullYear();
-								this.viewDate.setUTCMonth(month);
-								this._trigger('changeMonth', this.viewDate);
-								if (this.o.minViewMode === 1){
-									this._setDate(UTCDate(year, month, day));
-								}
-							}
-							else {
-								day = 1;
-								month = 0;
-								year = parseInt(target.text(), 10)||0;
-								this.viewDate.setUTCFullYear(year);
-								this._trigger('changeYear', this.viewDate);
-								if (this.o.minViewMode === 2){
-									this._setDate(UTCDate(year, month, day));
-								}
-							}
-							this.showMode(-1);
-							this.fill();
-						}
-						break;
-					case 'td':
-						if (target.hasClass('day') && !target.hasClass('disabled')){
-							day = parseInt(target.text(), 10)||1;
-							year = this.viewDate.getUTCFullYear();
-							month = this.viewDate.getUTCMonth();
-							if (target.hasClass('old')){
-								if (month === 0){
-									month = 11;
-									year -= 1;
-								}
-								else {
-									month -= 1;
-								}
-							}
-							else if (target.hasClass('new')){
-								if (month === 11){
-									month = 0;
-									year += 1;
-								}
-								else {
-									month += 1;
-								}
-							}
-							this._setDate(UTCDate(year, month, day));
-						}
-						break;
-				}
-			}
-			if (this.picker.is(':visible') && this._focused_from){
-				$(this._focused_from).focus();
-			}
-			delete this._focused_from;
-		},
-
-		_toggle_multidate: function(date){
-			var ix = this.dates.contains(date);
-			if (!date){
-				this.dates.clear();
-			}
-
-			if (ix !== -1){
-				if (this.o.multidate === true || this.o.multidate > 1 || this.o.toggleActive){
-					this.dates.remove(ix);
-				}
-			} else if (this.o.multidate === false) {
-				this.dates.clear();
-				this.dates.push(date);
-			}
-			else {
-				this.dates.push(date);
-			}
-
-			if (typeof this.o.multidate === 'number')
-				while (this.dates.length > this.o.multidate)
-					this.dates.remove(0);
-		},
-
-		_setDate: function(date, which){
-			if (!which || which === 'date')
-				this._toggle_multidate(date && new Date(date));
-			if (!which || which  === 'view')
-				this.viewDate = date && new Date(date);
-
-			this.fill();
-			this.setValue();
-			if (!which || which  !== 'view') {
-				this._trigger('changeDate');
-			}
-			var element;
-			if (this.isInput){
-				element = this.element;
-			}
-			else if (this.component){
-				element = this.element.find('input');
-			}
-			if (element){
-				element.change();
-			}
-			if (this.o.autoclose && (!which || which === 'date')){
-				this.hide();
-			}
-		},
-
-		moveMonth: function(date, dir){
-			if (!date)
-				return undefined;
-			if (!dir)
-				return date;
-			var new_date = new Date(date.valueOf()),
-				day = new_date.getUTCDate(),
-				month = new_date.getUTCMonth(),
-				mag = Math.abs(dir),
-				new_month, test;
-			dir = dir > 0 ? 1 : -1;
-			if (mag === 1){
-				test = dir === -1
-					// If going back one month, make sure month is not current month
-					// (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
-					? function(){
-						return new_date.getUTCMonth() === month;
-					}
-					// If going forward one month, make sure month is as expected
-					// (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
-					: function(){
-						return new_date.getUTCMonth() !== new_month;
-					};
-				new_month = month + dir;
-				new_date.setUTCMonth(new_month);
-				// Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
-				if (new_month < 0 || new_month > 11)
-					new_month = (new_month + 12) % 12;
-			}
-			else {
-				// For magnitudes >1, move one month at a time...
-				for (var i=0; i < mag; i++)
-					// ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
-					new_date = this.moveMonth(new_date, dir);
-				// ...then reset the day, keeping it in the new month
-				new_month = new_date.getUTCMonth();
-				new_date.setUTCDate(day);
-				test = function(){
-					return new_month !== new_date.getUTCMonth();
-				};
-			}
-			// Common date-resetting loop -- if date is beyond end of month, make it
-			// end of month
-			while (test()){
-				new_date.setUTCDate(--day);
-				new_date.setUTCMonth(new_month);
-			}
-			return new_date;
-		},
-
-		moveYear: function(date, dir){
-			return this.moveMonth(date, dir*12);
-		},
-
-		dateWithinRange: function(date){
-			return date >= this.o.startDate && date <= this.o.endDate;
-		},
-
-		keydown: function(e){
-			if (!this.picker.is(':visible')){
-				if (e.keyCode === 27) // allow escape to hide and re-show picker
-					this.show();
-				return;
-			}
-			var dateChanged = false,
-				dir, newDate, newViewDate,
-				focusDate = this.focusDate || this.viewDate;
-			switch (e.keyCode){
-				case 27: // escape
-					if (this.focusDate){
-						this.focusDate = null;
-						this.viewDate = this.dates.get(-1) || this.viewDate;
-						this.fill();
-					}
-					else
-						this.hide();
-					e.preventDefault();
-					break;
-				case 37: // left
-				case 39: // right
-					if (!this.o.keyboardNavigation)
-						break;
-					dir = e.keyCode === 37 ? -1 : 1;
-					if (e.ctrlKey){
-						newDate = this.moveYear(this.dates.get(-1) || UTCToday(), dir);
-						newViewDate = this.moveYear(focusDate, dir);
-						this._trigger('changeYear', this.viewDate);
-					}
-					else if (e.shiftKey){
-						newDate = this.moveMonth(this.dates.get(-1) || UTCToday(), dir);
-						newViewDate = this.moveMonth(focusDate, dir);
-						this._trigger('changeMonth', this.viewDate);
-					}
-					else {
-						newDate = new Date(this.dates.get(-1) || UTCToday());
-						newDate.setUTCDate(newDate.getUTCDate() + dir);
-						newViewDate = new Date(focusDate);
-						newViewDate.setUTCDate(focusDate.getUTCDate() + dir);
-					}
-					if (this.dateWithinRange(newViewDate)){
-						this.focusDate = this.viewDate = newViewDate;
-						this.setValue();
-						this.fill();
-						e.preventDefault();
-					}
-					break;
-				case 38: // up
-				case 40: // down
-					if (!this.o.keyboardNavigation)
-						break;
-					dir = e.keyCode === 38 ? -1 : 1;
-					if (e.ctrlKey){
-						newDate = this.moveYear(this.dates.get(-1) || UTCToday(), dir);
-						newViewDate = this.moveYear(focusDate, dir);
-						this._trigger('changeYear', this.viewDate);
-					}
-					else if (e.shiftKey){
-						newDate = this.moveMonth(this.dates.get(-1) || UTCToday(), dir);
-						newViewDate = this.moveMonth(focusDate, dir);
-						this._trigger('changeMonth', this.viewDate);
-					}
-					else {
-						newDate = new Date(this.dates.get(-1) || UTCToday());
-						newDate.setUTCDate(newDate.getUTCDate() + dir * 7);
-						newViewDate = new Date(focusDate);
-						newViewDate.setUTCDate(focusDate.getUTCDate() + dir * 7);
-					}
-					if (this.dateWithinRange(newViewDate)){
-						this.focusDate = this.viewDate = newViewDate;
-						this.setValue();
-						this.fill();
-						e.preventDefault();
-					}
-					break;
-				case 32: // spacebar
-					// Spacebar is used in manually typing dates in some formats.
-					// As such, its behavior should not be hijacked.
-					break;
-				case 13: // enter
-					focusDate = this.focusDate || this.dates.get(-1) || this.viewDate;
-					if (this.o.keyboardNavigation) {
-						this._toggle_multidate(focusDate);
-						dateChanged = true;
-					}
-					this.focusDate = null;
-					this.viewDate = this.dates.get(-1) || this.viewDate;
-					this.setValue();
-					this.fill();
-					if (this.picker.is(':visible')){
-						e.preventDefault();
-						if (typeof e.stopPropagation === 'function') {
-							e.stopPropagation(); // All modern browsers, IE9+
-						} else {
-							e.cancelBubble = true; // IE6,7,8 ignore "stopPropagation"
-						}
-						if (this.o.autoclose)
-							this.hide();
-					}
-					break;
-				case 9: // tab
-					this.focusDate = null;
-					this.viewDate = this.dates.get(-1) || this.viewDate;
-					this.fill();
-					this.hide();
-					break;
-			}
-			if (dateChanged){
-				if (this.dates.length)
-					this._trigger('changeDate');
-				else
-					this._trigger('clearDate');
-				var element;
-				if (this.isInput){
-					element = this.element;
-				}
-				else if (this.component){
-					element = this.element.find('input');
-				}
-				if (element){
-					element.change();
-				}
-			}
-		},
-
-		showMode: function(dir){
-			if (dir){
-				this.viewMode = Math.max(this.o.minViewMode, Math.min(2, this.viewMode + dir));
-			}
-			this.picker
-				.children('div')
-				.hide()
-				.filter('.datepicker-' + DPGlobal.modes[this.viewMode].clsName)
-					.css('display', 'block');
-			this.updateNavArrows();
-		}
-	};
-
-	var DateRangePicker = function(element, options){
-		this.element = $(element);
-		this.inputs = $.map(options.inputs, function(i){
-			return i.jquery ? i[0] : i;
-		});
-		delete options.inputs;
-
-		datepickerPlugin.call($(this.inputs), options)
-			.bind('changeDate', $.proxy(this.dateUpdated, this));
-
-		this.pickers = $.map(this.inputs, function(i){
-			return $(i).data('datepicker');
-		});
-		this.updateDates();
-	};
-	DateRangePicker.prototype = {
-		updateDates: function(){
-			this.dates = $.map(this.pickers, function(i){
-				return i.getUTCDate();
-			});
-			this.updateRanges();
-		},
-		updateRanges: function(){
-			var range = $.map(this.dates, function(d){
-				return d.valueOf();
-			});
-			$.each(this.pickers, function(i, p){
-				p.setRange(range);
-			});
-		},
-		dateUpdated: function(e){
-			// `this.updating` is a workaround for preventing infinite recursion
-			// between `changeDate` triggering and `setUTCDate` calling.  Until
-			// there is a better mechanism.
-			if (this.updating)
-				return;
-			this.updating = true;
-
-			var dp = $(e.target).data('datepicker'),
-				new_date = dp.getUTCDate(),
-				i = $.inArray(e.target, this.inputs),
-				j = i - 1,
-				k = i + 1,
-				l = this.inputs.length;
-			if (i === -1)
-				return;
-
-			$.each(this.pickers, function(i, p){
-				if (!p.getUTCDate())
-					p.setUTCDate(new_date);
-			});
-
-			if (new_date < this.dates[j]){
-				// Date being moved earlier/left
-				while (j >= 0 && new_date < this.dates[j]){
-					this.pickers[j--].setUTCDate(new_date);
-				}
-			}
-			else if (new_date > this.dates[k]){
-				// Date being moved later/right
-				while (k < l && new_date > this.dates[k]){
-					this.pickers[k++].setUTCDate(new_date);
-				}
-			}
-			this.updateDates();
-
-			delete this.updating;
-		},
-		remove: function(){
-			$.map(this.pickers, function(p){ p.remove(); });
-			delete this.element.data().datepicker;
-		}
-	};
-
-	function opts_from_el(el, prefix){
-		// Derive options from element data-attrs
-		var data = $(el).data(),
-			out = {}, inkey,
-			replace = new RegExp('^' + prefix.toLowerCase() + '([A-Z])');
-		prefix = new RegExp('^' + prefix.toLowerCase());
-		function re_lower(_,a){
-			return a.toLowerCase();
-		}
-		for (var key in data)
-			if (prefix.test(key)){
-				inkey = key.replace(replace, re_lower);
-				out[inkey] = data[key];
-			}
-		return out;
-	}
-
-	function opts_from_locale(lang){
-		// Derive options from locale plugins
-		var out = {};
-		// Check if "de-DE" style date is available, if not language should
-		// fallback to 2 letter code eg "de"
-		if (!dates[lang]){
-			lang = lang.split('-')[0];
-			if (!dates[lang])
-				return;
-		}
-		var d = dates[lang];
-		$.each(locale_opts, function(i,k){
-			if (k in d)
-				out[k] = d[k];
-		});
-		return out;
-	}
-
-	var old = $.fn.datepicker;
-	var datepickerPlugin = function(option){
-		var args = Array.apply(null, arguments);
-		args.shift();
-		var internal_return;
-		this.each(function(){
-			var $this = $(this),
-				data = $this.data('datepicker'),
-				options = typeof option === 'object' && option;
-			if (!data){
-				var elopts = opts_from_el(this, 'date'),
-					// Preliminary otions
-					xopts = $.extend({}, defaults, elopts, options),
-					locopts = opts_from_locale(xopts.language),
-					// Options priority: js args, data-attrs, locales, defaults
-					opts = $.extend({}, defaults, locopts, elopts, options);
-				if ($this.hasClass('input-daterange') || opts.inputs){
-					var ropts = {
-						inputs: opts.inputs || $this.find('input').toArray()
-					};
-					$this.data('datepicker', (data = new DateRangePicker(this, $.extend(opts, ropts))));
-				}
-				else {
-					$this.data('datepicker', (data = new Datepicker(this, opts)));
-				}
-			}
-			if (typeof option === 'string' && typeof data[option] === 'function'){
-				internal_return = data[option].apply(data, args);
-				if (internal_return !== undefined)
-					return false;
-			}
-		});
-		if (internal_return !== undefined)
-			return internal_return;
-		else
-			return this;
-	};
-	$.fn.datepicker = datepickerPlugin;
-
-	var defaults = $.fn.datepicker.defaults = {
-		autoclose: false,
-		beforeShowDay: $.noop,
-		beforeShowMonth: $.noop,
-		calendarWeeks: false,
-		clearBtn: false,
-		toggleActive: false,
-		daysOfWeekDisabled: [],
-		datesDisabled: [],
-		endDate: Infinity,
-		forceParse: true,
-		format: 'mm/dd/yyyy',
-		keyboardNavigation: true,
-		language: 'en',
-		minViewMode: 0,
-		multidate: false,
-		multidateSeparator: ',',
-		orientation: "auto",
-		rtl: false,
-		startDate: -Infinity,
-		startView: 0,
-		todayBtn: false,
-		todayHighlight: false,
-		weekStart: 0,
-		disableTouchKeyboard: false,
-        enableOnReadonly: true,
-		container: 'body'
-	};
-	var locale_opts = $.fn.datepicker.locale_opts = [
-		'format',
-		'rtl',
-		'weekStart'
-	];
-	$.fn.datepicker.Constructor = Datepicker;
-	var dates = $.fn.datepicker.dates = {
-		en: {
-			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-			today: "Today",
-			clear: "Clear"
-		}
-	};
-
-	var DPGlobal = {
-		modes: [
-			{
-				clsName: 'days',
-				navFnc: 'Month',
-				navStep: 1
-			},
-			{
-				clsName: 'months',
-				navFnc: 'FullYear',
-				navStep: 1
-			},
-			{
-				clsName: 'years',
-				navFnc: 'FullYear',
-				navStep: 10
-		}],
-		isLeapYear: function(year){
-			return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0));
-		},
-		getDaysInMonth: function(year, month){
-			return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
-		},
-		validParts: /dd?|DD?|mm?|MM?|yy(?:yy)?/g,
-		nonpunctuation: /[^ -\/:-@\[\u3400-\u9fff-`{-~\t\n\r]+/g,
-		parseFormat: function(format){
-			// IE treats \0 as a string end in inputs (truncating the value),
-			// so it's a bad format delimiter, anyway
-			var separators = format.replace(this.validParts, '\0').split('\0'),
-				parts = format.match(this.validParts);
-			if (!separators || !separators.length || !parts || parts.length === 0){
-				throw new Error("Invalid date format.");
-			}
-			return {separators: separators, parts: parts};
-		},
-		parseDate: function(date, format, language){
-			if (!date)
-				return undefined;
-			if (date instanceof Date)
-				return date;
-			if (typeof format === 'string')
-				format = DPGlobal.parseFormat(format);
-			var part_re = /([\-+]\d+)([dmwy])/,
-				parts = date.match(/([\-+]\d+)([dmwy])/g),
-				part, dir, i;
-			if (/^[\-+]\d+[dmwy]([\s,]+[\-+]\d+[dmwy])*$/.test(date)){
-				date = new Date();
-				for (i=0; i < parts.length; i++){
-					part = part_re.exec(parts[i]);
-					dir = parseInt(part[1]);
-					switch (part[2]){
-						case 'd':
-							date.setUTCDate(date.getUTCDate() + dir);
-							break;
-						case 'm':
-							date = Datepicker.prototype.moveMonth.call(Datepicker.prototype, date, dir);
-							break;
-						case 'w':
-							date.setUTCDate(date.getUTCDate() + dir * 7);
-							break;
-						case 'y':
-							date = Datepicker.prototype.moveYear.call(Datepicker.prototype, date, dir);
-							break;
-					}
-				}
-				return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
-			}
-			parts = date && date.match(this.nonpunctuation) || [];
-			date = new Date();
-			var parsed = {},
-				setters_order = ['yyyy', 'yy', 'M', 'MM', 'm', 'mm', 'd', 'dd'],
-				setters_map = {
-					yyyy: function(d,v){
-						return d.setUTCFullYear(v);
-					},
-					yy: function(d,v){
-						return d.setUTCFullYear(2000+v);
-					},
-					m: function(d,v){
-						if (isNaN(d))
-							return d;
-						v -= 1;
-						while (v < 0) v += 12;
-						v %= 12;
-						d.setUTCMonth(v);
-						while (d.getUTCMonth() !== v)
-							d.setUTCDate(d.getUTCDate()-1);
-						return d;
-					},
-					d: function(d,v){
-						return d.setUTCDate(v);
-					}
-				},
-				val, filtered;
-			setters_map['M'] = setters_map['MM'] = setters_map['mm'] = setters_map['m'];
-			setters_map['dd'] = setters_map['d'];
-			date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-			var fparts = format.parts.slice();
-			// Remove noop parts
-			if (parts.length !== fparts.length){
-				fparts = $(fparts).filter(function(i,p){
-					return $.inArray(p, setters_order) !== -1;
-				}).toArray();
-			}
-			// Process remainder
-			function match_part(){
-				var m = this.slice(0, parts[i].length),
-					p = parts[i].slice(0, m.length);
-				return m.toLowerCase() === p.toLowerCase();
-			}
-			if (parts.length === fparts.length){
-				var cnt;
-				for (i=0, cnt = fparts.length; i < cnt; i++){
-					val = parseInt(parts[i], 10);
-					part = fparts[i];
-					if (isNaN(val)){
-						switch (part){
-							case 'MM':
-								filtered = $(dates[language].months).filter(match_part);
-								val = $.inArray(filtered[0], dates[language].months) + 1;
-								break;
-							case 'M':
-								filtered = $(dates[language].monthsShort).filter(match_part);
-								val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
-								break;
-						}
-					}
-					parsed[part] = val;
-				}
-				var _date, s;
-				for (i=0; i < setters_order.length; i++){
-					s = setters_order[i];
-					if (s in parsed && !isNaN(parsed[s])){
-						_date = new Date(date);
-						setters_map[s](_date, parsed[s]);
-						if (!isNaN(_date))
-							date = _date;
-					}
-				}
-			}
-			return date;
-		},
-		formatDate: function(date, format, language){
-			if (!date)
-				return '';
-			if (typeof format === 'string')
-				format = DPGlobal.parseFormat(format);
-			var val = {
-				d: date.getUTCDate(),
-				D: dates[language].daysShort[date.getUTCDay()],
-				DD: dates[language].days[date.getUTCDay()],
-				m: date.getUTCMonth() + 1,
-				M: dates[language].monthsShort[date.getUTCMonth()],
-				MM: dates[language].months[date.getUTCMonth()],
-				yy: date.getUTCFullYear().toString().substring(2),
-				yyyy: date.getUTCFullYear()
-			};
-			val.dd = (val.d < 10 ? '0' : '') + val.d;
-			val.mm = (val.m < 10 ? '0' : '') + val.m;
-			date = [];
-			var seps = $.extend([], format.separators);
-			for (var i=0, cnt = format.parts.length; i <= cnt; i++){
-				if (seps.length)
-					date.push(seps.shift());
-				date.push(val[format.parts[i]]);
-			}
-			return date.join('');
-		},
-		headTemplate: '<thead>'+
-							'<tr>'+
-								'<th class="prev">&#171;</th>'+
-								'<th colspan="5" class="datepicker-switch"></th>'+
-								'<th class="next">&#187;</th>'+
-							'</tr>'+
-						'</thead>',
-		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
-		footTemplate: '<tfoot>'+
-							'<tr>'+
-								'<th colspan="7" class="today"></th>'+
-							'</tr>'+
-							'<tr>'+
-								'<th colspan="7" class="clear"></th>'+
-							'</tr>'+
-						'</tfoot>'
-	};
-	DPGlobal.template = '<div class="datepicker">'+
-							'<div class="datepicker-days">'+
-								'<table class=" table-condensed">'+
-									DPGlobal.headTemplate+
-									'<tbody></tbody>'+
-									DPGlobal.footTemplate+
-								'</table>'+
-							'</div>'+
-							'<div class="datepicker-months">'+
-								'<table class="table-condensed">'+
-									DPGlobal.headTemplate+
-									DPGlobal.contTemplate+
-									DPGlobal.footTemplate+
-								'</table>'+
-							'</div>'+
-							'<div class="datepicker-years">'+
-								'<table class="table-condensed">'+
-									DPGlobal.headTemplate+
-									DPGlobal.contTemplate+
-									DPGlobal.footTemplate+
-								'</table>'+
-							'</div>'+
-						'</div>';
-
-	$.fn.datepicker.DPGlobal = DPGlobal;
-
-
-	/* DATEPICKER NO CONFLICT
-	* =================== */
-
-	$.fn.datepicker.noConflict = function(){
-		$.fn.datepicker = old;
-		return this;
-	};
-
-	/* DATEPICKER VERSION
-	 * =================== */
-	$.fn.datepicker.version =  "1.4.1";
-
-	/* DATEPICKER DATA-API
-	* ================== */
-
-	$(document).on(
-		'focus.datepicker.data-api click.datepicker.data-api',
-		'[data-provide="datepicker"]',
-		function(e){
-			var $this = $(this);
-			if ($this.data('datepicker'))
-				return;
-			e.preventDefault();
-			// component click requires us to explicitly show it
-			datepickerPlugin.call($this, 'show');
-		}
-	);
-	$(function(){
-		datepickerPlugin.call($('[data-provide="datepicker-inline"]'));
-	});
-
-}(window.jQuery));
-
-!function(t){function e(r){if(n[r])return n[r].exports;var i=n[r]={i:r,l:!1,exports:{}};return t[r].call(i.exports,i,i.exports,e),i.l=!0,i.exports}var n={};return e.m=t,e.c=n,e.i=function(t){return t},e.d=function(t,e,n){Object.defineProperty(t,e,{configurable:!1,enumerable:!0,get:n})},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=37)}([function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(){n(this,t),this.startBin="101",this.endBin="101",this.middleBin="01010",this.Lbinary=["0001101","0011001","0010011","0111101","0100011","0110001","0101111","0111011","0110111","0001011"],this.Gbinary=["0100111","0110011","0011011","0100001","0011101","0111001","0000101","0010001","0001001","0010111"],this.Rbinary=["1110010","1100110","1101100","1000010","1011100","1001110","1010000","1000100","1001000","1110100"]}return t.prototype.encode=function(t,e,n){var r="";n=n||"";for(var i=0;i<t.length;i++)"L"==e[i]?r+=this.Lbinary[t[i]]:"G"==e[i]?r+=this.Gbinary[t[i]]:"R"==e[i]&&(r+=this.Rbinary[t[i]]),i<t.length-1&&(r+=n);return r},t}();e["default"]=r},function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function r(t,e){for(var n=0;n<e;n++)t="0"+t;return t}Object.defineProperty(e,"__esModule",{value:!0});var i=function(){function t(e){n(this,t),this.string=e}return t.prototype.encode=function(){for(var t="110",e=0;e<this.string.length;e++){var n=parseInt(this.string[e]),i=n.toString(2);i=r(i,4-i.length);for(var o=0;o<i.length;o++)t+="0"==i[o]?"100":"110"}return t+="1001",{data:t,text:this.string}},t.prototype.valid=function(){return this.string.search(/^[0-9]+$/)!==-1},t}();e["default"]=i},function(t,e){"use strict";function n(t,e){var n,r={};for(n in t)t.hasOwnProperty(n)&&(r[n]=t[n]);for(n in e)e.hasOwnProperty(n)&&"undefined"!=typeof e[n]&&(r[n]=e[n]);return r}Object.defineProperty(e,"__esModule",{value:!0}),e["default"]=n},function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(e){n(this,t),this.bytes=[];for(var r=0;r<e.length;++r)this.bytes.push(e.charCodeAt(r));this.string=e.substring(1),this.encodings=[740,644,638,176,164,100,224,220,124,608,604,572,436,244,230,484,260,254,650,628,614,764,652,902,868,836,830,892,844,842,752,734,590,304,112,94,416,128,122,672,576,570,464,422,134,496,478,142,910,678,582,768,762,774,880,862,814,896,890,818,914,602,930,328,292,200,158,68,62,424,412,232,218,76,74,554,616,978,556,146,340,212,182,508,268,266,956,940,938,758,782,974,400,310,118,512,506,960,954,502,518,886,966,668,680,692,5379]}return t.prototype.encode=function(){var t,e=this.bytes,n=e.shift()-105;return 103===n?t=this.nextA(e,1):104===n?t=this.nextB(e,1):105===n&&(t=this.nextC(e,1)),{text:this.string.replace(/[^\x20-\x7E]/g,""),data:this.getEncoding(n)+t.result+this.getEncoding((t.checksum+n)%103)+this.getEncoding(106)}},t.prototype.getEncoding=function(t){return this.encodings[t]?(this.encodings[t]+1e3).toString(2):""},t.prototype.valid=function(){return this.string.search(/^[\x00-\x7F\xC8-\xD3]+$/)!==-1},t.prototype.nextA=function(t,e){if(t.length<=0)return{result:"",checksum:0};var n,r;if(t[0]>=200)r=t[0]-105,t.shift(),99===r?n=this.nextC(t,e+1):100===r?n=this.nextB(t,e+1):98===r?(t[0]=t[0]>95?t[0]-96:t[0],n=this.nextA(t,e+1)):n=this.nextA(t,e+1);else{var i=t[0];r=i<32?i+64:i-32,t.shift(),n=this.nextA(t,e+1)}var o=this.getEncoding(r),s=r*e;return{result:o+n.result,checksum:s+n.checksum}},t.prototype.nextB=function(t,e){if(t.length<=0)return{result:"",checksum:0};var n,r;t[0]>=200?(r=t[0]-105,t.shift(),99===r?n=this.nextC(t,e+1):101===r?n=this.nextA(t,e+1):98===r?(t[0]=t[0]<32?t[0]+96:t[0],n=this.nextB(t,e+1)):n=this.nextB(t,e+1)):(r=t[0]-32,t.shift(),n=this.nextB(t,e+1));var i=this.getEncoding(r),o=r*e;return{result:i+n.result,checksum:o+n.checksum}},t.prototype.nextC=function(t,e){if(t.length<=0)return{result:"",checksum:0};var n,r;t[0]>=200?(r=t[0]-105,t.shift(),n=100===r?this.nextB(t,e+1):101===r?this.nextA(t,e+1):this.nextC(t,e+1)):(r=10*(t[0]-48)+t[1]-48,t.shift(),t.shift(),n=this.nextC(t,e+1));var i=this.getEncoding(r),o=r*e;return{result:i+n.result,checksum:o+n.checksum}},t}();e["default"]=r},function(t,e){"use strict";function n(t){for(var e=0,n=0;n<t.length;n++){var r=parseInt(t[n]);e+=(n+t.length)%2===0?r:2*r%10+Math.floor(2*r/10)}return(10-e%10)%10}function r(t){for(var e=0,n=[2,3,4,5,6,7],r=0;r<t.length;r++){var i=parseInt(t[t.length-1-r]);e+=n[r%n.length]*i}return(11-e%11)%11}Object.defineProperty(e,"__esModule",{value:!0}),e.mod10=n,e.mod11=r},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n={width:2,height:100,format:"auto",displayValue:!0,fontOptions:"",font:"monospace",textAlign:"center",textPosition:"bottom",textMargin:2,fontSize:20,background:"#ffffff",lineColor:"#000000",margin:10,marginTop:void 0,marginBottom:void 0,marginLeft:void 0,marginRight:void 0,valid:function(){}};e["default"]=n},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){return e.height+(e.displayValue&&t.text.length>0?e.fontSize:0)+e.textMargin+e.marginTop+e.marginBottom}function o(t,e,n){if(n.displayValue&&e<t){if("center"==n.textAlign)return Math.floor((t-e)/2);if("left"==n.textAlign)return 0;if("right"==n.textAlign)return Math.floor(t-e)}return 0}function s(t,e,n){for(var r=0;r<t.length;r++){var s=t[r],a=(0,h["default"])(e,s.options),u=c(s.text,a,n),f=s.data.length*a.width;s.width=Math.ceil(Math.max(u,f)),s.height=i(s,a),s.barcodePadding=o(u,f,a)}}function a(t){for(var e=0,n=0;n<t.length;n++)e+=t[n].width;return e}function u(t){for(var e=0,n=0;n<t.length;n++)t[n].height>e&&(e=t[n].height);return e}function c(t,e,n){var r;r="undefined"==typeof n?document.createElement("canvas").getContext("2d"):n,r.font=e.fontOptions+" "+e.fontSize+"px "+e.font;var i=r.measureText(t).width;return i}Object.defineProperty(e,"__esModule",{value:!0}),e.getTotalWidthOfEncodings=e.calculateEncodingAttributes=e.getBarcodePadding=e.getEncodingHeight=e.getMaximumHeightOfEncodings=void 0;var f=n(2),h=r(f);e.getMaximumHeightOfEncodings=u,e.getEncodingHeight=i,e.getBarcodePadding=o,e.calculateEncodingAttributes=s,e.getTotalWidthOfEncodings=a},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=n(16),i=n(15),o=n(22),s=n(25),a=n(24),u=n(30),c=n(31),f=n(23);e["default"]={CODE39:r.CODE39,CODE128:i.CODE128,CODE128A:i.CODE128A,CODE128B:i.CODE128B,CODE128C:i.CODE128C,EAN13:o.EAN13,EAN8:o.EAN8,EAN5:o.EAN5,EAN2:o.EAN2,UPC:o.UPC,ITF14:s.ITF14,ITF:a.ITF,MSI:u.MSI,MSI10:u.MSI10,MSI11:u.MSI11,MSI1010:u.MSI1010,MSI1110:u.MSI1110,pharmacode:c.pharmacode,GenericBarcode:f.GenericBarcode}},function(t,e){"use strict";function n(t){return t.marginTop=t.marginTop||t.margin,t.marginBottom=t.marginBottom||t.margin,t.marginRight=t.marginRight||t.margin,t.marginLeft=t.marginLeft||t.margin,t}Object.defineProperty(e,"__esModule",{value:!0}),e["default"]=n},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t){if("string"==typeof t)return o(t);if(Array.isArray(t)){for(var e=[],n=0;n<t.length;n++)e.push(i(t[n]));return e}if("undefined"!=typeof HTMLCanvasElement&&t instanceof HTMLImageElement)return s(t);if("undefined"!=typeof SVGElement&&t instanceof SVGElement)return{element:t,options:(0,u["default"])(t),renderer:(0,c.getRendererClass)("svg")};if("undefined"!=typeof HTMLCanvasElement&&t instanceof HTMLCanvasElement)return{element:t,options:(0,u["default"])(t),renderer:(0,c.getRendererClass)("canvas")};if(t.getContext)return{element:t,renderer:(0,c.getRendererClass)("canvas")};throw new Error("Not supported type to render on.")}function o(t){var e=document.querySelectorAll(t);if(0===e.length)throw new Error("No element found");for(var n=[],r=0;r<e.length;r++)n.push(i(e[r]));return n}function s(t){var e=document.createElement("canvas");return{element:e,options:(0,u["default"])(t),renderer:(0,c.getRendererClass)("canvas"),afterRender:function(){t.setAttribute("src",e.toDataURL())}}}Object.defineProperty(e,"__esModule",{value:!0});var a=n(32),u=r(a),c=n(35);e["default"]=i},function(t,e){"use strict";function n(t){function e(t){if(Array.isArray(t))for(var r=0;r<t.length;r++)e(t[r]);else t.text=t.text||"",t.data=t.data||"",n.push(t)}var n=[];return e(t),n}Object.defineProperty(e,"__esModule",{value:!0}),e["default"]=n},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}Object.defineProperty(e,"__esModule",{value:!0});var a=n(3),u=r(a),c=function(t){function e(n){return i(this,e),o(this,t.call(this,String.fromCharCode(208)+n))}return s(e,t),e.prototype.valid=function(){return this.string.search(/^[\x00-\x5F\xC8-\xCF]+$/)!==-1},e}(u["default"]);e["default"]=c},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}Object.defineProperty(e,"__esModule",{value:!0});var a=n(3),u=r(a),c=function(t){function e(n){return i(this,e),o(this,t.call(this,String.fromCharCode(209)+n))}return s(e,t),e.prototype.valid=function(){return this.string.search(/^[\x20-\x7F\xC8-\xCF]+$/)!==-1},e}(u["default"]);e["default"]=c},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}Object.defineProperty(e,"__esModule",{value:!0});var a=n(3),u=r(a),c=function(t){function e(n){return i(this,e),o(this,t.call(this,String.fromCharCode(210)+n))}return s(e,t),e.prototype.valid=function(){return this.string.search(/^(\xCF*[0-9]{2}\xCF*)+$/)!==-1},e}(u["default"]);e["default"]=c},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function a(t){var e,n=t.match(/^[\x00-\x5F\xC8-\xCF]*/)[0].length,r=t.match(/^[\x20-\x7F\xC8-\xCF]*/)[0].length,i=t.match(/^(\xCF*[0-9]{2}\xCF*)*/)[0].length;return e=i>=2?String.fromCharCode(210)+f(t):n>r?String.fromCharCode(208)+u(t):String.fromCharCode(209)+c(t),e=e.replace(/[\xCD\xCE]([^])[\xCD\xCE]/,function(t,e){return String.fromCharCode(203)+e})}function u(t){var e=t.match(/^([\x00-\x5F\xC8-\xCF]+?)(([0-9]{2}){2,})([^0-9]|$)/);if(e)return e[1]+String.fromCharCode(204)+f(t.substring(e[1].length));var n=t.match(/^[\x00-\x5F\xC8-\xCF]+/);return n[0].length===t.length?t:n[0]+String.fromCharCode(205)+c(t.substring(n[0].length))}function c(t){var e=t.match(/^([\x20-\x7F\xC8-\xCF]+?)(([0-9]{2}){2,})([^0-9]|$)/);if(e)return e[1]+String.fromCharCode(204)+f(t.substring(e[1].length));var n=t.match(/^[\x20-\x7F\xC8-\xCF]+/);return n[0].length===t.length?t:n[0]+String.fromCharCode(206)+u(t.substring(n[0].length))}function f(t){var e=t.match(/^(\xCF*[0-9]{2}\xCF*)+/)[0],n=e.length;if(n===t.length)return t;t=t.substring(n);var r=t.match(/^[\x00-\x5F\xC8-\xCF]*/)[0].length,i=t.match(/^[\x20-\x7F\xC8-\xCF]*/)[0].length;return r>=i?e+String.fromCharCode(206)+u(t):e+String.fromCharCode(205)+c(t)}Object.defineProperty(e,"__esModule",{value:!0});var h=n(3),l=r(h),d=function(t){function e(n){if(i(this,e),n.search(/^[\x00-\x7F\xC8-\xD3]+$/)!==-1)var r=o(this,t.call(this,a(n)));else var r=o(this,t.call(this,n));return o(r)}return s(e,t),e}(l["default"]);e["default"]=d},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}Object.defineProperty(e,"__esModule",{value:!0}),e.CODE128C=e.CODE128B=e.CODE128A=e.CODE128=void 0;var i=n(14),o=r(i),s=n(11),a=r(s),u=n(12),c=r(u),f=n(13),h=r(f);e.CODE128=o["default"],e.CODE128A=a["default"],e.CODE128B=c["default"],e.CODE128C=h["default"]},function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(e,r){n(this,t),this.string=e.toUpperCase(),this.mod43Enabled=r.mod43||!1,this.characters=["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","-","."," ","$","/","+","%","*"],this.encodings=[20957,29783,23639,30485,20951,29813,23669,20855,29789,23645,29975,23831,30533,22295,30149,24005,21623,29981,23837,22301,30023,23879,30545,22343,30161,24017,21959,30065,23921,22385,29015,18263,29141,17879,29045,18293,17783,29021,18269,17477,17489,17681,20753,35770]}return t.prototype.getEncoding=function(t){return this.getBinary(this.characterValue(t))},t.prototype.getBinary=function(t){return this.encodings[t].toString(2)},t.prototype.getCharacter=function(t){return this.characters[t]},t.prototype.characterValue=function(t){return this.characters.indexOf(t)},t.prototype.encode=function(){for(var t=this.string,e=this.getEncoding("*"),n=0;n<this.string.length;n++)e+=this.getEncoding(this.string[n])+"0";if(this.mod43Enabled){for(var r=0,i=0;i<this.string.length;i++)r+=this.characterValue(this.string[i]);r%=43,e+=this.getBinary(r)+"0",t+=this.getCharacter(r)}return e+=this.getEncoding("*"),{data:e,text:t}},t.prototype.valid=function(){return this.string.search(/^[0-9A-Z\-\.\ \$\/\+\%]+$/)!==-1},t}();e.CODE39=r},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),s=r(o),a=function(){function t(e,n){i(this,t),e.search(/^[0-9]{12}$/)!==-1?this.string=e+this.checksum(e):this.string=e,this.displayValue=n.displayValue,this.structure=["LLLLLL","LLGLGG","LLGGLG","LLGGGL","LGLLGG","LGGLLG","LGGGLL","LGLGLG","LGLGGL","LGGLGL"],n.fontSize>10*n.width?this.fontSize=10*n.width:this.fontSize=n.fontSize,this.guardHeight=n.height+this.fontSize/2+n.textMargin,this.lastChar=n.lastChar}return t.prototype.valid=function(){return this.string.search(/^[0-9]{13}$/)!==-1&&this.string[12]==this.checksum(this.string)},t.prototype.encode=function(){var t=new s["default"],e=[],n=this.structure[this.string[0]],r=this.string.substr(1,6),i=this.string.substr(7,6);return this.displayValue&&e.push({data:"000000000000",text:this.string[0],options:{textAlign:"left",fontSize:this.fontSize}}),e.push({data:"101",options:{height:this.guardHeight}}),e.push({data:t.encode(r,n),text:r,options:{fontSize:this.fontSize}}),e.push({data:"01010",options:{height:this.guardHeight}}),e.push({data:t.encode(i,"RRRRRR"),text:i,options:{fontSize:this.fontSize}}),e.push({data:"101",options:{height:this.guardHeight}}),this.lastChar&&this.displayValue&&(e.push({data:"00"}),e.push({data:"00000",text:this.lastChar,options:{fontSize:this.fontSize}})),e},t.prototype.checksum=function(t){var e,n=0;for(e=0;e<12;e+=2)n+=parseInt(t[e]);for(e=1;e<12;e+=2)n+=3*parseInt(t[e]);return(10-n%10)%10},t}();e["default"]=a},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),s=r(o),a=function(){function t(e){i(this,t),this.string=e,this.structure=["LL","LG","GL","GG"]}return t.prototype.valid=function(){return this.string.search(/^[0-9]{2}$/)!==-1},t.prototype.encode=function(){var t=new s["default"],e=this.structure[parseInt(this.string)%4],n="1011";return n+=t.encode(this.string,e,"01"),{data:n,text:this.string}},t}();e["default"]=a},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),s=r(o),a=function(){function t(e){i(this,t),this.string=e,this.structure=["GGLLL","GLGLL","GLLGL","GLLLG","LGGLL","LLGGL","LLLGG","LGLGL","LGLLG","LLGLG"]}return t.prototype.valid=function(){return this.string.search(/^[0-9]{5}$/)!==-1},t.prototype.encode=function(){var t=new s["default"],e=this.checksum(),n="1011";return n+=t.encode(this.string,this.structure[e],"01"),{data:n,text:this.string}},t.prototype.checksum=function(){var t=0;return t+=3*parseInt(this.string[0]),t+=9*parseInt(this.string[1]),t+=3*parseInt(this.string[2]),t+=9*parseInt(this.string[3]),t+=3*parseInt(this.string[4]),t%10},t}();e["default"]=a},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),s=r(o),a=function(){function t(e){i(this,t),e.search(/^[0-9]{7}$/)!==-1?this.string=e+this.checksum(e):this.string=e}return t.prototype.valid=function(){return this.string.search(/^[0-9]{8}$/)!==-1&&this.string[7]==this.checksum(this.string)},t.prototype.encode=function(){var t=new s["default"],e="",n=this.string.substr(0,4),r=this.string.substr(4,4);return e+=t.startBin,e+=t.encode(n,"LLLL"),e+=t.middleBin,e+=t.encode(r,"RRRR"),e+=t.endBin,{data:e,text:this.string}},t.prototype.checksum=function(t){var e,n=0;for(e=0;e<7;e+=2)n+=3*parseInt(t[e]);for(e=1;e<7;e+=2)n+=parseInt(t[e]);return(10-n%10)%10},t}();e["default"]=a},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var o=n(0),s=r(o),a=function(){function t(e,n){i(this,t),e.search(/^[0-9]{11}$/)!==-1?this.string=e+this.checksum(e):this.string=e,this.displayValue=n.displayValue,n.fontSize>10*n.width?this.fontSize=10*n.width:this.fontSize=n.fontSize,this.guardHeight=n.height+this.fontSize/2+n.textMargin}return t.prototype.valid=function(){return this.string.search(/^[0-9]{12}$/)!==-1&&this.string[11]==this.checksum(this.string)},t.prototype.encode=function(){var t=new s["default"],e=[];return this.displayValue&&e.push({data:"00000000",text:this.string[0],options:{textAlign:"left",fontSize:this.fontSize}}),e.push({data:"101"+t.encode(this.string[0],"L"),options:{height:this.guardHeight}}),e.push({data:t.encode(this.string.substr(1,5),"LLLLL"),text:this.string.substr(1,5),options:{fontSize:this.fontSize}}),e.push({data:"01010",options:{height:this.guardHeight}}),e.push({data:t.encode(this.string.substr(6,5),"RRRRR"),text:this.string.substr(6,5),options:{fontSize:this.fontSize}}),e.push({data:t.encode(this.string[11],"R")+"101",options:{height:this.guardHeight}}),this.displayValue&&e.push({data:"00000000",text:this.string[11],options:{textAlign:"right",fontSize:this.fontSize}}),e},t.prototype.checksum=function(t){var e,n=0;for(e=1;e<11;e+=2)n+=parseInt(t[e]);for(e=0;e<11;e+=2)n+=3*parseInt(t[e]);return(10-n%10)%10},t}();e["default"]=a},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}Object.defineProperty(e,"__esModule",{value:!0}),e.UPC=e.EAN2=e.EAN5=e.EAN8=e.EAN13=void 0;var i=n(17),o=r(i),s=n(20),a=r(s),u=n(19),c=r(u),f=n(18),h=r(f),l=n(21),d=r(l);e.EAN13=o["default"],e.EAN8=a["default"],e.EAN5=c["default"],e.EAN2=h["default"],e.UPC=d["default"]},function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(e){n(this,t),this.string=e}return t.prototype.encode=function(){return{data:"10101010101010101010101010101010101010101",text:this.string}},t.prototype.valid=function(){return!0},t}();e.GenericBarcode=r},function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(e){n(this,t),this.string=e,this.binaryRepresentation={0:"00110",1:"10001",2:"01001",3:"11000",4:"00101",5:"10100",6:"01100",7:"00011",8:"10010",9:"01010"}}return t.prototype.valid=function(){return this.string.search(/^([0-9]{2})+$/)!==-1},t.prototype.encode=function(){for(var t="1010",e=0;e<this.string.length;e+=2)t+=this.calculatePair(this.string.substr(e,2));return t+="11101",{data:t,text:this.string}},t.prototype.calculatePair=function(t){for(var e="",n=this.binaryRepresentation[t[0]],r=this.binaryRepresentation[t[1]],i=0;i<5;i++)e+="1"==n[i]?"111":"1",e+="1"==r[i]?"000":"0";return e},t}();e.ITF=r},function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(e){n(this,t),this.string=e,e.search(/^[0-9]{13}$/)!==-1&&(this.string+=this.checksum(e)),this.binaryRepresentation={0:"00110",1:"10001",2:"01001",3:"11000",4:"00101",5:"10100",6:"01100",7:"00011",8:"10010",9:"01010"}}return t.prototype.valid=function(){return this.string.search(/^[0-9]{14}$/)!==-1&&this.string[13]==this.checksum()},t.prototype.encode=function(){for(var t="1010",e=0;e<14;e+=2)t+=this.calculatePair(this.string.substr(e,2));return t+="11101",{data:t,text:this.string}},t.prototype.calculatePair=function(t){for(var e="",n=this.binaryRepresentation[t[0]],r=this.binaryRepresentation[t[1]],i=0;i<5;i++)e+="1"==n[i]?"111":"1",e+="1"==r[i]?"000":"0";return e},t.prototype.checksum=function(){for(var t=0,e=0;e<13;e++)t+=parseInt(this.string[e])*(3-e%2*2);return 10*Math.ceil(t/10)-t},t}();e.ITF14=r},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}Object.defineProperty(e,"__esModule",{value:!0});var a=n(1),u=r(a),c=n(4),f=function(t){function e(n){i(this,e);var r=o(this,t.call(this,n));return r.string+=(0,c.mod10)(r.string),r}return s(e,t),e}(u["default"]);e["default"]=f},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}Object.defineProperty(e,"__esModule",{value:!0});var a=n(1),u=r(a),c=n(4),f=function(t){function e(n){i(this,e);var r=o(this,t.call(this,n));return r.string+=(0,c.mod10)(r.string),r.string+=(0,c.mod10)(r.string),r}return s(e,t),e}(u["default"]);e["default"]=f},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}Object.defineProperty(e,"__esModule",{value:!0});var a=n(1),u=r(a),c=n(4),f=function(t){function e(n){i(this,e);var r=o(this,t.call(this,n));return r.string+=(0,c.mod11)(r.string),r}return s(e,t),e}(u["default"]);e["default"]=f},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}Object.defineProperty(e,"__esModule",{value:!0});var a=n(1),u=r(a),c=n(4),f=function(t){function e(n){i(this,e);var r=o(this,t.call(this,n));return r.string+=(0,c.mod11)(r.string),r.string+=(0,c.mod10)(r.string),r}return s(e,t),e}(u["default"]);e["default"]=f},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}Object.defineProperty(e,"__esModule",{value:!0}),e.MSI1110=e.MSI1010=e.MSI11=e.MSI10=e.MSI=void 0;var i=n(1),o=r(i),s=n(26),a=r(s),u=n(28),c=r(u),f=n(27),h=r(f),l=n(29),d=r(l);e.MSI=o["default"],e.MSI10=a["default"],e.MSI11=c["default"],e.MSI1010=h["default"],e.MSI1110=d["default"]},function(t,e){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(e){n(this,t),this.number=parseInt(e,10)}return t.prototype.encode=function(){for(var t=this.number,e="";!isNaN(t)&&0!=t;)t%2===0?(e="11100"+e,t=(t-2)/2):(e="100"+e,t=(t-1)/2);return e=e.slice(0,-2),{data:e,text:this.number+""}},t.prototype.valid=function(){return this.number>=3&&this.number<=131070},t}();e.pharmacode=r},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t){var e={};for(var n in u["default"])u["default"].hasOwnProperty(n)&&(t.hasAttribute("jsbarcode-"+n.toLowerCase())&&(e[n]=t.getAttribute("jsbarcode-"+n.toLowerCase())),t.hasAttribute("data-"+n.toLowerCase())&&(e[n]=t.getAttribute("data-"+n.toLowerCase())));return e.value=t.getAttribute("jsbarcode-value")||t.getAttribute("data-value"),e=(0,s["default"])(e)}Object.defineProperty(e,"__esModule",{value:!0});var o=n(33),s=r(o),a=n(5),u=r(a);e["default"]=i},function(t,e){"use strict";function n(t){var e=["width","height","textMargin","fontSize","margin","marginTop","marginBottom","marginLeft","marginRight"];for(var n in e)e.hasOwnProperty(n)&&(n=e[n],"string"==typeof t[n]&&(t[n]=parseInt(t[n],10)));return"string"==typeof t.displayValue&&(t.displayValue="false"!=t.displayValue),t}Object.defineProperty(e,"__esModule",{value:!0}),e["default"]=n},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var o=n(2),s=r(o),a=n(6),u=function(){function t(e,n,r){i(this,t),this.canvas=e,this.encodings=n,this.options=r}return t.prototype.render=function(){if(!this.canvas.getContext)throw new Error("The browser does not support canvas.");this.prepareCanvas();for(var t=0;t<this.encodings.length;t++){var e=(0,s["default"])(this.options,this.encodings[t].options);this.drawCanvasBarcode(e,this.encodings[t]),this.drawCanvasText(e,this.encodings[t]),this.moveCanvasDrawing(this.encodings[t])}this.restoreCanvas()},t.prototype.prepareCanvas=function(){var t=this.canvas.getContext("2d");t.save(),(0,a.calculateEncodingAttributes)(this.encodings,this.options,t);var e=(0,a.getTotalWidthOfEncodings)(this.encodings),n=(0,a.getMaximumHeightOfEncodings)(this.encodings);this.canvas.width=e+this.options.marginLeft+this.options.marginRight,this.canvas.height=n,t.clearRect(0,0,this.canvas.width,this.canvas.height),this.options.background&&(t.fillStyle=this.options.background,t.fillRect(0,0,this.canvas.width,this.canvas.height)),t.translate(this.options.marginLeft,0)},t.prototype.drawCanvasBarcode=function(t,e){var n,r=this.canvas.getContext("2d"),i=e.data;n="top"==t.textPosition?t.marginTop+t.fontSize+t.textMargin:t.marginTop,r.fillStyle=t.lineColor;for(var o=0;o<i.length;o++){var s=o*t.width+e.barcodePadding;"1"===i[o]?r.fillRect(s,n,t.width,t.height):i[o]&&r.fillRect(s,n,t.width,t.height*i[o])}},t.prototype.drawCanvasText=function(t,e){var n=this.canvas.getContext("2d"),r=t.fontOptions+" "+t.fontSize+"px "+t.font;if(t.displayValue){var i,o;o="top"==t.textPosition?t.marginTop+t.fontSize-t.textMargin:t.height+t.textMargin+t.marginTop+t.fontSize,n.font=r,"left"==t.textAlign||e.barcodePadding>0?(i=0,n.textAlign="left"):"right"==t.textAlign?(i=e.width-1,n.textAlign="right"):(i=e.width/2,n.textAlign="center"),n.fillText(e.text,i,o)}},t.prototype.moveCanvasDrawing=function(t){var e=this.canvas.getContext("2d");e.translate(t.width,0)},t.prototype.restoreCanvas=function(){var t=this.canvas.getContext("2d");t.restore()},t}();e["default"]=u},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t){switch(t){case"canvas":return s["default"];case"svg":return u["default"];default:throw new Error("Invalid rederer")}}Object.defineProperty(e,"__esModule",{value:!0}),e.getRendererClass=void 0;var o=n(34),s=r(o),a=n(36),u=r(a);e.getRendererClass=i},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function o(t,e,n){var r=document.createElementNS(h,"g");return r.setAttribute("transform","translate("+t+", "+e+")"),n.appendChild(r),r}function s(t,e){t.setAttribute("style","fill:"+e.lineColor+";")}function a(t,e,n,r,i){
-var o=document.createElementNS(h,"rect");o.setAttribute("x",t),o.setAttribute("y",e),o.setAttribute("width",n),o.setAttribute("height",r),i.appendChild(o)}Object.defineProperty(e,"__esModule",{value:!0});var u=n(2),c=r(u),f=n(6),h="http://www.w3.org/2000/svg",l=function(){function t(e,n,r){i(this,t),this.svg=e,this.encodings=n,this.options=r}return t.prototype.render=function(){var t=this.options.marginLeft;this.prepareSVG();for(var e=0;e<this.encodings.length;e++){var n=this.encodings[e],r=(0,c["default"])(this.options,n.options),i=o(t,r.marginTop,this.svg);s(i,r),this.drawSvgBarcode(i,r,n),this.drawSVGText(i,r,n),t+=n.width}},t.prototype.prepareSVG=function(){for(;this.svg.firstChild;)this.svg.removeChild(this.firstChild);(0,f.calculateEncodingAttributes)(this.encodings,this.options);var t=(0,f.getTotalWidthOfEncodings)(this.encodings),e=(0,f.getMaximumHeightOfEncodings)(this.encodings),n=t+this.options.marginLeft+this.options.marginRight;this.setSvgAttributes(n,e)},t.prototype.drawSvgBarcode=function(t,e,n){var r,i=n.data;r="top"==e.textPosition?e.fontSize+e.textMargin:0;for(var o=0,s=0,u=0;u<i.length;u++)s=u*e.width+n.barcodePadding,"1"===i[u]?o++:o>0&&(a(s-e.width*o,r,e.width*o,e.height,t),o=0);o>0&&a(s-e.width*(o-1),r,e.width*o,e.height,t)},t.prototype.drawSVGText=function(t,e,n){var r=document.createElementNS(h,"text");if(e.displayValue){var i,o;r.setAttribute("style","font:"+e.fontOptions+" "+e.fontSize+"px "+e.font),o="top"==e.textPosition?e.fontSize-e.textMargin:e.height+e.textMargin+e.fontSize,"left"==e.textAlign||n.barcodePadding>0?(i=0,r.setAttribute("text-anchor","start")):"right"==e.textAlign?(i=n.width-1,r.setAttribute("text-anchor","end")):(i=n.width/2,r.setAttribute("text-anchor","middle")),r.setAttribute("x",i),r.setAttribute("y",o),r.appendChild(document.createTextNode(n.text)),t.appendChild(r)}},t.prototype.setSvgAttributes=function(t,e){var n=this.svg;n.setAttribute("width",t+"px"),n.setAttribute("height",e+"px"),n.setAttribute("x","0px"),n.setAttribute("y","0px"),n.setAttribute("viewBox","0 0 "+t+" "+e),n.setAttribute("xmlns",h),n.setAttribute("version","1.1"),n.style.transform="translate(0,0)",this.options.background&&(n.style.background=this.options.background)},t}();e["default"]=l},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t,e){m.prototype[e]=m.prototype[e.toUpperCase()]=m.prototype[e.toLowerCase()]=function(n,r){var i=(0,h["default"])(this._options,r),s=t[e],a=o(n,s,i);return this._encodings.push(a),this}}function o(t,e,n){t=""+t;var r=new e(t,n);if(!r.valid()){if(n.valid===x["default"].valid)throw new Error('"'+t+'" is not a valid input.');n.valid(!1)}var i=r.encode();i=(0,d["default"])(i);for(var o=0;o<i.length;o++)i[o].options=(0,h["default"])(n,i[o].options);return i}function s(){return c["default"].CODE128?"CODE128":Object.keys(c["default"])[0]}function a(t,e,n){e=(0,d["default"])(e);for(var r=0;r<e.length;r++)e[r].options=(0,h["default"])(n,e[r].options),(0,g["default"])(e[r].options);(0,g["default"])(n);var i=t.renderer,o=new i(t.element,e,n);o.render(),t.afterRender&&t.afterRender()}var u=n(7),c=r(u),f=n(2),h=r(f),l=n(10),d=r(l),p=n(8),g=r(p),v=n(9),y=r(v),b=n(5),x=r(b),m=function(){},_=function(t,e,n){var r=new m;if("undefined"==typeof t)throw Error("No element to render on was provided.");return r._renderProperties=(0,y["default"])(t),r._encodings=[],r._options=x["default"],"undefined"!=typeof e&&(n=n||{},n.format||(n.format=s()),r.options(n),r[n.format](e,n),r.render()),r};_.getModule=function(t){return c["default"][t]};for(var C in c["default"])c["default"].hasOwnProperty(C)&&i(c["default"],C);m.prototype.options=function(t){return this._options=(0,h["default"])(this._options,t),this},m.prototype.blank=function(t){var e="0".repeat(t);return this._encodings.push({data:e}),this},m.prototype.init=function(){Array.isArray(this._renderProperties)||(this._renderProperties=[this._renderProperties]);var t;for(var e in this._renderProperties){t=this._renderProperties[e];var n=(0,h["default"])(this._options,t.options);"auto"==n.format&&(n.format=s());var r=n.value,i=c["default"][n.format.toUpperCase()],u=o(r,i,n);a(t,u,n)}},m.prototype.render=function(){if(Array.isArray(this._renderProperties))for(var t in this._renderProperties)a(this._renderProperties[t],this._encodings,this._options);else a(this._renderProperties,this._encodings,this._options);return this._options.valid(!0),this},"undefined"!=typeof window&&(window.JsBarcode=_),"undefined"!=typeof jQuery&&(jQuery.fn.JsBarcode=function(t,e){var n=[];return jQuery(this).each(function(){n.push(this)}),_(n,t,e)}),t.exports=_}]);
 /*!
  * Materialize v0.97.7 (http://materializecss.com)
  * Copyright 2014-2015 Materialize
@@ -51171,7 +49132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-//# sourceMappingURL=socket.io.js.map
+
 var templates = {};
 
 templates["../tabletop/view/modules/actions/actions.html"] = "<div class=\"global-wrapper\">\n" +
@@ -51185,7 +49146,7 @@ templates["../tabletop/view/modules/actions/actions.html"] = "<div class=\"globa
    "    <div class=\"chat-wrapper\">\n" +
    "        <div class=\"chat-body\">\n" +
    "            <ul class=\"chat-list\">\n" +
-   "                <li class=\"chat-msg\" ng-repeat=\"msg in chatMsgs\">\n" +
+   "                <li class=\"chat-msg\" ng-repeat=\"msg in chatMsgs track by $index\">\n" +
    "                    <span>\n" +
    "                        {{msg.username}} - {{msg.dt | date:'HH:mm:ss'}} : {{msg.text}}\n" +
    "                        <!--mmalkav - (11:11:11) : ActionName=8,7,3,4,5,6,7,8,9,4-->\n" +
@@ -51201,8 +49162,13 @@ templates["../tabletop/view/modules/actions/actions.html"] = "<div class=\"globa
    "                    </a>\n" +
    "                    <ul>\n" +
    "                        <li>\n" +
+   "                            <a class=\"btn-floating black\" ng-click=\"actionMode('dices')\">\n" +
+   "                                <img src=\"/files/images/icons/d20.svg\" alt=\"dices\">\n" +
+   "                            </a>\n" +
+   "                        </li>\n" +
+   "                        <li>\n" +
    "                            <a class=\"btn-floating red\" ng-click=\"actionMode('fight')\">\n" +
-   "                                <i class=\"material-icons\">pages</i>\n" +
+   "                                <img src=\"/files/images/icons/fight.svg\" alt=\"dices\">\n" +
    "                            </a>\n" +
    "                        </li>\n" +
    "                        <li>\n" +
@@ -51240,7 +49206,55 @@ templates["../tabletop/view/modules/actions/actions.html"] = "<div class=\"globa
    "\n" +
    "\n" +
    "</div>\n" +
-   "";
+   "\n" +
+   "<div id=\"modal-dices\" class=\"modal\">\n" +
+   "    <a class=\"close-btn-m modal-close\">\n" +
+   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
+   "    </a>\n" +
+   "    <div class=\"modal-content\">\n" +
+   "        <h4>Dices</h4>\n" +
+   "        <form class=\"col s12\" name=\"vtm_main_form\">\n" +
+   "            <div class=\"row\">\n" +
+   "                <div class=\"input-field col s6\">\n" +
+   "                    <select class=\"icons\" ng-model=\"currentDice\">\n" +
+   "                        <option value=\"6\" data-icon=\"/files/images/icons/d6.svg\" class=\"circle\"></option>\n" +
+   "                        <option value=\"8\" data-icon=\"/files/images/icons/d8.svg\" class=\"circle\"></option>\n" +
+   "                        <option value=\"10\" data-icon=\"/files/images/icons/d10.svg\" class=\"circle\"></option>\n" +
+   "                        <option value=\"12\" data-icon=\"/files/images/icons/d12.svg\" class=\"circle\"></option>\n" +
+   "                        <option value=\"20\" data-icon=\"/files/images/icons/d20.svg\" class=\"circle\"></option>\n" +
+   "                    </select>\n" +
+   "                    <label>\n" +
+   "                        <img ng-if=\"currentDice\" ng-src=\"/files/images/icons/d{{currentDice}}.svg\">\n" +
+   "                    </label>\n" +
+   "                </div>\n" +
+   "                <div class=\"input-field col s2\">\n" +
+   "                    <i class=\"fa fa-minus left\" ng-click=\"changeNumber(-1)\"></i>\n" +
+   "                </div>\n" +
+   "                <div class=\"input-field col s2 currentNumber\">\n" +
+   "                    <span class=\"cur-number\">\n" +
+   "                        {{currentNumber}}\n" +
+   "                    </span>\n" +
+   "                </div>\n" +
+   "                <div class=\"input-field col s2\">\n" +
+   "                    <i class=\"fa fa-plus right\" ng-click=\"changeNumber(1)\"></i>\n" +
+   "                </div>\n" +
+   "            </div>\n" +
+   "\n" +
+   "        </form>\n" +
+   "    </div>\n" +
+   "    <div class=\"modal-footer center\">\n" +
+   "        <button ng-click=\"sendMessage(currentDice+','+currentNumber, 'roll')\" class=\"modal-action modal-close waves-effect waves-green btn-flat btn-modal-m\">\n" +
+   "            Roll!\n" +
+   "        </button>\n" +
+   "    </div>\n" +
+   "</div>\n" +
+   "\n" +
+   "<script>\n" +
+   "    $(document).ready(function() {\n" +
+   "        $('select').material_select();\n" +
+   "        $('modal').leanModal();\n" +
+   "    });\n" +
+   "</script>";
 
 templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper bio\" ng-init=\"getCharacterBio()\">\n" +
    "    <h4 class=\"page-header global-page-header center\">{{\"BIO\" | translate}}</h4>\n" +
@@ -51298,37 +49312,23 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "    <!--<h4 class=\"page-header global-page-header center\" ng-show=\"hideLoader\">-->\n" +
    "        <!-- -->\n" +
    "    <!--</h4>-->\n" +
-   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"userInfo.type != 'player'\">\n" +
-   "        <!--<button class=\"waves-effect waves-green btn-flat next-modal\">-->\n" +
-   "           <!---->\n" +
-   "        <!--</button>-->\n" +
-   "        <div class=\"panel-body global-panel-body\" ng-show=\"hideLoader\">\n" +
-   "            <a ng-click=\"createCharacterDialog()\" class=\"btn waves-effect waves-light red\">\n" +
-   "                New Char <i class=\"material-icons right\">add</i>\n" +
-   "            </a>\n" +
-   "        </div>\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader && !currentChar\" ng-if=\"userInfo.type != 'player'\">\n" +
+   "\n" +
    "        <ul class=\"collapsible\" data-collapsible=\"expandable\">\n" +
    "            <li>\n" +
    "                <div class=\"collapsible-header\">\n" +
    "                    Players' chars.\n" +
    "                </div>\n" +
    "                <div class=\"collapsible-body\">\n" +
-   "                    <table>\n" +
-   "                        <thead>\n" +
-   "                        <tr>\n" +
-   "                            <th data-field=\"id\">Name</th>\n" +
-   "                            <th data-field=\"name\">Item Name</th>\n" +
-   "                            <th data-field=\"price\">Item Price</th>\n" +
-   "                        </tr>\n" +
-   "                        </thead>\n" +
-   "                        <tbody>\n" +
-   "                        <tr>\n" +
-   "                            <td>Alvin</td>\n" +
-   "                            <td>Eclair</td>\n" +
-   "                            <td>$0.87</td>\n" +
-   "                        </tr>\n" +
-   "                        </tbody>\n" +
-   "                    </table>\n" +
+   "                    <div class=\"row\">\n" +
+   "                        <div class=\"col s12\">\n" +
+   "                            <ul>\n" +
+   "                                <li ng-repeat=\"char in charList.players\">\n" +
+   "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}}</a>\n" +
+   "                                </li>\n" +
+   "                            </ul>\n" +
+   "                        </div>\n" +
+   "                    </div>\n" +
    "                </div>\n" +
    "            </li>\n" +
    "            <li>\n" +
@@ -51336,41 +49336,27 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                    NPCs.\n" +
    "                </div>\n" +
    "                <div class=\"collapsible-body\">\n" +
-   "                    <table>\n" +
-   "                        <thead>\n" +
-   "                        <tr>\n" +
-   "                            <th data-field=\"id\">Name</th>\n" +
-   "                            <th data-field=\"name\">Item Name</th>\n" +
-   "                            <th data-field=\"price\">Item Price</th>\n" +
-   "                        </tr>\n" +
-   "                        </thead>\n" +
-   "                        <tbody>\n" +
-   "                        <tr>\n" +
-   "                            <td>Alvin</td>\n" +
-   "                            <td>Eclair</td>\n" +
-   "                            <td>$0.87</td>\n" +
-   "                        </tr>\n" +
-   "                        </tbody>\n" +
-   "                    </table>\n" +
+   "                    <div class=\"row\">\n" +
+   "                        <div class=\"col s12\">\n" +
+   "                            <ul>\n" +
+   "                                <li ng-repeat=\"char in charList.npc\">\n" +
+   "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}}</a>\n" +
+   "                                </li>\n" +
+   "                            </ul>\n" +
+   "                        </div>\n" +
+   "                    </div>\n" +
    "                </div>\n" +
    "            </li>\n" +
-   "\n" +
    "        </ul>\n" +
    "\n" +
-   "        <!--<div class=\"fixed-action-btn horizontal click-to-toggle\">-->\n" +
-   "            <!--<a class=\"btn-floating btn-large red\">-->\n" +
-   "                <!--<i class=\"large material-icons\">mode_edit</i>-->\n" +
-   "            <!--</a>-->\n" +
-   "            <!--<ul>-->\n" +
-   "                <!--<li><a class=\"btn-floating red\"><i class=\"material-icons\">insert_chart</i></a></li>-->\n" +
-   "                <!--<li><a class=\"btn-floating yellow darken-1\"><i class=\"material-icons\">format_quote</i></a></li>-->\n" +
-   "                <!--<li><a class=\"btn-floating green\"><i class=\"material-icons\">publish</i></a></li>-->\n" +
-   "                <!--<li><a class=\"btn-floating blue\"><i class=\"material-icons\">attach_file</i></a></li>-->\n" +
-   "            <!--</ul>-->\n" +
-   "        <!--</div>-->\n" +
+   "        <script>\n" +
+   "            $('.collapsible').collapsible({\n" +
+   "                //accordion: false\n" +
+   "            });\n" +
+   "        </script>\n" +
    "    </div>\n" +
    "\n" +
-   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\" ng-if=\"currentSchema\">\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader && currentChar\" ng-if=\"currentSchema\">\n" +
    "        <char-list char=\"currentChar\"></char-list>\n" +
    "    </div>\n" +
    "\n" +
@@ -51535,12 +49521,12 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "    <footer class=\"page-footer\">\n" +
    "        <div class=\"footer-copyright\">\n" +
    "            <div class=\"container\">\n" +
-   "                <a href=\"https://www.facebook.com/msarukhanov\"> © 2017 Sarukhanov </a>\n" +
-   "                <a class=\"grey-text text-lighten-4 right\" href=\"https://www.facebook.com/tabletopbymmalkav/\">\n" +
-   "                    <i class=\"fa fa-facebook-official\"></i>\n" +
-   "                </a>\n" +
-   "                <a class=\"grey-text text-lighten-4 right\" href=\"https://www.facebook.com/tabletopbymmalkav/\">\n" +
+   "                <a class=\"copyr\" href=\"https://www.facebook.com/msarukhanov\"> © 2017 Sarukhanov </a>\n" +
+   "                <a class=\"right\" href=\"https://www.facebook.com/tabletopbymmalkav/\">\n" +
    "                    <i class=\"fa fa-twitter-square\"></i>\n" +
+   "                </a>\n" +
+   "                <a class=\"right\" href=\"https://www.facebook.com/tabletopbymmalkav/\">\n" +
+   "                    <i class=\"fa fa-facebook-official\"></i>\n" +
    "                </a>\n" +
    "            </div>\n" +
    "        </div>\n" +
@@ -51555,673 +49541,13 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "    });\n" +
    "</script>";
 
-templates["../tabletop/view/modules/schemas/vtm@mmalkav.html"] = "<svg style=\"&#10; width: 100%;&#10;\" preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 2513.000000 263.000000\"\n" +
-   "     height=\"100%\" width=\"100%\" version=\"1.0\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-   "    <g transform=\"translate(0.000000,263.000000) scale(0.100000,-0.100000)\" fill=\"#000000\" stroke=\"none\">\n" +
-   "        <path d=\"M4500 2383 c-40 -12 -111 -16 -267 -17 -116 0 -211 -2 -210 -2 1 -1 42 -18 90 -38 171 -70 317 -155 371 -215 l19 -21 51 29 51 28 325 -77 c179 -43 318 -80 310 -83 -8 -3 -55 -13 -105 -22 -430 -79 -1041 -233 -1950 -491 -692 -197 -680 -194 -820 -201 -108 -5 -126 -4 -168 15 -36 16 -47 26 -47 43 0 21 1 21 18 6 30 -28 89 -22 123 12 36 36 37 60 3 100 -89 106 -264 30 -264 -114 0 -46 20 -84 65 -124 l36 -31 -389 0 -388 0 -48 49 -49 50 -46 -23 c-100 -51 -268 -101 -421 -127 l-75 -12 130 -22 c155 -26 256 -55 346 -100 l67 -33 28 29 28 29 4034 0 c2870 0 4039 3 4054 11 31 17 50 71 37 108 -6 17 -19 36 -29 41 -10 5 -746 181 -1636 390 -891 209 -1639 386 -1664 393 -44 13 -43 13 100 25 580 49 1095 66 1505 52 562 -20 895 -57 1563 -172 79 -14 112 -2 112 40 0 52 -16 60 -160 87 -1013 185 -1920 212 -3185 95 -115 -11 -241 -22 -280 -26 -65 -5 -105 3 -585 116 -283 66 -523 123 -532 126 -9 3 -28 25 -43 49 -29 50 -27 49 -105 28z m2620 -829 c855 -201 1557 -367 1559 -370 2 -2 -1365 -4 -3039 -4 -1674 0 -3041 2 -3039 4 4 4 535 156 1039 297 511 143 1061 279 1435 353 178 36 446 84 475 85 8 1 715 -164 1570 -365z\"/>\n" +
-   "        <path d=\"M20776 2356 c-14 -25 -34 -47 -44 -50 -9 -3 -267 -64 -572 -136 l-555 -130 -270 25 c-932 86 -1584 98 -2255 40 -449 -39 -1082 -136 -1122 -172 -37 -33 -12 -93 38 -93 13 0 128 18 256 40 390 66 758 108 1147 130 233 13 834 13 1096 0 200 -10 737 -49 742 -54 1 -1 -730 -174 -1625 -384 -1543 -363 -1628 -384 -1649 -410 -33 -39 -31 -94 3 -121 l27 -21 3990 0 3990 0 44 -41 c24 -22 47 -39 51 -37 135 71 267 112 452 140 47 7 74 14 60 16 -155 22 -346 76 -457 130 l-61 29 -38 -38 -38 -39 -364 0 -364 0 26 30 c55 66 53 149 -5 215 -56 63 -154 67 -213 9 -48 -49 -31 -107 38 -134 24 -9 36 -7 67 8 42 21 54 9 21 -21 -31 -29 -76 -39 -163 -39 -130 0 -208 19 -800 186 -1011 287 -1469 402 -2034 512 -76 15 -134 29 -127 32 6 2 170 41 364 87 l352 83 44 -28 45 -28 63 52 c69 57 211 134 342 186 45 18 82 33 82 34 0 0 -93 1 -208 1 -160 1 -222 5 -275 18 -38 9 -70 17 -72 17 -2 0 -15 -20 -29 -44z m-786 -491 c392 -68 897 -183 1425 -325 285 -76 1248 -349 1254 -355 2 -3 -1341 -5 -2985 -4 -1644 0 -2984 3 -2977 6 36 14 3013 711 3043 712 19 1 127 -15 240 -34z\"/>\n" +
-   "        <path d=\"M9502 2252 c83 -87 117 -162 192 -427 18 -66 55 -185 81 -265 26 -80 62 -192 80 -250 18 -58 78 -249 135 -425 56 -176 117 -371 136 -433 40 -130 59 -170 143 -301 37 -57 63 -88 66 -80 3 8 4 484 3 1059 l-3 1045 -112 3 c-62 1 -113 -1 -113 -6 0 -5 11 -19 25 -32 14 -13 35 -48 47 -79 23 -56 23 -60 26 -655 2 -329 -1 -603 -6 -608 -4 -4 -16 17 -26 49 -10 32 -49 157 -88 278 -38 121 -86 270 -105 330 -19 61 -52 164 -73 230 -21 66 -57 181 -80 255 -23 74 -59 187 -80 250 l-38 115 -133 3 -133 3 56 -59z\"/>\n" +
-   "        <path d=\"M9810 2294 c0 -8 5 -24 10 -35 11 -19 54 -19 2930 -19 l2920 0 0 35 0 35 -2930 0 c-2652 0 -2930 -1 -2930 -16z\"/>\n" +
-   "        <path d=\"M10955 2153 c25 -37 23 -62 -25 -438 -23 -176 -47 -374 -55 -440 -26 -211 -46 -329 -66 -374 -10 -24 -19 -45 -19 -47 0 -2 36 -4 80 -4 44 0 80 2 80 4 0 2 -7 17 -15 32 -8 16 -15 45 -15 64 0 46 39 370 46 381 9 14 124 11 129 -3 5 -16 34 -257 42 -350 4 -53 2 -73 -11 -92 -9 -14 -16 -28 -16 -31 0 -3 38 -5 85 -5 47 0 85 2 85 5 0 3 -9 32 -19 63 -11 32 -25 94 -30 138 -41 315 -63 480 -82 619 -11 88 -31 237 -43 330 l-21 170 -74 3 -74 3 18 -28z m98 -478 c10 -80 15 -150 12 -155 -3 -6 -22 -10 -42 -10 l-36 0 7 78 c8 103 28 232 35 232 4 0 14 -65 24 -145z\"/>\n" +
-   "        <path d=\"M11810 2175 c0 -3 10 -20 23 -36 l22 -31 0 -551 c0 -533 -3 -586 -31 -684 -6 -22 -4 -23 69 -23 l76 0 -15 28 c-11 22 -14 103 -13 472 1 245 3 436 6 425 26 -120 83 -411 88 -450 8 -58 52 -202 64 -209 4 -3 15 36 24 87 8 51 29 175 46 277 18 102 34 196 37 210 15 64 19 -35 14 -404 -5 -369 -6 -395 -24 -415 l-19 -21 88 0 c72 0 86 3 82 14 -31 79 -32 109 -32 688 0 456 3 590 13 599 24 25 11 30 -60 27 l-73 -3 -7 -75 c-8 -83 -81 -451 -94 -471 -5 -9 -14 18 -25 71 -10 47 -34 162 -53 255 -20 94 -36 182 -36 198 l0 27 -85 0 c-47 0 -85 -2 -85 -5z\"/>\n" +
-   "        <path d=\"M12923 2143 l22 -38 0 -595 c0 -551 -1 -598 -17 -623 -10 -14 -18 -29 -18 -32 0 -3 38 -5 85 -5 47 0 85 2 85 5 0 3 -7 22 -17 43 -13 30 -17 83 -21 290 l-4 253 39 -7 c33 -5 44 -2 70 20 63 53 102 189 103 362 0 165 -30 273 -91 329 l-39 35 -110 0 -109 0 22 -37z m200 -190 c31 -69 30 -270 -2 -357 -23 -63 -46 -96 -68 -96 -10 0 -13 47 -13 250 l0 250 31 0 c26 0 33 -6 52 -47z\"/>\n" +
-   "        <path d=\"M13770 2175 c0 -3 8 -18 18 -32 16 -25 17 -73 17 -628 0 -555 -1 -603 -17 -628 -10 -14 -18 -29 -18 -32 0 -3 38 -5 85 -5 47 0 85 2 85 3 0 2 -8 19 -17 38 -17 31 -18 82 -18 624 0 534 2 594 17 628 l17 37 -85 0 c-46 0 -84 -2 -84 -5z\"/>\n" +
-   "        <path d=\"M14470 2176 c0 -2 8 -21 18 -42 16 -36 17 -89 17 -629 0 -546 -1 -593 -17 -618 -10 -14 -18 -29 -18 -32 0 -3 38 -5 85 -5 47 0 85 2 85 3 0 2 -7 19 -16 37 -14 27 -17 77 -20 289 -5 298 -7 300 77 -43 31 -128 62 -232 74 -250 19 -28 27 -31 78 -34 31 -2 57 -1 57 2 0 3 -16 44 -35 91 -37 90 -85 247 -130 431 l-27 112 26 45 c46 78 66 172 67 315 0 156 -22 242 -77 297 l-35 35 -104 0 c-58 0 -105 -2 -105 -4z m215 -237 c27 -100 15 -235 -28 -319 -13 -25 -31 -46 -40 -48 -16 -3 -17 15 -17 217 0 199 2 221 18 230 25 15 50 -15 67 -80z\"/>\n" +
-   "        <path d=\"M15290 2171 c0 -6 4 -13 10 -16 11 -7 28 -66 40 -143 5 -30 10 -402 10 -826 2 -793 2 -782 -35 -868 -7 -17 6 -18 188 -18 108 0 198 4 201 8 7 12 48 333 43 338 -2 3 -18 -20 -35 -50 -44 -77 -134 -138 -217 -148 l-30 -3 -3 458 -2 457 49 0 c27 0 53 -6 59 -13 6 -7 16 -43 23 -81 9 -48 15 -63 20 -50 11 27 11 314 0 314 -5 0 -14 -7 -21 -15 -8 -10 -31 -15 -71 -15 l-59 0 0 265 0 265 30 0 c16 0 48 -7 70 -16 44 -18 73 -60 85 -127 15 -80 25 -29 25 128 l0 165 -190 0 c-112 0 -190 -4 -190 -9z\"/>\n" +
-   "        <path d=\"M10427 773 c-12 -12 -7 -52 7 -60 8 -4 1097 -7 2420 -5 l2406 2 0 35 0 35 -2413 0 c-1328 0 -2417 -3 -2420 -7z\"/>\n" +
-   "        <path d=\"M10427 644 c-3 -3 -4 -11 -2 -17 2 -7 6 -24 9 -39 8 -34 18 -36 31 -5 6 13 21 23 38 25 l27 3 0 -131 c0 -107 -3 -132 -15 -136 -8 -4 -15 -12 -15 -20 0 -10 14 -14 48 -14 l47 0 -3 151 -4 151 29 -4 c17 -2 32 -11 38 -25 5 -13 12 -23 15 -23 8 0 28 78 22 85 -7 7 -257 6 -265 -1z\"/>\n" +
-   "        <path d=\"M11016 628 c-11 -15 -16 -45 -16 -85 l0 -63 -50 0 c-27 0 -50 3 -51 8 -1 4 -2 31 -4 60 -2 43 1 55 17 63 30 16 11 29 -42 29 -51 0 -71 -13 -45 -27 13 -8 16 -32 16 -137 1 -113 -1 -129 -17 -141 -17 -12 -18 -14 -2 -20 9 -4 29 -5 45 -3 27 3 28 5 29 63 1 33 2 66 3 73 0 8 18 12 51 12 l50 0 0 -59 c0 -44 -4 -60 -16 -65 -29 -11 -3 -26 46 -26 56 0 67 9 39 33 -17 15 -19 30 -19 135 0 75 4 122 11 129 15 15 4 43 -15 43 -8 0 -22 -10 -30 -22z\"/>\n" +
-   "        <path d=\"M11215 636 c-15 -11 -17 -17 -7 -28 7 -9 13 -59 15 -124 2 -95 6 -114 25 -142 27 -37 89 -58 130 -44 42 14 36 27 -10 24 -58 -5 -87 25 -90 94 l-3 49 48 3 c26 2 47 -1 47 -6 0 -4 7 -17 15 -28 13 -17 14 -14 15 44 0 60 -12 83 -23 41 -5 -17 -12 -20 -54 -17 l-48 3 0 50 0 50 58 3 c52 3 59 1 64 -17 10 -39 30 -24 24 17 l-6 37 -90 3 c-66 2 -95 -1 -110 -12z\"/>\n" +
-   "        <path d=\"M11657 643 c-4 -3 2 -13 14 -21 19 -13 20 -23 18 -195 l-2 -182 35 -39 34 -40 -4 209 c-4 175 -2 206 9 200 8 -5 33 -21 56 -37 23 -15 46 -28 50 -28 5 0 28 14 51 31 23 17 47 27 53 23 8 -4 10 -63 9 -193 -2 -102 -2 -190 -1 -196 0 -5 13 7 28 28 l26 37 -2 184 c-2 176 -2 185 18 198 27 19 17 28 -30 28 -26 0 -52 -10 -88 -35 -28 -19 -55 -35 -61 -35 -6 0 -33 16 -61 35 -41 28 -61 35 -98 35 -26 0 -51 -3 -54 -7z\"/>\n" +
-   "        <path d=\"M12293 638 c-5 -7 -31 -74 -58 -148 -27 -74 -54 -139 -62 -143 -28 -17 -14 -37 27 -37 40 0 52 14 30 36 -5 5 -6 22 -2 39 8 27 13 30 55 33 47 3 48 2 63 -35 23 -59 29 -68 53 -71 23 -4 41 25 22 37 -6 4 -33 71 -59 149 -27 78 -51 144 -54 147 -3 3 -10 0 -15 -7z\"/>\n" +
-   "        <path d=\"M12894 640 c-80 -32 -95 -177 -24 -232 17 -13 51 -40 76 -60 46 -39 85 -47 129 -28 16 7 11 9 -21 9 -28 1 -47 8 -59 21 -10 11 -16 21 -14 23 2 2 17 11 32 21 113 70 71 257 -57 255 -22 0 -51 -4 -62 -9z m81 -20 c30 -11 55 -63 55 -112 0 -43 -33 -96 -65 -104 -81 -20 -127 135 -59 203 26 26 32 27 69 13z\"/>\n" +
-   "        <path d=\"M13199 634 c-10 -12 -10 -20 -1 -35 7 -11 12 -59 12 -118 0 -111 10 -145 49 -160 20 -9 108 -9 161 -2 3 1 4 62 2 136 -4 118 -2 138 13 155 23 26 11 40 -35 40 -47 0 -62 -18 -32 -38 20 -13 22 -23 22 -117 0 -88 -3 -106 -21 -129 -25 -32 -68 -35 -95 -5 -16 18 -20 40 -23 143 -4 138 -17 172 -52 130z\"/>\n" +
-   "        <path d=\"M13581 636 c-9 -11 -9 -20 -2 -35 6 -11 11 -63 11 -116 0 -106 13 -144 57 -164 26 -12 73 -14 97 -5 29 11 17 20 -21 16 -51 -5 -78 22 -88 84 -5 34 -3 49 7 55 23 15 57 10 78 -11 11 -11 22 -20 25 -20 3 0 5 23 5 50 0 52 -5 60 -24 36 -10 -14 -38 -20 -79 -17 -15 1 -18 9 -15 49 l3 47 53 3 c47 3 54 1 59 -17 7 -29 23 -26 23 3 0 52 -6 56 -95 56 -60 0 -86 -4 -94 -14z\"/>\n" +
-   "        <path d=\"M13925 640 c-5 -8 -1 -18 11 -27 16 -12 19 -30 22 -128 3 -104 2 -115 -17 -134 -33 -33 -25 -41 39 -41 64 0 72 8 39 41 -15 15 -19 30 -17 62 3 41 4 42 40 45 29 3 40 -1 52 -20 20 -32 31 -94 17 -102 -24 -15 -9 -26 34 -26 41 0 58 11 36 24 -5 3 -14 27 -21 53 -6 27 -18 56 -27 65 -14 15 -13 20 6 44 30 38 28 94 -4 124 -22 21 -38 24 -114 28 -64 3 -91 1 -96 -8z\"/>\n" +
-   "        <path d=\"M14425 633 c-4 -10 -27 -74 -52 -143 -25 -69 -54 -134 -64 -146 -23 -25 -16 -34 27 -34 39 0 49 12 32 39 -9 15 -9 25 0 45 10 22 18 26 57 26 41 0 47 -3 55 -27 18 -51 36 -78 54 -81 29 -6 42 14 24 35 -8 10 -37 82 -63 161 -27 78 -52 142 -56 142 -4 0 -10 -8 -14 -17z\"/>\n" +
-   "        <path d=\"M14685 640 c-5 -8 1 -19 14 -30 22 -16 23 -22 20 -156 -3 -133 -2 -139 17 -136 28 5 46 4 77 -4 43 -10 82 12 111 66 48 89 26 209 -47 246 -41 22 -181 32 -192 14z m173 -50 c76 -71 40 -260 -49 -260 -16 0 -32 6 -36 14 -4 8 -7 71 -5 140 l3 126 33 0 c18 0 41 -8 54 -20z\"/>\n" +
-   "        <path d=\"M15073 638 c-7 -8 -8 -54 -3 -129 10 -158 33 -199 112 -199 18 0 40 5 48 10 11 7 7 10 -18 10 -46 0 -68 14 -81 51 -17 50 -14 87 8 94 30 9 68 -5 77 -28 6 -19 8 -18 11 11 2 17 2 47 0 65 -3 28 -5 29 -11 10 -9 -23 -47 -37 -77 -28 -15 5 -19 16 -19 56 l0 49 49 0 c39 0 52 -4 65 -22 16 -23 16 -22 13 17 l-2 40 -81 3 c-57 2 -84 -1 -91 -10z\"/>\n" +
-   "        <path d=\"M12515 615 c-44 -44 -22 -108 47 -135 87 -35 108 -72 67 -124 -16 -21 -29 -26 -62 -26 -31 0 -38 -3 -27 -10 8 -5 35 -10 58 -10 36 0 49 5 72 30 35 38 46 82 29 121 -9 22 -30 39 -80 65 -74 37 -88 63 -48 84 30 16 66 4 81 -26 18 -37 32 -34 39 9 5 34 4 35 -30 41 -77 13 -121 7 -146 -19z\"/>\n" +
-   "    </g>\n" +
-   "</svg>\n" +
-   "<div class=\"row vtm_main\" ng-init=\"prepareCharList()\">\n" +
-   "    <div class=\"col s12 center\">\n" +
-   "        {{char.main.Name}}\n" +
-   "    </div>\n" +
-   "    <div class=\"col s6\">\n" +
-   "        <p class=\"main_info\">\n" +
-   "            <span class=\"attr-name\">Nature</span>\n" +
-   "            <span class=\"attr-stat\">{{char.main.Nature}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"main_info\">\n" +
-   "            <span class=\"attr-name\">Demeanor</span>\n" +
-   "            <span class=\"attr-stat\">{{char.main.Demeanor}}</span>\n" +
-   "        </p>\n" +
-   "\n" +
-   "        <p class=\"main_info\">\n" +
-   "            <span class=\"attr-name\">Concept</span>\n" +
-   "            <span class=\"attr-stat\">{{char.main.Concept}}</span>\n" +
-   "        </p>\n" +
-   "    </div>\n" +
-   "    <div class=\"col s6\">\n" +
-   "        <p class=\"main_info\">\n" +
-   "            <span class=\"attr-name\">Clan</span>\n" +
-   "            <span class=\"attr-stat\">{{char.main.Clan}}</span>\n" +
-   "        </p>\n" +
-   "        <p class=\"main_info\">\n" +
-   "            <span class=\"attr-name\">Generation</span>\n" +
-   "            <span class=\"attr-stat\">{{char.main.Generation}}</span>\n" +
-   "        </p>\n" +
-   "        <p class=\"main_info\">\n" +
-   "            <span class=\"attr-name\">Sire</span>\n" +
-   "            <span class=\"attr-stat\">{{char.main.Sire}}</span>\n" +
-   "        </p>\n" +
-   "    </div>\n" +
-   "</div>\n" +
-   "<div class=\"row vtm_attributes\">\n" +
-   "    <div class=\"col s4\" ng-repeat=\"col in [['','',''],['Attributes','Abilities','Advantages'],['','','']] track by $index\">\n" +
-   "        <p class=\"attr-space\">{{col[0]}}</p>\n" +
-   "        <p class=\"attr-group\">{{attrGroups[$index].title}}</p>\n" +
-   "        <p class=\"attr\" ng-repeat=\"attr in attrGroups[$index].array\">\n" +
-   "            <span class=\"attr-name\">{{attr}}</span>\n" +
-   "            <span class=\"attr-stat\">{{char.attr[''+attr]}}</span>\n" +
-   "        </p>\n" +
-   "        <p class=\"attr-space\">{{col[1]}}</p>\n" +
-   "        <p class=\"attr-group\">{{abilitiesGroups[$index].title}}</p>\n" +
-   "        <p class=\"attr\" ng-repeat=\"abi in abilitiesGroups[$index].array\">\n" +
-   "            <span class=\"attr-name\">{{abi}}</span>\n" +
-   "            <span class=\"attr-stat\">{{char.abi[''+abi]}}</span>\n" +
-   "        </p>\n" +
-   "        <p class=\"attr-space\">{{col[2]}}</p>\n" +
-   "    </div>\n" +
-   "        <!--<p class=\"attr-group\">Disciplines</p>-->\n" +
-   "    <!--<p class=\"attr-group\">Backgrounds</p>-->\n" +
-   "    <!--<p class=\"attr-group\">Virtues</p>-->\n" +
-   "\n" +
-   "    <!--<p class=\"attr\">-->\n" +
-   "        <!--<span class=\"attr-name\">Conscience / Conviction</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">5</span>-->\n" +
-   "    <!--</p>-->\n" +
-   "\n" +
-   "    <!--<p class=\"attr\">-->\n" +
-   "        <!--<span class=\"attr-name\">Self-Control / Instinct</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">4</span>-->\n" +
-   "    <!--</p>-->\n" +
-   "\n" +
-   "    <!--<p class=\"attr\">-->\n" +
-   "        <!--<span class=\"attr-name\">Courage</span>-->\n" +
-   "        <!--<span class=\"attr-stat\">4</span>-->\n" +
-   "    <!--</p>-->\n" +
-   "\n" +
-   "</div>\n" +
-   "\n" +
-   "<div id=\"modalCharMain\" class=\"modal bottom-sheet mainform\">\n" +
-   "    <a class=\"close-btn modal-close\">\n" +
-   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
-   "    </a>\n" +
-   "    <div class=\"modal-content\">\n" +
-   "        <h4>Creating Character</h4>\n" +
-   "        <h5>Main info ( step 1 of 8 )</h5>\n" +
-   "        <form class=\"col s12\" name=\"vtm_main_form\">\n" +
-   "            <div class=\"row\">\n" +
-   "                <div class=\"input-field col s12\">\n" +
-   "                    <input id=\"c_name\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Name\" required>\n" +
-   "                    <label for=\"c_name\">Name</label>\n" +
-   "                </div>\n" +
-   "            </div>\n" +
-   "            <div class=\"row\">\n" +
-   "                <div class=\"input-field col s6\">\n" +
-   "                    <input id=\"c_nature\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Nature\">\n" +
-   "                    <label for=\"c_nature\">Nature</label>\n" +
-   "                </div>\n" +
-   "                <div class=\"input-field col s6\">\n" +
-   "                    <input id=\"c_demeanor\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Demeanor\">\n" +
-   "                    <label for=\"c_demeanor\">Demeanor</label>\n" +
-   "                </div>\n" +
-   "            </div>\n" +
-   "            <div class=\"row\">\n" +
-   "                <div class=\"input-field col s6\">\n" +
-   "                    <input id=\"c_clan\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Clan\">\n" +
-   "                    <label for=\"c_clan\">Clan</label>\n" +
-   "                </div>\n" +
-   "                <div class=\"input-field col s6\">\n" +
-   "                    <input id=\"c_generation\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Generation\">\n" +
-   "                    <label for=\"c_generation\">Generation</label>\n" +
-   "                </div>\n" +
-   "            </div>\n" +
-   "            <div class=\"row\">\n" +
-   "                <div class=\"input-field col s6\">\n" +
-   "                    <input id=\"c_concept\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Concept\">\n" +
-   "                    <label for=\"c_concept\">Concept</label>\n" +
-   "                </div>\n" +
-   "                <div class=\"input-field col s6\">\n" +
-   "                    <input id=\"c_sire\" type=\"text\" class=\"validate\" ng-model=\"newChar.main.Sire\">\n" +
-   "                    <label for=\"c_sire\">Sire</label>\n" +
-   "                </div>\n" +
-   "            </div>\n" +
-   "            <div class=\"modal-footer\">\n" +
-   "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
-   "                    Close\n" +
-   "                </a>\n" +
-   "                <button ng-disabled=\"!vtm_main_form.$valid\" ng-click=\"createNext('modalCharMain','modalCharAttr1')\"\n" +
-   "                        class=\"waves-effect waves-green btn-flat next-modal\">\n" +
-   "                    Next\n" +
-   "                </button>\n" +
-   "            </div>\n" +
-   "        </form>\n" +
-   "    </div>\n" +
-   "</div>\n" +
-   "\n" +
-   "<div id=\"modalCharAttr1\" class=\"modal bottom-sheet mainform\">\n" +
-   "    <a class=\"close-btn modal-close\">\n" +
-   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
-   "    </a>\n" +
-   "    <div class=\"modal-content\">\n" +
-   "        <h4>Creating Character</h4>\n" +
-   "        <h5>Attributes cost ( step 2 of 8 )</h5>\n" +
-   "        <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
-   "            <div class=\"row\">\n" +
-   "                <span>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups\">\n" +
-   "                        {{group.title}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                </span>\n" +
-   "                <span ng-repeat=\"price in attrPoints.prices track by $index\">\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s1\">\n" +
-   "                        {{price}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups track by $index\">\n" +
-   "                        <input id=\"pr{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\"\n" +
-   "                               name=\"a{{$parent.$index}}\"\n" +
-   "                               ng-model=\"newChar.pref[''+group.title]\" value=\"{{price}}\">\n" +
-   "                        <label for=\"pr{{$parent.$index}}{{$index}}\"></label>\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                </span>\n" +
-   "            </div>\n" +
-   "        </form>\n" +
-   "        <h5>Attributes starting ( step 3 of 8 )</h5>\n" +
-   "        <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
-   "            <div class=\"row\">\n" +
-   "                <span>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups\">\n" +
-   "                        {{group.title}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                </span>\n" +
-   "                <span ng-repeat=\"price in attrPoints.starting track by $index\">\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s1\">\n" +
-   "                        {{price}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s3\" ng-repeat=\"group in attrGroups track by $index\">\n" +
-   "                        <input id=\"st{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\"\n" +
-   "                               name=\"a{{$parent.$index}}\"\n" +
-   "                               ng-model=\"newChar.start[''+group.title]\" value=\"{{price}}\">\n" +
-   "                        <label for=\"st{{$parent.$index}}{{$index}}\"></label>\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                </span>\n" +
-   "            </div>\n" +
-   "            <div class=\"modal-footer\">\n" +
-   "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
-   "                    Close\n" +
-   "                </a>\n" +
-   "                <button ng-click=\"createNext('modalCharAttr1','modalCharAttr2')\"\n" +
-   "                        class=\"waves-effect waves-green btn-flat next-modal\">\n" +
-   "                    Next\n" +
-   "                </button>\n" +
-   "            </div>\n" +
-   "        </form>\n" +
-   "    </div>\n" +
-   "</div>\n" +
-   "\n" +
-   "<div id=\"modalCharAttr2\" class=\"modal bottom-sheet mainform\">\n" +
-   "    <a class=\"close-btn modal-close\">\n" +
-   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
-   "    </a>\n" +
-   "    <div class=\"modal-content\">\n" +
-   "        <h4>Creating Character</h4>\n" +
-   "        <h5>Attributes ( step 4 of 8 )</h5>\n" +
-   "        <div class=\"row\" ng-repeat=\"group in attrGroups\">\n" +
-   "            <h6 class=\"center\">\n" +
-   "                {{group.title}} (Remaining : {{newChar.start[''+group.title]}})\n" +
-   "            </h6>\n" +
-   "            <form class=\"col s12\" name=\"vtm_attr1_form\">\n" +
-   "                <div class=\"col s4\" ng-repeat=\"stat in group.array\">\n" +
-   "                    <div class=\"col s12\">\n" +
-   "                        {{stat}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s12 center\">\n" +
-   "                        <i class=\"fa fa-minus left\" ng-click=\"changeStat('attr', -1, stat, group.title)\" aria-hidden=\"true\"\n" +
-   "                           ng-show=\"newChar.attr[''+stat] > 1\"></i>\n" +
-   "                        {{newChar.attr[\"\"+stat] || 1}}\n" +
-   "                        <i class=\"fa fa-plus right\" ng-click=\"changeStat('attr', 1, stat, group.title)\" aria-hidden=\"true\"\n" +
-   "                           ng-show=\"newChar.attr[''+stat] < 5 && newChar.start[''+group.title] > 0\"></i>\n" +
-   "                    </div>\n" +
-   "                </div>\n" +
-   "            </form>\n" +
-   "        </div>\n" +
-   "        <div class=\"modal-footer\">\n" +
-   "            <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
-   "                Close\n" +
-   "            </a>\n" +
-   "            <button ng-click=\"createNext('modalCharAttr2','modalCharAbi1')\"\n" +
-   "                    class=\"waves-effect waves-green btn-flat next-modal\">\n" +
-   "                Next\n" +
-   "            </button>\n" +
-   "        </div>\n" +
-   "    </div>\n" +
-   "</div>\n" +
-   "\n" +
-   "<div id=\"modalCharAbi1\" class=\"modal bottom-sheet mainform\">\n" +
-   "    <a class=\"close-btn modal-close\">\n" +
-   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
-   "    </a>\n" +
-   "    <div class=\"modal-content\">\n" +
-   "        <h4>Creating Character</h4>\n" +
-   "        <h5>Abilities cost ( step 5 of 8 )</h5>\n" +
-   "        <form class=\"col s12\" name=\"vtm_abilities1_form\">\n" +
-   "            <div class=\"row\">\n" +
-   "                <span>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s3\" ng-repeat=\"group in abilitiesGroups\">\n" +
-   "                        {{group.title}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                </span>\n" +
-   "                <span ng-repeat=\"price in abilitiesPoints.prices track by $index\">\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s1\">\n" +
-   "                        {{price}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s3\" ng-repeat=\"group in abilitiesGroups track by $index\">\n" +
-   "                        <input id=\"apr{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\"\n" +
-   "                               name=\"a{{$parent.$index}}\"\n" +
-   "                               ng-model=\"newChar.pref[''+group.title]\" value=\"{{price}}\">\n" +
-   "                        <label for=\"apr{{$parent.$index}}{{$index}}\"></label>\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                </span>\n" +
-   "            </div>\n" +
-   "        </form>\n" +
-   "        <h5>Abilities starting ( step 6 of 8 )</h5>\n" +
-   "        <form class=\"col s12\" name=\"vtm_abilities1_form\">\n" +
-   "            <div class=\"row\">\n" +
-   "                <span>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s3\" ng-repeat=\"group in abilitiesGroups\">\n" +
-   "                        {{group.title}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                </span>\n" +
-   "                <span ng-repeat=\"price in abilitiesPoints.starting track by $index\">\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                    <div class=\"col s1\">\n" +
-   "                        {{price}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s3\" ng-repeat=\"group in abilitiesGroups track by $index\">\n" +
-   "                        <input id=\"ast{{$parent.$index}}{{$index}}\" type=\"radio\" class=\"a{{$index}}\"\n" +
-   "                               name=\"a{{$parent.$index}}\"\n" +
-   "                               ng-model=\"newChar.start[''+group.title]\" value=\"{{price}}\">\n" +
-   "                        <label for=\"ast{{$parent.$index}}{{$index}}\"></label>\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s1\"></div>\n" +
-   "                </span>\n" +
-   "            </div>\n" +
-   "            <div class=\"modal-footer\">\n" +
-   "                <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
-   "                    Close\n" +
-   "                </a>\n" +
-   "                <button ng-click=\"createNext('modalCharAbi1','modalCharAbi2')\"\n" +
-   "                        class=\"waves-effect waves-green btn-flat next-modal\">\n" +
-   "                    Next\n" +
-   "                </button>\n" +
-   "            </div>\n" +
-   "        </form>\n" +
-   "    </div>\n" +
-   "</div>\n" +
-   "\n" +
-   "<div id=\"modalCharAbi2\" class=\"modal bottom-sheet mainform\">\n" +
-   "    <a class=\"close-btn modal-close\">\n" +
-   "        <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n" +
-   "    </a>\n" +
-   "    <div class=\"modal-content\">\n" +
-   "        <h4>Creating Character</h4>\n" +
-   "        <h5>Abilities ( step 7 of 8 )</h5>\n" +
-   "        <div class=\"row\" ng-repeat=\"group in abilitiesGroups\">\n" +
-   "            <h6 class=\"center\">\n" +
-   "                {{group.title}} (Remaining : {{newChar.start[''+group.title]}})\n" +
-   "            </h6>\n" +
-   "            <form class=\"col s12\" name=\"vtm_abilities1_form\">\n" +
-   "                <div class=\"col s4\" ng-repeat=\"stat in group.array\">\n" +
-   "                    <div class=\"col s12\">\n" +
-   "                        {{stat}}\n" +
-   "                    </div>\n" +
-   "                    <div class=\"col s12 center\">\n" +
-   "                        <i class=\"fa fa-minus left\" ng-click=\"changeStat('abilities', -1, stat, group.title)\" aria-hidden=\"true\"\n" +
-   "                           ng-show=\"newChar.abilities[''+stat] > 1\"></i>\n" +
-   "                        {{newChar.abilities[\"\"+stat] || 1}}\n" +
-   "                        <i class=\"fa fa-plus right\" ng-click=\"changeStat('abilities', 1, stat, group.title)\" aria-hidden=\"true\"\n" +
-   "                           ng-show=\"newChar.abilities[''+stat] < 5 && newChar.start[''+group.title] > 0\"></i>\n" +
-   "                    </div>\n" +
-   "                </div>\n" +
-   "            </form>\n" +
-   "        </div>\n" +
-   "        <div class=\"modal-footer\">\n" +
-   "            <a class=\"modal-action modal-close waves-effect waves-green btn-flat close-modal\">\n" +
-   "                Close\n" +
-   "            </a>\n" +
-   "            <button ng-click=\"createNext('modalCharAbi2','modalCharAttr2')\"\n" +
-   "                    class=\"waves-effect waves-green btn-flat next-modal\">\n" +
-   "                Next\n" +
-   "            </button>\n" +
-   "        </div>\n" +
-   "    </div>\n" +
-   "</div>\n" +
-   "\n" +
-   "<style>\n" +
-   "    .modal.bottom-sheet.mainform {\n" +
-   "        max-height: 100%;\n" +
-   "    }\n" +
-   "\n" +
-   "    .next-modal {\n" +
-   "        color: #fff;\n" +
-   "        background-color: #000;\n" +
-   "        font-size: 16px;\n" +
-   "    }\n" +
-   "\n" +
-   "    .next-modal[disabled] {\n" +
-   "        background-color: #eee;\n" +
-   "    }\n" +
-   "\n" +
-   "    .modal .modal-footer .btn-flat.close-modal {\n" +
-   "        float: left;\n" +
-   "        border: 1px solid #000;\n" +
-   "    }\n" +
-   "\n" +
-   "    .modal .col {\n" +
-   "        min-height: 31px;\n" +
-   "    }\n" +
-   "\n" +
-   "    #modalCharAttr2 i {\n" +
-   "        line-height: 21px;\n" +
-   "    }\n" +
-   "\n" +
-   "    .close-btn {\n" +
-   "        position: absolute;\n" +
-   "        font-size: 25px;\n" +
-   "        right: 10px;\n" +
-   "        top: 5px;\n" +
-   "        color: #000;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes, .vtm_main {\n" +
-   "        padding: 0 10px;\n" +
-   "        margin: 0 10px;\n" +
-   "        border: 2px solid #000;\n" +
-   "    }\n" +
-   "\n" +
-   "    char-list {\n" +
-   "        float: left;\n" +
-   "        padding-top: 10px;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_main {\n" +
-   "        border-top: none;\n" +
-   "        border-bottom: none;\n" +
-   "        padding-top: 15px;\n" +
-   "        margin-top: -15px;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes {\n" +
-   "        padding-bottom: 15px;\n" +
-   "        border-top: none;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_main .col, .vtm_attributes .col {\n" +
-   "        padding: 0;\n" +
-   "        border-right: 1px solid #000;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_main .col.s12 {\n" +
-   "        border: none;\n" +
-   "        font-size: 20px;\n" +
-   "        font-weight: 900;\n" +
-   "        text-decoration: underline;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes .col {\n" +
-   "        min-height: 500px;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_main .col:last-child, .vtm_attributes .col:last-child {\n" +
-   "        border: none;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_main p {\n" +
-   "        padding-left: 5px;\n" +
-   "        margin: 0;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes p {\n" +
-   "        margin: 0;\n" +
-   "        padding: 2px 0;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_main .attr-stat {\n" +
-   "        font-weight: normal;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_main .main_info {\n" +
-   "        font-weight: 900;\n" +
-   "        text-overflow: ellipsis;\n" +
-   "        word-break: break-all;\n" +
-   "        white-space: nowrap;\n" +
-   "        overflow: hidden;\n" +
-   "        padding-left: 3px;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes .attr-space {\n" +
-   "        padding: 5px 0;\n" +
-   "        height: 30px;\n" +
-   "        float: left;\n" +
-   "        width: 100%;\n" +
-   "        text-align: center;\n" +
-   "        font-size: 120%;\n" +
-   "        margin-left: -1px;\n" +
-   "        margin-right: -1px;\n" +
-   "        background: #fff;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes .attr-group {\n" +
-   "        padding: 5px 0;\n" +
-   "        border-top: 1px solid #000;\n" +
-   "        border-bottom: 1px solid #000;\n" +
-   "        float: left;\n" +
-   "        width: 100%;\n" +
-   "        text-align: center;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes .attr {\n" +
-   "        width: 100%;\n" +
-   "        float: left;\n" +
-   "        padding-left: 5px;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes .attr-stat, .vtm_main .attr-stat {\n" +
-   "        float: right;\n" +
-   "        margin-right: 2px;\n" +
-   "        margin-top: 2px;\n" +
-   "        border-radius: 50px;\n" +
-   "        line-height: 17px;\n" +
-   "        text-align: center;\n" +
-   "    }\n" +
-   "\n" +
-   "    .vtm_attributes .attr-name {\n" +
-   "        float: left;\n" +
-   "        max-width: 80%;\n" +
-   "        font-size: 12px;\n" +
-   "        line-height: 14px;\n" +
-   "    }\n" +
-   "</style>\n" +
-   "\n" +
-   "<script>\n" +
-   "    $(document).ready(function () {\n" +
-   "\n" +
-   "    });\n" +
-   "    window.prepareCharListFunctions = function ($scope, $rootScope) {\n" +
-   "\n" +
-   "        function startEditFunctions() {\n" +
-   "\n" +
-   "        }\n" +
-   "\n" +
-   "        function startCreateFunctions() {\n" +
-   "            $scope.newChar = {\n" +
-   "                main: {\n" +
-   "                    Name: \"\",\n" +
-   "                    Player: \"\",\n" +
-   "                    Chronicle: \"\",\n" +
-   "                    Nature: \"\",\n" +
-   "                    Demeanor: \"\",\n" +
-   "                    Concept: \"\",\n" +
-   "                    Clan: \"\",\n" +
-   "                    Generation: \"\",\n" +
-   "                    Sire: \"\"\n" +
-   "                },\n" +
-   "                attr: {\n" +
-   "                    Strength: 1,\n" +
-   "                    Dexterity: 1,\n" +
-   "                    Stamina: 1,\n" +
-   "                    Charisma: 1,\n" +
-   "                    Manipulation: 1,\n" +
-   "                    Appearance: 1,\n" +
-   "                    Perception: 1,\n" +
-   "                    Intelligence: 1,\n" +
-   "                    Wits: 1\n" +
-   "                },\n" +
-   "                abilities: {\n" +
-   "                    Alertness: 0,\n" +
-   "                    Athletics: 0,\n" +
-   "                    Brawl: 0,\n" +
-   "                    Dodge: 0,\n" +
-   "                    Empathy: 0,\n" +
-   "                    Expression: 0,\n" +
-   "                    Intimidation: 0,\n" +
-   "                    Leadership: 0,\n" +
-   "                    Streetwise: 0,\n" +
-   "                    Subterfuge: 0,\n" +
-   "                    \n" +
-   "                    AnimalKen: 0,\n" +
-   "                    Crafts: 0,\n" +
-   "                    Drive: 0,\n" +
-   "                    Etiquette: 0,\n" +
-   "                    Firearms: 0,\n" +
-   "                    Performance: 0,\n" +
-   "                    Melee: 0,\n" +
-   "                    Security: 0,\n" +
-   "                    Stealth: 0,\n" +
-   "                    Survival: 0,\n" +
-   "                    \n" +
-   "                    Academics: 0,\n" +
-   "                    Computer: 0,\n" +
-   "                    Finance: 0,\n" +
-   "                    Investigation: 0,\n" +
-   "                    Law: 0,\n" +
-   "                    Linguistics: 0,\n" +
-   "                    Medicine: 0,\n" +
-   "                    Occult: 0,\n" +
-   "                    Politics: 0,\n" +
-   "                    Science: 0\n" +
-   "                },\n" +
-   "                disciplines: {},\n" +
-   "                advantages: {},\n" +
-   "                virtues: {}\n" +
-   "            };\n" +
-   "            $scope.attrPoints = {\n" +
-   "                prices: [3, 5, 8],\n" +
-   "                starting: [3, 5, 8]\n" +
-   "            };\n" +
-   "            $scope.abilitiesPoints = {\n" +
-   "                prices: [3, 5, 8],\n" +
-   "                starting: [8, 12, 20]\n" +
-   "            };\n" +
-   "            $scope.attrGroups = [\n" +
-   "                {\n" +
-   "                    title: \"Physical\",\n" +
-   "                    array: ['Strength', 'Dexterity', 'Stamina']\n" +
-   "                },\n" +
-   "                {\n" +
-   "                    title: \"Social\",\n" +
-   "                    array: ['Charisma', 'Manipulation', 'Appearance']\n" +
-   "                },\n" +
-   "                {\n" +
-   "                    title: \"Mental\",\n" +
-   "                    array: ['Perception', 'Intelligence', 'Wits']\n" +
-   "                }\n" +
-   "            ];\n" +
-   "            $scope.abilitiesGroups = [\n" +
-   "                {\n" +
-   "                    title: \"Talents\",\n" +
-   "                    array: [\"Alertness\",\"Athletics\",\"Brawl\",\"Dodge\",\"Empathy\",\"Expression\",\"Intimidation\",\"Leadership\",\"Streetwise\",\"Subterfuge\"]\n" +
-   "                },\n" +
-   "                {\n" +
-   "                    title: \"Skills\",\n" +
-   "                    array: [\"AnimalKen\",\"Crafts\",\"Drive\",\"Etiquette\",\"Firearms\",\"Performance\",\"Melee\",\"Security\",\"Stealth\",\"Survival\"]\n" +
-   "                },\n" +
-   "                {\n" +
-   "                    title: \"Knowledges\",\n" +
-   "                    array: [\"Academics\",\"Computer\",\"Finance\",\"Investigation\",\"Law\",\"Linguistics\",\"Medicine\",\"Occult\",\"Politics\",\"Science\"]\n" +
-   "                }\n" +
-   "            ];\n" +
-   "            $(\".attr1table input\").click(function () {\n" +
-   "                $(\".attr1table input.\" + this.className).not($(this)).each(function () {\n" +
-   "                    this.checked = false;\n" +
-   "                });\n" +
-   "            });\n" +
-   "            $scope.createNext = function (from, to) {\n" +
-   "                console.log($scope.newChar);\n" +
-   "                $('#' + from).closeModal();\n" +
-   "                $('#' + to).openModal();\n" +
-   "            };\n" +
-   "            $scope.changeStat = function (type, val, attr, group) {\n" +
-   "                if ($scope.newChar.start['' + group] - val > -1 && $scope.newChar[''+type]['' + attr] + val > 0 && $scope.newChar[''+type]['' + attr] + val < 6) {\n" +
-   "                    $scope.newChar.start['' + group] -= val;\n" +
-   "                    $scope.newChar[''+type]['' + attr] += val;\n" +
-   "                }\n" +
-   "            };\n" +
-   "            //$('#modalCharMain').openModal();\n" +
-   "            $('#modalCharAbi1').openModal();\n" +
-   "        }\n" +
-   "\n" +
-   "        if ($scope.char.list && $scope.char.list.concept) {\n" +
-   "            console.log(\"start edit func\");\n" +
-   "            $scope.currentChar = angular.copy($scope.char);\n" +
-   "            startEditFunctions();\n" +
-   "        }\n" +
-   "        else {\n" +
-   "            startCreateFunctions();\n" +
-   "        }\n" +
-   "    };\n" +
-   "    window.prepareCharList();\n" +
-   "</script>";
-
-var app = angular.module("tabletapApp", ['ngRoute', 'pascalprecht.translate', 'ngCookies','ngStorage', 'ngSanitize']);
+var app = angular.module("tabletapApp", ['ngRoute', 'pascalprecht.translate', 'ngCookies', 'ngSanitize']);
 
 app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationProvider',
     function ($routeProvider, $translateProvider, $httpProvider, $locationProvider) {
 
         $translateProvider.useStaticFilesLoader({
-            'prefix': 'files/locales/locale-',
+            'prefix': 'files/',
             'suffix': '.json'
         });
 
@@ -52234,7 +49560,7 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
                 template : templates["../tabletop/view/modules/home/home.html"],
                 controller: 'Home'
             })
-            .when("/charlist?:char_id", {
+            .when("/charlist:char_id?", {
                 template : templates["../tabletop/view/modules/charlist/charlist.html"],
                 controller: 'Charlist'
             })
@@ -52316,26 +49642,28 @@ app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http
         }
     }
 }]);
-app.directive('charList', ['$rootScope', '$compile', '$templateRequest', '$templateCache', function($rootScope, $compile, $templateRequest, $templateCache){
-    return {
-        restrict: 'E',
-        scope: {
-            char: '=char'
-        },
-        link: function(scope, element){
-            window.prepareCharList = function() {
-                console.log("preparing charlist controller");
-                window.prepareCharListFunctions(scope, $rootScope);
-            };
-            $templateRequest("/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html").then(function(html){
-                var template = angular.element(html);
-                $templateCache.put("/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html", html);
-                element.append(template);
-                $compile(template)(scope);
-            });
-        }
-    };
-}]);
+app.directive('charList', ['$rootScope', '$translate', '$compile', '$templateRequest', '$templateCache',
+    function($rootScope, $translate, $compile, $templateRequest, $templateCache){
+        return {
+            restrict: 'E',
+            scope: {
+                char: '=char'
+            },
+            link: function(scope, element){
+                window.prepareCharList = function() {
+                    console.log("preparing charlist controller");
+                    window.prepareCharListFunctions(scope, $rootScope, $translate);
+                };
+                $templateRequest("/files/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html").then(function(html){
+                    var template = angular.element(html);
+                    $templateCache.put("/files/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html", html);
+                    element.append(template);
+                    $compile(template)(scope);
+                });
+            }
+        };
+    }
+]);
 
 app.controller('Actions', ['$scope', '$rootScope', '$routeParams', '$location', 'userRequests',
     function ($scope, $rootScope, $routeParams, $location, userRequests) {
@@ -52344,6 +49672,19 @@ app.controller('Actions', ['$scope', '$rootScope', '$routeParams', '$location', 
 
         $scope.chatMsgs = [];
         $scope.textMsg = '';
+        $scope.currentDice = 10;
+        $scope.currentNumber = 1;
+
+        $scope.changeNumber = function(val) {
+            if($scope.currentNumber + val > 0 && $scope.currentNumber + val < 20) {
+                $scope.currentNumber += val;
+            }
+        };
+
+
+        $scope.actionMode = function(mode) {
+            $('#modal-'+mode).openModal();
+        };
 
         var socket = io.connect(location.origin);
         socket.on("connect", function(){
@@ -52450,11 +49791,24 @@ app.controller('Bio', ['$scope', '$rootScope', '$routeParams', '$location', 'use
 
     }
 ]);
-app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location', 'userRequests',
-    function ($scope, $rootScope, $routeParams, $location, userRequests) {
+app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location', '$translate', 'userRequests',
+    function ($scope, $rootScope, $routeParams, $location, $translate, userRequests) {
 
         $rootScope.hideLoader = false;
 
+        var translateSchema = function() {
+
+            $scope.$evalAsync(function() {
+                $translate.refresh();
+            });
+        };
+        //$scope.prepareCharList = function() {
+        //    $translate.use("/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema+"-" + $rootScope.userInfo.lang).then(function () {
+        //        console.log("aa");
+        //        $translate.refresh();
+        //    });
+        //};
+        
         window.saveCharacterProceed = function(newChar) {
             userRequests.CRUDUser('saveCharacterList', {
                 newChar : newChar,
@@ -52477,7 +49831,25 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
             window.createCharacterDialog();
         };
 
-        if($rootScope.userInfo && $rootScope.userInfo.char_id && $rootScope.userInfo.char_info) {
+        if($routeParams.char_id && $routeParams.char_id!="") {
+            userRequests.CRUDUser('getCharacterList', {
+                char_id : $routeParams.char_id
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                $rootScope.hideLoader = true;
+                if (!data.error) {
+                    $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
+                    translateSchema();
+                    $scope.currentChar = data.data.list;
+                    $rootScope.getUserData();
+                }
+                else {
+                    //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
+                }
+            });
+        }
+        else if($rootScope.userInfo && $rootScope.userInfo.char_id && $rootScope.userInfo.char_info) {
             if(!$rootScope.userInfo.char_info.charlist || !$rootScope.userInfo.server_info.charlist_name) {
                 userRequests.CRUDUser('getCharacterList', {
                     char_id : $rootScope.userInfo.char_id
@@ -52487,6 +49859,7 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                     $rootScope.hideLoader = true;
                     if (!data.error) {
                         $rootScope.currentSchema = data.data.schema;
+                        translateSchema();
                         $scope.currentChar = data.data.char.list;
                         $rootScope.getUserData();
                     }
@@ -52497,6 +49870,7 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
             }
             else {
                 $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name;
+                translateSchema();
                 $scope.currentChar = $rootScope.userInfo.char_info.charlist.list;
                 $rootScope.hideLoader = true;
             }
@@ -52512,7 +49886,8 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $rootScope.hideLoader = true;
                 if (!data.error) {
                     $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name || data.data.schema;
-                    $scope.charList = data.data.chars;
+                    translateSchema();
+                    $scope.charList = data.data;
                     $rootScope.getUserData();
                 }
                 else {
@@ -52530,8 +49905,8 @@ app.controller('Home', ['$scope', '$rootScope', '$routeParams',
 
     }
 ]);
-app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore', 'userRequests', '$localStorage', '$translate',
-    function ($scope, $rootScope, $routeParams, $cookieStore, userRequests, $localStorage, $translate) {
+app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore', 'userRequests', '$translate',
+    function ($scope, $rootScope, $routeParams, $cookieStore, userRequests, $translate) {
 
         window.deleteCookie = function() {
             $cookieStore.remove('ttapp_token');
@@ -52577,8 +49952,8 @@ app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore',
         };
     }
 ]);
-app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStore', '$localStorage', '$location', '$translate',
-    function (userRequests, $rootScope, $scope, $cookieStore, $localStorage, $location, $translate) {
+app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStore', '$location', '$translate',
+    function (userRequests, $rootScope, $scope, $cookieStore, $location, $translate) {
 
         $rootScope.isLoggedIn = false;
         $rootScope.readOnly = false;
@@ -52609,6 +49984,13 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
                         var token = data.data.user_token;
                         $cookieStore.put('ttapp_token', token);
                         $rootScope.userInfo = data.data;
+                        $translate.translations
+                        $translate.use("locales/locale-" + $rootScope.userInfo.lang);
+                        //{
+                        //    "LOGOUT" : "�����",
+                        //    "Character" : "��������",
+                        //    "Actions" : "��������"
+                        //}
                         $rootScope.isLoggedIn = true;
                     }
                     else {

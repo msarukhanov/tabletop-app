@@ -28,8 +28,8 @@
     </g>
 </svg>
 
-<link rel="stylesheet" href="/files/modules/schemas/vtm@mmalkav/style.css">
-<script src="/files/modules/schemas/vtm@mmalkav/script.js"></script>
+<link rel="stylesheet" href="/files/schemas/vtm@mmalkav/style.css">
+<script src="/files/schemas/vtm@mmalkav/script.js"></script>
 
 <div ng-show="currentChar" class="row vtm_main" ng-init="prepareCharList()">
     <div class="col s12 center">
@@ -37,12 +37,12 @@
     </div>
     <div class="col s6">
         <p class="main_info">
-            <span class="attr-name">Nature</span>
+            <span class="attr-name">{{"Nature" | translate}}</span>
             <span class="attr-stat">{{char.main.Nature}}</span>
         </p>
 
         <p class="main_info">
-            <span class="attr-name">Demeanor</span>
+            <span class="attr-name">{{"Demeanor" | translate}}</span>
             <span class="attr-stat">{{char.main.Demeanor}}</span>
         </p>
 

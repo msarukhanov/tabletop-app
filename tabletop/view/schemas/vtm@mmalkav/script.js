@@ -1,8 +1,8 @@
-window.prepareCharListFunctions = function ($scope, $rootScope) {
+window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
     function startEditFunctions() {
 
     }
-    function startCreateFunctions() {
+    function startCreateFunctions(ifPlayer) {
         $scope.newChar = {
             main: {
                 Name: "",
@@ -130,20 +130,39 @@ window.prepareCharListFunctions = function ($scope, $rootScope) {
                 $scope.newChar[''+type]['' + attr] += val;
             }
         };
-        $('#modalCharMain').openModal();
+        if($scope.userType == 'player') $('#modalCharMain').openModal();
     }
-    if($scope.char) {
-        if ($scope.char.list && $scope.char.list.Name) {
+
+    if($scope.char && $scope.char.main && $scope.char.main.Name) {
+        console.log("start edit func");
+        $scope.currentChar = angular.copy($scope.char);
+        startEditFunctions();
+    }
+    else {
+        console.log("start create func");
+        //$scope.currentChar = angular.copy($scope.char);
+        startCreateFunctions();
+    }
+    window.createCharacterDialog = function() {
+        if ($scope.char && $scope.char.main && $scope.char.main.Name) {
             console.log("start edit func");
             $scope.currentChar = angular.copy($scope.char);
             startEditFunctions();
         }
         else {
+            console.log("start create func");
+            $scope.currentChar = angular.copy($scope.char);
             startCreateFunctions();
         }
-    }
+        //$translate.use("/schemas/"+$rootScope.currentSchema + "/"+$rootScope.currentSchema+"-" + $rootScope.userInfo.lang);
+    };
+    $scope.prepareCharList = function() {
+        console.log($translate.getTranslationTable("locales/locale-" + $rootScope.userInfo.lang))
+        //$translate.getTranslationTable("locales/locale-" + $rootScope.userInfo.lang);
+    };
     window.createCharacterDialog = function() {
         startCreateFunctions();
+        //startCreateFunctions();
     };
 };
 window.prepareCharList();

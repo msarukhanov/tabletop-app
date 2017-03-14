@@ -1,5 +1,5 @@
-app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore', 'userRequests', '$localStorage', '$translate',
-    function ($scope, $rootScope, $routeParams, $cookieStore, userRequests, $localStorage, $translate) {
+app.controller('Login', ['$scope', '$rootScope', '$routeParams', '$cookieStore', 'userRequests', '$translate',
+    function ($scope, $rootScope, $routeParams, $cookieStore, userRequests, $translate) {
 
         window.deleteCookie = function() {
             $cookieStore.remove('ttapp_token');

@@ -30,7 +30,7 @@
     "newrelic": "^1.37.2",
     "pg": "~6.1.2",
     "redis": "^2.6.5",
-    "socket.io": "^1.7.3",
+    "socket.io": "~1.7.3",
     "telegram-bot-api": "^1.2.0",
     "underscore": "^1.8.3",
     "wait.for": "^0.6.6"

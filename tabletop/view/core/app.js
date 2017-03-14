@@ -1,10 +1,10 @@
-var app = angular.module("tabletapApp", ['ngRoute', 'pascalprecht.translate', 'ngCookies','ngStorage', 'ngSanitize']);
+var app = angular.module("tabletapApp", ['ngRoute', 'pascalprecht.translate', 'ngCookies', 'ngSanitize']);
 
 app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationProvider',
     function ($routeProvider, $translateProvider, $httpProvider, $locationProvider) {
 
         $translateProvider.useStaticFilesLoader({
-            'prefix': 'files/locales/locale-',
+            'prefix': 'files/',
             'suffix': '.json'
         });
 
@@ -17,7 +17,7 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
                 template : templates["../tabletop/view/modules/home/home.html"],
                 controller: 'Home'
             })
-            .when("/charlist?:char_id", {
+            .when("/charlist:char_id?", {
                 template : templates["../tabletop/view/modules/charlist/charlist.html"],
                 controller: 'Charlist'
             })
@@ -99,23 +99,25 @@ app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http
         }
     }
 }]);
-app.directive('charList', ['$rootScope', '$compile', '$templateRequest', '$templateCache', function($rootScope, $compile, $templateRequest, $templateCache){
-    return {
-        restrict: 'E',
-        scope: {
-            char: '=char'
-        },
-        link: function(scope, element){
-            window.prepareCharList = function() {
-                console.log("preparing charlist controller");
-                window.prepareCharListFunctions(scope, $rootScope);
-            };
-            $templateRequest("/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html").then(function(html){
-                var template = angular.element(html);
-                $templateCache.put("/files/modules/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html", html);
-                element.append(template);
-                $compile(template)(scope);
-            });
-        }
-    };
-}]);
+app.directive('charList', ['$rootScope', '$translate', '$compile', '$templateRequest', '$templateCache',
+    function($rootScope, $translate, $compile, $templateRequest, $templateCache){
+        return {
+            restrict: 'E',
+            scope: {
+                char: '=char'
+            },
+            link: function(scope, element){
+                window.prepareCharList = function() {
+                    console.log("preparing charlist controller");
+                    window.prepareCharListFunctions(scope, $rootScope, $translate);
+                };
+                $templateRequest("/files/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html").then(function(html){
+                    var template = angular.element(html);
+                    $templateCache.put("/files/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html", html);
+                    element.append(template);
+                    $compile(template)(scope);
+                });
+            }
+        };
+    }
+]);

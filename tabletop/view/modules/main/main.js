@@ -1,5 +1,5 @@
-app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStore', '$localStorage', '$location', '$translate',
-    function (userRequests, $rootScope, $scope, $cookieStore, $localStorage, $location, $translate) {
+app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStore', '$location', '$translate',
+    function (userRequests, $rootScope, $scope, $cookieStore, $location, $translate) {
 
         $rootScope.isLoggedIn = false;
         $rootScope.readOnly = false;
@@ -30,6 +30,13 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
                         var token = data.data.user_token;
                         $cookieStore.put('ttapp_token', token);
                         $rootScope.userInfo = data.data;
+                        $translate.translations
+                        $translate.use("locales/locale-" + $rootScope.userInfo.lang);
+                        //{
+                        //    "LOGOUT" : "ВЫХОД",
+                        //    "Character" : "Персонаж",
+                        //    "Actions" : "Действия"
+                        //}
                         $rootScope.isLoggedIn = true;
                     }
                     else {

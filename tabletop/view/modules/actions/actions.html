@@ -9,7 +9,7 @@
     <div class="chat-wrapper">
         <div class="chat-body">
             <ul class="chat-list">
-                <li class="chat-msg" ng-repeat="msg in chatMsgs">
+                <li class="chat-msg" ng-repeat="msg in chatMsgs track by $index">
                     <span>
                         {{msg.username}} - {{msg.dt | date:'HH:mm:ss'}} : {{msg.text}}
                         <!--mmalkav - (11:11:11) : ActionName=8,7,3,4,5,6,7,8,9,4-->
@@ -25,8 +25,13 @@
                     </a>
                     <ul>
                         <li>
+                            <a class="btn-floating black" ng-click="actionMode('dices')">
+                                <img src="/files/images/icons/d20.svg" alt="dices">
+                            </a>
+                        </li>
+                        <li>
                             <a class="btn-floating red" ng-click="actionMode('fight')">
-                                <i class="material-icons">pages</i>
+                                <img src="/files/images/icons/fight.svg" alt="dices">
                             </a>
                         </li>
                         <li>
@@ -64,3 +69,52 @@
 
 
 </div>
+
+<div id="modal-dices" class="modal">
+    <a class="close-btn-m modal-close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </a>
+    <div class="modal-content">
+        <h4>Dices</h4>
+        <form class="col s12" name="vtm_main_form">
+            <div class="row">
+                <div class="input-field col s6">
+                    <select class="icons" ng-model="currentDice">
+                        <option value="6" data-icon="/files/images/icons/d6.svg" class="circle"></option>
+                        <option value="8" data-icon="/files/images/icons/d8.svg" class="circle"></option>
+                        <option value="10" data-icon="/files/images/icons/d10.svg" class="circle"></option>
+                        <option value="12" data-icon="/files/images/icons/d12.svg" class="circle"></option>
+                        <option value="20" data-icon="/files/images/icons/d20.svg" class="circle"></option>
+                    </select>
+                    <label>
+                        <img ng-if="currentDice" ng-src="/files/images/icons/d{{currentDice}}.svg">
+                    </label>
+                </div>
+                <div class="input-field col s2">
+                    <i class="fa fa-minus left" ng-click="changeNumber(-1)"></i>
+                </div>
+                <div class="input-field col s2 currentNumber">
+                    <span class="cur-number">
+                        {{currentNumber}}
+                    </span>
+                </div>
+                <div class="input-field col s2">
+                    <i class="fa fa-plus right" ng-click="changeNumber(1)"></i>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer center">
+        <button ng-click="sendMessage(currentDice+','+currentNumber, 'roll')" class="modal-action modal-close waves-effect waves-green btn-flat btn-modal-m">
+            Roll!
+        </button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('select').material_select();
+        $('modal').leanModal();
+    });
+</script>

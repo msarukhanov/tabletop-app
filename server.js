@@ -91,6 +91,21 @@ app.io.on('connection', function(socket){
                             else app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs = [msg[2]];
                             app.io.sockets.to('server_' + socket.UserInfo.server_id).emit('message', ['log-u', msg[2]]);
                             break;
+                        case 'roll':
+                            msg[2].dt = new Date();
+                            msg[2].username = socket.UserInfo.username;
+                            var D = msg[2].text.split(",")[0], N = msg[2].text.split(",")[1], result = [], i;
+                            for(i=0;i<N;i++){result.push(Math.floor(Math.random() * D) + 1)}
+                            msg[2].text = N+"d"+D+" roll results : " + result.join(",");
+                            if(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs) {
+                                app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.push(msg[2]);
+                                if(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.length > 50) {
+                                    app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs.shift();
+                                }
+                            }
+                            else app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs = [msg[2]];
+                            app.io.sockets.to('server_' + socket.UserInfo.server_id).emit('message', ['log-u', msg[2]]);
+                            break;
                         case 'log':
                             break;
                     }

@@ -152,7 +152,76 @@ nav .button-collapse i {
 }
 .fixed-action-btn.actions-bot.horizontal ul li {
     margin-top: 0;
+    margin-right: 10px;
 }
 .fixed-action-btn.actions-bot .btn-floating {
     z-index: 100;
+}
+footer.page-footer {
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    color: #fff;
+    background-color: #0A0A0A;
+    margin: 0;
+    padding-top: 0;
+}
+footer.page-footer .footer-copyright {
+    background-color: #000000;
+}
+footer.page-footer a.right {
+    font-size: 32px;
+    display: inline-block;
+    color: #fff;
+    margin-left: 20px;
+}
+footer.page-footer a.copyr {
+    float: left;
+    color: #ff0000;
+}
+#modal-dices .icons {
+    z-index: 99;
+}
+#modal-dices .icons .dropdown-content {
+    max-height: 216px;
+}
+#modal-dices .icons input[type=text] {
+    border: none;
+    color: transparent;
+}
+#modal-dices form {
+    min-height: 175px;
+    margin-top: 25px;
+}
+#modal-dices i {
+    line-height: 60px;
+}
+#modal-dices .currentNumber {
+    text-align: center;
+    padding: 0;
+}
+#modal-dices .currentNumber span {
+    line-height: 60px;
+    font-size: 40px;
+}
+#modal-dices label {
+    width: 55px;
+    margin-top: 16px;
+}
+#modal-dices img {
+    width: 100%;
+}
+#modal-dices .select-wrapper input.select-dropdown {
+    border: none;
+    color: transparent;
+    margin: 0;
+    height: 60px;
+}
+#modal-dices .select-wrapper span.caret {
+    top: 20px;
+    font-size: 14px;
+    left: 60px;
+}
+#modal-dices .input-field {
+    margin: 0;
 }

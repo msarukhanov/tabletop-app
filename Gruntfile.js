@@ -30,11 +30,8 @@ module.exports = function(grunt) {
                     'tabletop/view/libs/angular-sanitize.js',
                     'tabletop/view/libs/angular-translate.js',
                     'tabletop/view/libs/angular-translate-loader-static-files.js',
-                    'tabletop/view/libs/ngStorage.js',
 
                     'tabletop/view/libs/underscore.js',
-                    'tabletop/view/libs/bootstrap-datepicker.js',
-                    'tabletop/view/libs/JsBarcode.all.min.js',
                     'tabletop/view/libs/materialize.min.js',
                     'tabletop/view/libs/socket.io.js'
                 ],

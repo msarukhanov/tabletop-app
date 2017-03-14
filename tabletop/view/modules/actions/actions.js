@@ -5,6 +5,19 @@ app.controller('Actions', ['$scope', '$rootScope', '$routeParams', '$location', 
 
         $scope.chatMsgs = [];
         $scope.textMsg = '';
+        $scope.currentDice = 10;
+        $scope.currentNumber = 1;
+
+        $scope.changeNumber = function(val) {
+            if($scope.currentNumber + val > 0 && $scope.currentNumber + val < 20) {
+                $scope.currentNumber += val;
+            }
+        };
+
+
+        $scope.actionMode = function(mode) {
+            $('#modal-'+mode).openModal();
+        };
 
         var socket = io.connect(location.origin);
         socket.on("connect", function(){
