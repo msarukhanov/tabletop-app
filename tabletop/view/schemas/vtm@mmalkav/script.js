@@ -2,7 +2,7 @@ window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
     function startEditFunctions() {
 
     }
-    function startCreateFunctions(ifPlayer) {
+    function startCreateFunctions(isNew) {
         $scope.newChar = {
             main: {
                 Name: "",
@@ -64,42 +64,6 @@ window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
             advantages: {},
             virtues: {}
         };
-        $scope.attrPoints = {
-            prices: [3, 5, 8],
-            starting: [3, 5, 8]
-        };
-        $scope.abilitiesPoints = {
-            prices: [3, 5, 8],
-            starting: [8, 12, 20]
-        };
-        $scope.attrGroups = [
-            {
-                title: "Physical",
-                array: ['Strength', 'Dexterity', 'Stamina']
-            },
-            {
-                title: "Social",
-                array: ['Charisma', 'Manipulation', 'Appearance']
-            },
-            {
-                title: "Mental",
-                array: ['Perception', 'Intelligence', 'Wits']
-            }
-        ];
-        $scope.abilitiesGroups = [
-            {
-                title: "Talents",
-                array: ["Alertness","Athletics","Brawl","Dodge","Empathy","Expression","Intimidation","Leadership","Streetwise","Subterfuge"]
-            },
-            {
-                title: "Skills",
-                array: ["AnimalKen","Crafts","Drive","Etiquette","Firearms","Performance","Melee","Security","Stealth","Survival"]
-            },
-            {
-                title: "Knowledges",
-                array: ["Academics","Computer","Finance","Investigation","Law","Linguistics","Medicine","Occult","Politics","Science"]
-            }
-        ];
         $scope.userType = $rootScope.userInfo.type;
         $scope.saveCharacterProceed = function(newChar) {
             window.saveCharacterProceed(newChar);
@@ -130,39 +94,88 @@ window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
                 $scope.newChar[''+type]['' + attr] += val;
             }
         };
-        if($scope.userType == 'player') $('#modalCharMain').openModal();
+        if($scope.userType == 'player' || isNew) $('#modalCharMain').openModal();
     }
 
-    if($scope.char && $scope.char.main && $scope.char.main.Name) {
-        console.log("start edit func");
-        $scope.currentChar = angular.copy($scope.char);
-        startEditFunctions();
-    }
-    else {
-        console.log("start create func");
-        //$scope.currentChar = angular.copy($scope.char);
-        startCreateFunctions();
-    }
-    window.createCharacterDialog = function() {
-        if ($scope.char && $scope.char.main && $scope.char.main.Name) {
+    $scope.attrPoints = {
+        prices: [3, 5, 8],
+        starting: [3, 5, 8]
+    };
+    $scope.abilitiesPoints = {
+        prices: [3, 5, 8],
+        starting: [8, 12, 20]
+    };
+    $scope.attrGroups = [
+        {
+            title: "Physical",
+            array: ['Strength', 'Dexterity', 'Stamina']
+        },
+        {
+            title: "Social",
+            array: ['Charisma', 'Manipulation', 'Appearance']
+        },
+        {
+            title: "Mental",
+            array: ['Perception', 'Intelligence', 'Wits']
+        }
+    ];
+    $scope.abilitiesGroups = [
+        {
+            title: "Talents",
+            array: ["Alertness","Athletics","Brawl","Dodge","Empathy","Expression","Intimidation","Leadership","Streetwise","Subterfuge"]
+        },
+        {
+            title: "Skills",
+            array: ["AnimalKen","Crafts","Drive","Etiquette","Firearms","Performance","Melee","Security","Stealth","Survival"]
+        },
+        {
+            title: "Knowledges",
+            array: ["Academics","Computer","Finance","Investigation","Law","Linguistics","Medicine","Occult","Politics","Science"]
+        }
+    ];
+    window.createCharacterDialog = function(isNew) {
+        if($scope.char && $scope.char.main && $scope.char.main.Name && !isNew) {
             console.log("start edit func");
-            $scope.currentChar = angular.copy($scope.char);
             startEditFunctions();
         }
         else {
             console.log("start create func");
-            $scope.currentChar = angular.copy($scope.char);
-            startCreateFunctions();
+            startCreateFunctions(isNew);
         }
-        //$translate.use("/schemas/"+$rootScope.currentSchema + "/"+$rootScope.currentSchema+"-" + $rootScope.userInfo.lang);
     };
-    $scope.prepareCharList = function() {
-        console.log($translate.getTranslationTable("locales/locale-" + $rootScope.userInfo.lang))
-        //$translate.getTranslationTable("locales/locale-" + $rootScope.userInfo.lang);
+    window.createCharacterDialog();
+
+    $translate.use("/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema+"-" + $rootScope.userInfo.lang).then(function(){
+        $translate.refresh();
+    });
+
+    $scope.range = function(n) {
+        return new Array(n);
     };
-    window.createCharacterDialog = function() {
-        startCreateFunctions();
-        //startCreateFunctions();
+
+    var resizeTV = function() {
+        var wdt = $(window).width(), dwdt = 450;
+        $('.attr-group').css({
+            'font-size': 14*wdt/dwdt + 'px'
+        });
+        $('.attr-name').css({
+            'font-size': 12*wdt/dwdt + 'px'
+        });
+        $('.statpoint').css({
+            'width': 8*wdt/dwdt + 'px',
+            'height': 8*wdt/dwdt + 'px'
+        });
+        $('.attr-stat').css({
+            'font-size': 12*wdt/dwdt + 'px'
+        });
+        $('.attr-space').css({
+            'font-size': 17*wdt/dwdt + 'px'
+        });
+        $('.vtm_main .col.s12').css({
+            'font-size': 30*wdt/dwdt + 'px'
+        });
     };
+    $(window).resize(function() { resizeTV()});
+    resizeTV();
 };
 window.prepareCharList();

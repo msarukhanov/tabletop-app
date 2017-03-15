@@ -57,8 +57,15 @@ nav .button-collapse i {
 .global-wrapper {
     position: absolute;
     top: 56px;
-    height: calc(100% - 106px);
-    padding: 0 10px;
+    min-height: calc(100% - 106px);
+    padding: 0 10px 0;
+    width: 100%;
+}
+.global-wrapper.charl {
+    padding: 0 10px 60px;
+}
+.charl .global-panel-default {
+    float:left;
     width: 100%;
 }
 .bio textarea {
@@ -80,9 +87,8 @@ nav .button-collapse i {
 
 .chat-wrapper {
     height: calc(100% - 100px);
-    width: 100%;
-    position: relative;
-    float: left;
+    position: absolute;
+    width: calc(100% - 20px);
 }
 .chat-body {
     height: calc(100% - 50px);

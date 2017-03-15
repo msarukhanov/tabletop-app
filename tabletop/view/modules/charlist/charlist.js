@@ -4,18 +4,11 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
         $rootScope.hideLoader = false;
 
         var translateSchema = function() {
-
             $scope.$evalAsync(function() {
                 $translate.refresh();
             });
         };
-        //$scope.prepareCharList = function() {
-        //    $translate.use("/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema+"-" + $rootScope.userInfo.lang).then(function () {
-        //        console.log("aa");
-        //        $translate.refresh();
-        //    });
-        //};
-        
+
         window.saveCharacterProceed = function(newChar) {
             userRequests.CRUDUser('saveCharacterList', {
                 newChar : newChar,
@@ -35,20 +28,20 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
             });
         };
         $scope.createCharacterDialog = function() {
-            window.createCharacterDialog();
+            window.createCharacterDialog(true);
         };
 
-        if($routeParams.char_id && $routeParams.char_id!="") {
+        function getChar(char_id) {
             userRequests.CRUDUser('getCharacterList', {
-                char_id : $routeParams.char_id
+                char_id : char_id
             }, function (data) {
                 $scope.error = data.error;
                 $scope.message = data.message;
                 $rootScope.hideLoader = true;
                 if (!data.error) {
                     $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
-                    translateSchema();
                     $scope.currentChar = data.data.list;
+                    translateSchema();
                     $rootScope.getUserData();
                 }
                 else {
@@ -56,35 +49,17 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 }
             });
         }
-        else if($rootScope.userInfo && $rootScope.userInfo.char_id && $rootScope.userInfo.char_info) {
-            if(!$rootScope.userInfo.char_info.charlist || !$rootScope.userInfo.server_info.charlist_name) {
-                userRequests.CRUDUser('getCharacterList', {
-                    char_id : $rootScope.userInfo.char_id
-                }, function (data) {
-                    $scope.error = data.error;
-                    $scope.message = data.message;
-                    $rootScope.hideLoader = true;
-                    if (!data.error) {
-                        $rootScope.currentSchema = data.data.schema;
-                        translateSchema();
-                        $scope.currentChar = data.data.char.list;
-                        $rootScope.getUserData();
-                    }
-                    else {
-                        //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
-                    }
-                });
-            }
-            else {
-                $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name;
-                translateSchema();
-                $scope.currentChar = $rootScope.userInfo.char_info.charlist.list;
-                $rootScope.hideLoader = true;
-            }
-
+        var currentCharacter = '';
+        if($routeParams.char_id && $routeParams.char_id!="") {
+            currentCharacter = $routeParams.char_id;
         }
-        else if($rootScope.userInfo && (!$rootScope.userInfo.char_id || !$rootScope.userInfo.char_info)) {
-            $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name;
+        else if($rootScope.userInfo && $rootScope.userInfo.char_id && $rootScope.userInfo.char_info) {
+            currentCharacter = $rootScope.userInfo.char_id;
+        }
+        if(currentCharacter) {
+            getChar(currentCharacter);
+        }
+        else {
             userRequests.CRUDUser('getCharactersList', {
                 users : $rootScope.userInfo.server_info.users
             }, function (data) {
@@ -92,7 +67,7 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $scope.message = data.message;
                 $rootScope.hideLoader = true;
                 if (!data.error) {
-                    $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name || data.data.schema;
+                    $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
                     translateSchema();
                     $scope.charList = data.data;
                     $rootScope.getUserData();
@@ -101,7 +76,6 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                     //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
                 }
             });
-
         }
     }
 ]);

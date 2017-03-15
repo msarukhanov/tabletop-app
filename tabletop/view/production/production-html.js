@@ -168,10 +168,13 @@ templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrappe
    "    </div>\n" +
    "</div>";
 
-templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
+templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"global-wrapper charl\" ng-init=\"getCharacterData()\">\n" +
    "\n" +
    "    <h4 class=\"page-header global-page-header center\">\n" +
    "        {{\"Character\" | translate}}\n" +
+   "        <a ng-click=\"createCharacterDialog()\" ng-if=\"userInfo.type != 'player'\" class=\"right btn-floating waves-effect waves-light red\" style=\"position: absolute;right: 10px;\">\n" +
+   "            <i class=\"material-icons\">add</i>  New Char\n" +
+   "        </a>\n" +
    "    </h4>\n" +
    "\n" +
    "    <!--<h4 class=\"page-header global-page-header center\" ng-show=\"hideLoader\">-->\n" +
@@ -187,9 +190,9 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                <div class=\"collapsible-body\">\n" +
    "                    <div class=\"row\">\n" +
    "                        <div class=\"col s12\">\n" +
-   "                            <ul>\n" +
-   "                                <li ng-repeat=\"char in charList.players\">\n" +
-   "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}}</a>\n" +
+   "                            <ul class=\"collection\">\n" +
+   "                                <li class=\"collection-item\" ng-repeat=\"char in charList.players\">\n" +
+   "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}} ({{char.username}})</a>\n" +
    "                                </li>\n" +
    "                            </ul>\n" +
    "                        </div>\n" +
@@ -203,8 +206,8 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                <div class=\"collapsible-body\">\n" +
    "                    <div class=\"row\">\n" +
    "                        <div class=\"col s12\">\n" +
-   "                            <ul>\n" +
-   "                                <li ng-repeat=\"char in charList.npc\">\n" +
+   "                            <ul class=\"collection\">\n" +
+   "                                <li class=\"collection-item\" ng-repeat=\"char in charList.npc\">\n" +
    "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}}</a>\n" +
    "                                </li>\n" +
    "                            </ul>\n" +
@@ -213,19 +216,20 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                </div>\n" +
    "            </li>\n" +
    "        </ul>\n" +
-   "\n" +
    "        <script>\n" +
    "            $('.collapsible').collapsible({\n" +
    "                //accordion: false\n" +
    "            });\n" +
    "        </script>\n" +
-   "    </div>\n" +
    "\n" +
-   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader && currentChar\" ng-if=\"currentSchema\">\n" +
-   "        <char-list char=\"currentChar\"></char-list>\n" +
+   "    </div>\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\">\n" +
+   "        <char-list char=\"currentChar\" schema=\"currentSchema\"></char-list>\n" +
    "    </div>\n" +
    "\n" +
    "</div>\n" +
+   "\n" +
+   "\n" +
    "";
 
 templates["../tabletop/view/modules/home/home.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
@@ -386,7 +390,7 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "    <footer class=\"page-footer\">\n" +
    "        <div class=\"footer-copyright\">\n" +
    "            <div class=\"container\">\n" +
-   "                <a class=\"copyr\" href=\"https://www.facebook.com/msarukhanov\"> © 2017 Sarukhanov </a>\n" +
+   "                <a class=\"copyr\" href=\"https://www.facebook.com/msarukhanov\"> © 2017 @mmalkav </a>\n" +
    "                <a class=\"right\" href=\"https://www.facebook.com/tabletopbymmalkav/\">\n" +
    "                    <i class=\"fa fa-twitter-square\"></i>\n" +
    "                </a>\n" +

@@ -49303,10 +49303,13 @@ templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrappe
    "    </div>\n" +
    "</div>";
 
-templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
+templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"global-wrapper charl\" ng-init=\"getCharacterData()\">\n" +
    "\n" +
    "    <h4 class=\"page-header global-page-header center\">\n" +
    "        {{\"Character\" | translate}}\n" +
+   "        <a ng-click=\"createCharacterDialog()\" ng-if=\"userInfo.type != 'player'\" class=\"right btn-floating waves-effect waves-light red\" style=\"position: absolute;right: 10px;\">\n" +
+   "            <i class=\"material-icons\">add</i>  New Char\n" +
+   "        </a>\n" +
    "    </h4>\n" +
    "\n" +
    "    <!--<h4 class=\"page-header global-page-header center\" ng-show=\"hideLoader\">-->\n" +
@@ -49322,9 +49325,9 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                <div class=\"collapsible-body\">\n" +
    "                    <div class=\"row\">\n" +
    "                        <div class=\"col s12\">\n" +
-   "                            <ul>\n" +
-   "                                <li ng-repeat=\"char in charList.players\">\n" +
-   "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}}</a>\n" +
+   "                            <ul class=\"collection\">\n" +
+   "                                <li class=\"collection-item\" ng-repeat=\"char in charList.players\">\n" +
+   "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}} ({{char.username}})</a>\n" +
    "                                </li>\n" +
    "                            </ul>\n" +
    "                        </div>\n" +
@@ -49338,8 +49341,8 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                <div class=\"collapsible-body\">\n" +
    "                    <div class=\"row\">\n" +
    "                        <div class=\"col s12\">\n" +
-   "                            <ul>\n" +
-   "                                <li ng-repeat=\"char in charList.npc\">\n" +
+   "                            <ul class=\"collection\">\n" +
+   "                                <li class=\"collection-item\" ng-repeat=\"char in charList.npc\">\n" +
    "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}}</a>\n" +
    "                                </li>\n" +
    "                            </ul>\n" +
@@ -49348,19 +49351,20 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                </div>\n" +
    "            </li>\n" +
    "        </ul>\n" +
-   "\n" +
    "        <script>\n" +
    "            $('.collapsible').collapsible({\n" +
    "                //accordion: false\n" +
    "            });\n" +
    "        </script>\n" +
-   "    </div>\n" +
    "\n" +
-   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader && currentChar\" ng-if=\"currentSchema\">\n" +
-   "        <char-list char=\"currentChar\"></char-list>\n" +
+   "    </div>\n" +
+   "    <div class=\"panel global-panel-default\" ng-show=\"hideLoader\">\n" +
+   "        <char-list char=\"currentChar\" schema=\"currentSchema\"></char-list>\n" +
    "    </div>\n" +
    "\n" +
    "</div>\n" +
+   "\n" +
+   "\n" +
    "";
 
 templates["../tabletop/view/modules/home/home.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
@@ -49521,7 +49525,7 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "    <footer class=\"page-footer\">\n" +
    "        <div class=\"footer-copyright\">\n" +
    "            <div class=\"container\">\n" +
-   "                <a class=\"copyr\" href=\"https://www.facebook.com/msarukhanov\"> © 2017 Sarukhanov </a>\n" +
+   "                <a class=\"copyr\" href=\"https://www.facebook.com/msarukhanov\"> © 2017 @mmalkav </a>\n" +
    "                <a class=\"right\" href=\"https://www.facebook.com/tabletopbymmalkav/\">\n" +
    "                    <i class=\"fa fa-twitter-square\"></i>\n" +
    "                </a>\n" +
@@ -49546,9 +49550,14 @@ var app = angular.module("tabletapApp", ['ngRoute', 'pascalprecht.translate', 'n
 app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationProvider',
     function ($routeProvider, $translateProvider, $httpProvider, $locationProvider) {
 
-        $translateProvider.useStaticFilesLoader({
-            'prefix': 'files/',
-            'suffix': '.json'
+        // $translateProvider.useStaticFilesLoader({
+        //     'prefix': 'files/',
+        //     'suffix': '.json'
+        // });
+
+        //$translateProvider.preferredLanguage('en');
+        $translateProvider.useLoader('asyncLoader', {
+            schema : ''
         });
 
         $routeProvider
@@ -49564,7 +49573,7 @@ app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationP
                 template : templates["../tabletop/view/modules/charlist/charlist.html"],
                 controller: 'Charlist'
             })
-            .when("/bio?:char_id", {
+            .when("/bio:char_id?", {
                 template : templates["../tabletop/view/modules/bio/bio.html"],
                 controller: 'Bio'
             })
@@ -49626,6 +49635,29 @@ app.run(['$rootScope', '$translate', '$cookieStore', '$templateCache',
 
     }
 ]);
+
+app.factory('asyncLoader', ['$q', '$http', '$rootScope', function ($q, $http, $rootScope) {
+    return function (options) {
+        var deferred = $q.defer(), translations;
+        if(!$rootScope.mainTranslations) {
+            $http.get('/files/' + options.key + '.json').then(function(data){
+                $rootScope.mainTranslations = data.data;
+                deferred.resolve(data.data);
+            }, function() {
+                deferred.reject({});
+            });
+        }
+        else {
+            $http.get('/files/' + options.key + '.json').then(function(data){
+                deferred.resolve(_.extend($rootScope.mainTranslations, data.data));
+            }, function() {
+                deferred.reject(_.extend($rootScope.mainTranslations, {}));
+            });
+        }
+        return deferred.promise;
+    };
+}]);
+
 app.factory('userRequests', ['$http', '$cookieStore', '$filter', function ($http, $cookieStore, $filter) {
     return {
 
@@ -49647,19 +49679,37 @@ app.directive('charList', ['$rootScope', '$translate', '$compile', '$templateReq
         return {
             restrict: 'E',
             scope: {
-                char: '=char'
+                char: '=char',
+                schema: '=schema'
             },
-            link: function(scope, element){
-                window.prepareCharList = function() {
-                    console.log("preparing charlist controller");
-                    window.prepareCharListFunctions(scope, $rootScope, $translate);
-                };
-                $templateRequest("/files/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html").then(function(html){
-                    var template = angular.element(html);
-                    $templateCache.put("/files/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html", html);
-                    element.append(template);
-                    $compile(template)(scope);
+            link: function(scope, element, attrs){
+                var listInit = false;
+                function makeList() {
+                    //scope.char &&
+                    if( scope.schema) {
+                        listInit = true;
+                        window.prepareCharList = function() {
+                            console.log("preparing charlist controller");
+                            window.prepareCharListFunctions(scope, $rootScope, $translate);
+                        };
+                        $templateRequest("/files/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html").then(function(html){
+                            var template = angular.element(html);
+                            $templateCache.put("/files/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema + ".html", html);
+                            element.append(template);
+                            $compile(template)(scope);
+                        }, function(error) {
+                            console.log(error);
+                            listInit = false;
+                        });
+                    }
+                }
+                makeList();
+                scope.$watch('schema', function(oldVal, newVal) {
+                    if(!listInit) makeList();
                 });
+                // scope.$watchGroup(['char','schema'], function(oldVal, newVal) {
+                //     if(!listInit) makeList();
+                // });
             }
         };
     }
@@ -49797,18 +49847,11 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
         $rootScope.hideLoader = false;
 
         var translateSchema = function() {
-
             $scope.$evalAsync(function() {
                 $translate.refresh();
             });
         };
-        //$scope.prepareCharList = function() {
-        //    $translate.use("/schemas/" + $rootScope.currentSchema + "/" + $rootScope.currentSchema+"-" + $rootScope.userInfo.lang).then(function () {
-        //        console.log("aa");
-        //        $translate.refresh();
-        //    });
-        //};
-        
+
         window.saveCharacterProceed = function(newChar) {
             userRequests.CRUDUser('saveCharacterList', {
                 newChar : newChar,
@@ -49828,20 +49871,20 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
             });
         };
         $scope.createCharacterDialog = function() {
-            window.createCharacterDialog();
+            window.createCharacterDialog(true);
         };
 
-        if($routeParams.char_id && $routeParams.char_id!="") {
+        function getChar(char_id) {
             userRequests.CRUDUser('getCharacterList', {
-                char_id : $routeParams.char_id
+                char_id : char_id
             }, function (data) {
                 $scope.error = data.error;
                 $scope.message = data.message;
                 $rootScope.hideLoader = true;
                 if (!data.error) {
                     $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
-                    translateSchema();
                     $scope.currentChar = data.data.list;
+                    translateSchema();
                     $rootScope.getUserData();
                 }
                 else {
@@ -49849,35 +49892,17 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 }
             });
         }
-        else if($rootScope.userInfo && $rootScope.userInfo.char_id && $rootScope.userInfo.char_info) {
-            if(!$rootScope.userInfo.char_info.charlist || !$rootScope.userInfo.server_info.charlist_name) {
-                userRequests.CRUDUser('getCharacterList', {
-                    char_id : $rootScope.userInfo.char_id
-                }, function (data) {
-                    $scope.error = data.error;
-                    $scope.message = data.message;
-                    $rootScope.hideLoader = true;
-                    if (!data.error) {
-                        $rootScope.currentSchema = data.data.schema;
-                        translateSchema();
-                        $scope.currentChar = data.data.char.list;
-                        $rootScope.getUserData();
-                    }
-                    else {
-                        //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
-                    }
-                });
-            }
-            else {
-                $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name;
-                translateSchema();
-                $scope.currentChar = $rootScope.userInfo.char_info.charlist.list;
-                $rootScope.hideLoader = true;
-            }
-
+        var currentCharacter = '';
+        if($routeParams.char_id && $routeParams.char_id!="") {
+            currentCharacter = $routeParams.char_id;
         }
-        else if($rootScope.userInfo && (!$rootScope.userInfo.char_id || !$rootScope.userInfo.char_info)) {
-            $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name;
+        else if($rootScope.userInfo && $rootScope.userInfo.char_id && $rootScope.userInfo.char_info) {
+            currentCharacter = $rootScope.userInfo.char_id;
+        }
+        if(currentCharacter) {
+            getChar(currentCharacter);
+        }
+        else {
             userRequests.CRUDUser('getCharactersList', {
                 users : $rootScope.userInfo.server_info.users
             }, function (data) {
@@ -49885,7 +49910,7 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $scope.message = data.message;
                 $rootScope.hideLoader = true;
                 if (!data.error) {
-                    $rootScope.currentSchema = $rootScope.userInfo.server_info.charlist_name || data.data.schema;
+                    $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
                     translateSchema();
                     $scope.charList = data.data;
                     $rootScope.getUserData();
@@ -49894,7 +49919,6 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                     //if($scope && $scope.showToastError) $scope.showToastError($scope.message);
                 }
             });
-
         }
     }
 ]);
@@ -49984,13 +50008,8 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
                         var token = data.data.user_token;
                         $cookieStore.put('ttapp_token', token);
                         $rootScope.userInfo = data.data;
-                        $translate.translations
+                        $rootScope.mainLocale = "locales/locale-" + $rootScope.userInfo.lang;
                         $translate.use("locales/locale-" + $rootScope.userInfo.lang);
-                        //{
-                        //    "LOGOUT" : "�����",
-                        //    "Character" : "��������",
-                        //    "Actions" : "��������"
-                        //}
                         $rootScope.isLoggedIn = true;
                     }
                     else {
@@ -50001,5 +50020,6 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
             else $rootScope.isLoggedIn = false;
         };
         $rootScope.getUserData();
+
     }
 ]);

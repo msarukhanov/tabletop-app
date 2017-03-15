@@ -30,13 +30,8 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
                         var token = data.data.user_token;
                         $cookieStore.put('ttapp_token', token);
                         $rootScope.userInfo = data.data;
-                        $translate.translations
+                        $rootScope.mainLocale = "locales/locale-" + $rootScope.userInfo.lang;
                         $translate.use("locales/locale-" + $rootScope.userInfo.lang);
-                        //{
-                        //    "LOGOUT" : "ВЫХОД",
-                        //    "Character" : "Персонаж",
-                        //    "Actions" : "Действия"
-                        //}
                         $rootScope.isLoggedIn = true;
                     }
                     else {
@@ -47,5 +42,6 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
             else $rootScope.isLoggedIn = false;
         };
         $rootScope.getUserData();
+
     }
 ]);

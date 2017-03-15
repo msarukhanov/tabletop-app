@@ -77,9 +77,9 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
                     //knex('chars').select(["chars.id","chars.charlist_id","charlists.list"])
                     //    .leftJoin('charlists', 'chars.charlist_id', 'charlists.id')
                     //    .whereIn('user_id', req.body.users)
-                    knex('chars').select(["chars.id","chars.charlist_id","chars.char_name","chars.npc"])
-                        //.leftJoin('charlists', 'chars.charlist_id', 'charlists.id')
-                        .whereIn('user_id', req.body.users)
+                    knex('chars').select(["chars.id","chars.charlist_id","chars.char_name","chars.npc","chars.user_id","users.username"])
+                        .leftJoin('users', 'chars.user_id', 'users.user_id')
+                        .whereIn('chars.user_id', req.body.users)
                         .then(function(rows) {
                             var chars = rows;
                             if(!currentUser.server_info.charlist_name) {

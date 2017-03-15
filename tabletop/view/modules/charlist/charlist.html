@@ -1,7 +1,10 @@
-<div class="global-wrapper" ng-init="getCharacterData()">
+<div class="global-wrapper charl" ng-init="getCharacterData()">
 
     <h4 class="page-header global-page-header center">
         {{"Character" | translate}}
+        <a ng-click="createCharacterDialog()" ng-if="userInfo.type != 'player'" class="right btn-floating waves-effect waves-light red" style="position: absolute;right: 10px;">
+            <i class="material-icons">add</i>  New Char
+        </a>
     </h4>
 
     <!--<h4 class="page-header global-page-header center" ng-show="hideLoader">-->
@@ -17,9 +20,9 @@
                 <div class="collapsible-body">
                     <div class="row">
                         <div class="col s12">
-                            <ul>
-                                <li ng-repeat="char in charList.players">
-                                    <a ng-href="/#!/charlist{{char.id}}">{{char.char_name}}</a>
+                            <ul class="collection">
+                                <li class="collection-item" ng-repeat="char in charList.players">
+                                    <a ng-href="/#!/charlist{{char.id}}">{{char.char_name}} ({{char.username}})</a>
                                 </li>
                             </ul>
                         </div>
@@ -33,8 +36,8 @@
                 <div class="collapsible-body">
                     <div class="row">
                         <div class="col s12">
-                            <ul>
-                                <li ng-repeat="char in charList.npc">
+                            <ul class="collection">
+                                <li class="collection-item" ng-repeat="char in charList.npc">
                                     <a ng-href="/#!/charlist{{char.id}}">{{char.char_name}}</a>
                                 </li>
                             </ul>
@@ -43,16 +46,17 @@
                 </div>
             </li>
         </ul>
-
         <script>
             $('.collapsible').collapsible({
                 //accordion: false
             });
         </script>
-    </div>
 
-    <div class="panel global-panel-default" ng-show="hideLoader && currentChar" ng-if="currentSchema">
-        <char-list char="currentChar"></char-list>
+    </div>
+    <div class="panel global-panel-default" ng-show="hideLoader">
+        <char-list char="currentChar" schema="currentSchema"></char-list>
     </div>
 
 </div>
+
+
