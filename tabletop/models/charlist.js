@@ -26,6 +26,12 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
                 });
             });
 
+            appRoute(app, 'editCharacterList', function(req, res, currentUser) {
+                _this.editCharacterList(req, currentUser, function (callback) {
+                    res.send(callback).end();
+                });
+            });
+
         },
 
         getCharacterList: function (req, currentUser, callback) {
@@ -133,6 +139,7 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
                         var charlist_id = rows[0];
                         knex('chars').returning('id').insert({
                             char_name: req.body.newChar.main.Name,
+                            npc: req.body.npc == true,
                             user_id: currentUser.user_id,
                             charlist_id: charlist_id,
                             server_id: currentUser.server_info.server_id,
@@ -174,6 +181,39 @@ module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
             else {
                 callback({error: true, message: 'Authorization token required', error_code: 'auth_1'});
             }
+        },
+
+        editCharacterList: function (req, currentUser, callback) {
+            if(currentUser) {
+                if(currentUser.server_id) {
+                    knex('charlists').update({
+                        list: req.body.list
+                    }).where({
+                        id: req.body.listId
+                    }).then(function (rows) {
+                        currentUser.char_info = {
+                            charlist: {
+                                id: req.body.listId,
+                                list: req.body.list,
+                                schema_id: currentUser.server_info.schema_id
+                            },
+                            char_name: req.body.list.main.Name
+                        };
+                        userToRedis(currentUser, 30000, function (data) {});
+                        callback({error:false, message: "Success"})
+                    }, function (error) {
+                        console.error(error);
+                        callback({error: true, message: 'db error chars'});
+                    });
+                }
+                else {
+                    callback({error: true, message: 'No active server.'});
+                }
+            }
+            else {
+                callback({error: true, message: 'Authorization token required', error_code: 'auth_1'});
+            }
         }
+
     }
 };

@@ -1,6 +1,28 @@
 window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
     function startEditFunctions() {
 
+        $scope.editStatOpen = function (name, path, type) {
+            $('#editCharModal').openModal();
+            $scope.edit = {
+                name : name,
+                path1 : path.split(".")[0],
+                path2 : path.split(".")[1],
+                type : type
+            }
+        };
+        $scope.changeStat = function (type, val, attr, group) {
+            if ($scope.char[''+type]['' + attr] + val > -1 &&
+                $scope.char[''+type]['' + attr] + val < 11) {
+                $scope.char[''+type]['' + attr] += val;
+            }
+        };
+        $scope.closeEditStat = function() {
+            $('#editCharModal').closeModal();
+        };
+        $scope.editCharacterProceed = function() {
+            $('#editCharModal').closeModal();
+            window.editCharacterProceed($scope.char);
+        };
     }
     function startCreateFunctions(isNew) {
         $scope.newChar = {
@@ -65,9 +87,7 @@ window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
             virtues: {}
         };
         $scope.userType = $rootScope.userInfo.type;
-        $scope.saveCharacterProceed = function(newChar) {
-            window.saveCharacterProceed(newChar);
-        };
+        $scope.isNpc = ($scope.userType != 'player' && isNew);
         if($scope.userType != 'player') {
             $scope.newChar.start = {
                 "Talents" : 999,
@@ -78,23 +98,30 @@ window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
                 "Mental" : 999
             };
         }
+        if($scope.userType == 'player' || isNew) $('#modalCharMain').openModal();
+
+        $scope.saveCharacterProceed = function(newChar, isNpc) {
+            window.saveCharacterProceed(newChar, isNpc);
+        };
+
         $(".attr1table input").click(function () {
             $(".attr1table input." + this.className).not($(this)).each(function () {
                 this.checked = false;
             });
         });
         $scope.createNext = function (from, to) {
-            console.log($scope.newChar);
             $('#' + from).closeModal();
             $('#' + to).openModal();
         };
         $scope.changeStat = function (type, val, attr, group) {
-            if ($scope.newChar.start['' + group] - val > -1 && $scope.newChar[''+type]['' + attr] + val > 0 && $scope.newChar[''+type]['' + attr] + val < 6) {
+            if (($scope.newChar.start['' + group] - val > -1 || $scope.isNpc) &&
+                $scope.newChar[''+type]['' + attr] + val > ((group=='Physical' || group=='Social' || group=='Mental') ? 0 : -1) &&
+                $scope.newChar[''+type]['' + attr] + val < ($scope.isNpc ? 11 : 6)) {
                 $scope.newChar.start['' + group] -= val;
                 $scope.newChar[''+type]['' + attr] += val;
             }
         };
-        if($scope.userType == 'player' || isNew) $('#modalCharMain').openModal();
+
     }
 
     $scope.attrPoints = {
@@ -156,6 +183,9 @@ window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
     var resizeTV = function() {
         var wdt = $(window).width(), dwdt = 450;
         $('.attr-group').css({
+            'font-size': 14*wdt/dwdt + 'px'
+        });
+        $('.pm-row, .pm-row div').css({
             'font-size': 14*wdt/dwdt + 'px'
         });
         $('.attr-name').css({

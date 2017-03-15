@@ -9,8 +9,8 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
             $location.url(link);
             $rootScope.showLM = false;
         };
-        $rootScope.toggleLeftMenu = function() {
-            $rootScope.showLM = !$rootScope.showLM;
+        $rootScope.toggleLeftMenu = function(param) {
+            $rootScope.showLM = param!=undefined ? param : !$rootScope.showLM;
         };
         $scope.logout = function () {
             $cookieStore.remove('ttapp_token');

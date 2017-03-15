@@ -11,11 +11,11 @@
                             <i class="fa fa-home fa-fw"></i> {{"Home" | translate}}
                         </a>
                     </li>
-                    <li>
-                        <a ng-click='menuLink("/games")' ng-class="{active: activeTab=='/games'}">
-                            <i class="fa fa-globe fa-fw"></i> {{"Games" | translate}}
-                        </a>
-                    </li>
+                    <!--<li>-->
+                        <!--<a ng-click='menuLink("/games")' ng-class="{active: activeTab=='/games'}">-->
+                            <!--<i class="fa fa-globe fa-fw"></i> {{"Games" | translate}}-->
+                        <!--</a>-->
+                    <!--</li>-->
                     <li ng-if="userInfo.server_info.schema_id">
                         <a ng-click='menuLink("/charlist")' ng-class="{active: activeTab=='/charlist'}">
                             <i class="fa fa-address-card fa-fw"></i> {{"Charlist" | translate}}
@@ -48,7 +48,7 @@
         </div>
     </nav>
 
-    <div ng-view id="main"></div>
+    <div ng-view ng-click="toggleLeftMenu(false)" id="main"></div>
 
     <div class="pre-loader global-loader global-wrapper center valign-wrapper" ng-show="!hideLoader">
         <i class="fa fa-cog fa-spin fa-3x pre-loader  valign center-block"></i>

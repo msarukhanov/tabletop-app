@@ -36,31 +36,31 @@
         {{char.main.Name}}
     </div>
     <div class="col s6">
-        <p class="main_info">
+        <p class="main_info" ng-click="editStatOpen('Nature','main.Nature','text')">
             <span class="attr-name">{{"Nature" | translate}}</span>
             <span class="attr-stat">{{char.main.Nature}}</span>
         </p>
 
-        <p class="main_info">
+        <p class="main_info" ng-click="editStatOpen('Demeanor','main.Demeanor','text')">
             <span class="attr-name">{{"Demeanor" | translate}}</span>
             <span class="attr-stat">{{char.main.Demeanor}}</span>
         </p>
 
-        <p class="main_info">
+        <p class="main_info" ng-click="editStatOpen('Concept','main.Concept','text')">
             <span class="attr-name">{{"Concept" | translate}}</span>
             <span class="attr-stat">{{char.main.Concept}}</span>
         </p>
     </div>
     <div class="col s6">
-        <p class="main_info">
+        <p class="main_info" ng-click="editStatOpen('Clan','main.Clan','text')">
             <span class="attr-name">{{"Clan" | translate}}</span>
             <span class="attr-stat">{{char.main.Clan}}</span>
         </p>
-        <p class="main_info">
+        <p class="main_info" ng-click="editStatOpen('Generation','main.Generation','text')">
             <span class="attr-name">{{"Generation" | translate}}</span>
             <span class="attr-stat">{{char.main.Generation}}</span>
         </p>
-        <p class="main_info">
+        <p class="main_info" ng-click="editStatOpen('Sire','main.Sire','text')">
             <span class="attr-name">{{"Sire" | translate}}</span>
             <span class="attr-stat">{{char.main.Sire}}</span>
         </p>
@@ -71,7 +71,7 @@
     <div class="col s4" ng-repeat="col in [['',''],['Attributes','Abilities'],['','']] track by $index">
         <p class="attr-space">{{col[0] | translate}}</p>
         <p class="attr-group">{{attrGroups[$index].title | translate}}</p>
-        <p class="attr" ng-repeat="attr in attrGroups[$index].array">
+        <p class="attr" ng-repeat="attr in attrGroups[$index].array" ng-click="editStatOpen(attr,'attr.'+attr,'num')">
             <span class="attr-name">{{attr | translate}}</span>
             <span class="attr-stat">
                 <span class="statpoint" ng-repeat="n in range(char.attr[''+attr]) track by $index">
@@ -83,10 +83,11 @@
         </p>
         <p class="attr-space">{{col[1] | translate}}</p>
         <p class="attr-group">{{abilitiesGroups[$index].title | translate}}</p>
-        <p class="attr" ng-repeat="abi in abilitiesGroups[$index].array">
+        <p class="attr" ng-repeat="abi in abilitiesGroups[$index].array" ng-click="editStatOpen(abi,'abilities.'+abi,'num')">
             <span class="attr-name">{{abi | translate}}</span>
             <span class="attr-stat">
-                <span class="statpoint" ng-repeat="n in range(char.abi[''+abi]) track by $index">
+                <span class="statpoint" ng-if="char.abilities[''+abi]==0"></span>
+                <span class="statpoint" ng-repeat="n in range(char.abilities[''+abi]) track by $index">
                     <svg viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="60" cy="60" r="50"/>
                     </svg>
@@ -122,8 +123,8 @@
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
-        <h4>Creating Character</h4>
-        <h5>Main info ( 1 of 8 )</h5>
+        <h5>Creating Character</h5>
+        <h6>Main info ( 1 of 8 )</h6>
         <form class="col s12" name="vtm_main_form">
             <div class="row">
                 <div class="input-field col s12">
@@ -188,8 +189,8 @@
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
-        <h4>Creating Character</h4>
-        <h5>Attributes cost ( 2 of 8 )</h5>
+        <h5>Creating Character</h5>
+        <h6>Attributes cost ( 2 of 8 )</h6>
         <form class="col s12" name="vtm_attr1_form">
             <div class="row" style="margin-bottom: 0px">
                 <div class="col s2"></div>
@@ -212,7 +213,7 @@
                 <div class="col s1"></div>
             </div>
         </form>
-        <h5>Attributes starting ( 3 of 8 )</h5>
+        <h6>Attributes starting ( 3 of 8 )</h6>
         <form class="col s12" name="vtm_attr1_form">
             <div class="row" style="margin-bottom: 0px">
                 <div class="col s2"></div>
@@ -252,23 +253,30 @@
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
-        <h4>Creating Character</h4>
-        <h5>Attributes ( 4 of 8 )</h5>
+        <h5>Creating Character</h5>
+        <h6>Attributes ( 4 of 8 )</h6>
         <div class="row" ng-repeat="group in attrGroups">
             <h6 class="center">
-                {{group.title}} (Remaining : {{newChar.start[''+group.title]}})
+                {{group.title | translate}} (Remaining : {{newChar.start[''+group.title]}})
             </h6>
             <form class="col s12" name="vtm_attr1_form">
                 <div class="col s4" ng-repeat="stat in group.array">
-                    <div class="col s12">
-                        {{stat}}
+                    <div class="col s12 pm-row">
+                        {{stat | translate}}
                     </div>
-                    <div class="col s12 center">
-                        <i class="fa fa-minus left" ng-click="changeStat('attr', -1, stat, group.title)" aria-hidden="true"
-                           ng-show="newChar.attr[''+stat] > 1"></i>
-                        {{newChar.attr[""+stat] || 1}}
-                        <i class="fa fa-plus right" ng-click="changeStat('attr', 1, stat, group.title)" aria-hidden="true"
-                           ng-show="newChar.attr[''+stat] < 5 && newChar.start[''+group.title] > 0"></i>
+                    <div class="col s12 center pm-row">
+                        <div class="pm-minus">
+                            <i class="fa fa-minus left" ng-click="changeStat('attr', -1, stat, group.title)"></i>
+                        </div>
+                        <div class="pm-center">
+                            {{newChar.attr[""+stat] || 1}}
+                        </div>
+                        <div class="pm-plus">
+                            <i class="fa fa-plus right" ng-click="changeStat('attr', 1, stat, group.title)"></i>
+                        </div>
+                        <!--<i class="fa fa-minus left" ng-click="changeStat('attr', -1, stat, group.title)"></i>-->
+                        <!--{{newChar.attr[""+stat] || 1}}-->
+                        <!--<i class="fa fa-plus right" ng-click="changeStat('attr', 1, stat, group.title)"></i>-->
                     </div>
                 </div>
             </form>
@@ -287,7 +295,7 @@
         <button ng-click="createNext('modalCharAttr2','modalCharMain')" class="waves-effect waves-green btn-flat close-modal">
             Back
         </button>
-        <button ng-click="createNext('modalCharAttr2','modalCharAbi1')"
+        <button ng-click="createNext('modalCharAttr2','modalCharAbi2')"
                 class="waves-effect waves-green btn-flat next-modal">
             Next
         </button>
@@ -299,20 +307,20 @@
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
-        <h4>Creating Character</h4>
-        <h5>Abilities cost ( 5 of 8 )</h5>
+        <h5>Creating Character</h5>
+        <h6>Abilities cost ( 5 of 8 )</h6>
         <form class="col s12" name="vtm_abilities1_form">
             <div class="row" style="margin-bottom: 0px">
                 <div class="col s2"></div>
                 <div class="col s3" ng-repeat="group in abilitiesGroups">
-                    {{group.title}}
+                    {{group.title | translate}}
                 </div>
                 <div class="col s1"></div>
             </div>
             <div class="row" ng-repeat="price in abilitiesPoints.prices track by $index" style="margin-bottom: 10px">
                 <div class="col s1"></div>
                 <div class="col s1">
-                    {{price}}
+                    {{price | translate}}
                 </div>
                 <div class="col s3" ng-repeat="group in abilitiesGroups track by $index">
                     <input id="apr{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
@@ -323,19 +331,19 @@
                 <div class="col s1"></div>
             </div>
         </form>
-        <h5>Abilities starting ( 6 of 8 )</h5>
+        <h6>Abilities starting ( 6 of 8 )</h6>
         <form class="col s12" name="vtm_abilities1_form">
             <div class="row" style="margin-bottom: 0px">
                 <div class="col s2"></div>
                 <div class="col s3" ng-repeat="group in abilitiesGroups">
-                    {{group.title}}
+                    {{group.title | translate}}
                 </div>
                 <div class="col s1"></div>
             </div>
             <div class="row" ng-repeat="price in abilitiesPoints.starting track by $index" style="margin-bottom: 0px">
                 <div class="col s1"></div>
                 <div class="col s1">
-                    {{price}}
+                    {{price | translate}}
                 </div>
                 <div class="col s3" ng-repeat="group in abilitiesGroups track by $index">
                     <input id="ast{{$parent.$index}}{{$index}}" type="radio" class="a{{$index}}"
@@ -362,26 +370,26 @@
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
-        <h4>Creating Character</h4>
-        <h5>Abilities ( 7 of 8 )</h5>
+        <h5>Creating Character</h5>
+        <h6>Abilities ( 7 of 8 )</h6>
         <div class="row" ng-repeat="group in abilitiesGroups">
             <h6 class="center">
-                {{group.title}} (Remaining : {{newChar.start[''+group.title]}})
+                {{group.title | translate}} (Remaining : {{newChar.start[''+group.title]}})
             </h6>
             <form class="col s12" name="vtm_abilities1_form">
                 <div class="col s4" ng-repeat="stat in group.array">
-                    <div class="col s12">
-                        {{stat}}
+                    <div class="col s12 pm-row">
+                        {{stat | translate}}
                     </div>
-                    <div class="col s12 center">
+                    <div class="col s12 center pm-row">
                         <div class="pm-minus">
-                            <i class="fa fa-minus left" ng-click="changeStat('abilities', -1, stat, group.title)" aria-hidden="true" ng-show="newChar.abilities[''+stat] > 0"></i>
+                            <i class="fa fa-minus left" ng-click="changeStat('abilities', -1, stat, group.title)"></i>
                         </div>
                         <div class="pm-center">
                             {{newChar.abilities[""+stat] || 0}}
                         </div>
                         <div class="pm-plus">
-                            <i class="fa fa-plus right" ng-click="changeStat('abilities', 1, stat, group.title)" aria-hidden="true" ng-show="newChar.abilities[''+stat] < 5 && newChar.start[''+group.title] > 0"></i>
+                            <i class="fa fa-plus right" ng-click="changeStat('abilities', 1, stat, group.title)"></i>
                         </div>
                     </div>
                 </div>
@@ -411,8 +419,8 @@
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
-        <h4>Creating Character</h4>
-        <h5>Finish ( 8 of 8 )</h5>
+        <h5>Creating Character</h5>
+        <h6>Finish ( 8 of 8 )</h6>
         <form class="col s12" name="vtm_main_form">
             <div class="row">
                 <div class="input-field col s12">
@@ -423,8 +431,45 @@
                 <button ng-click="createNext('modalCharFinish','modalCharAbi3')" class="waves-effect waves-green btn-flat close-modal">
                     Back
                 </button>
-                <button ng-click="saveCharacterProceed(newChar)" class="waves-effect waves-green btn-flat next-modal">
+                <button ng-click="saveCharacterProceed(newChar, isNpc)" class="waves-effect waves-green btn-flat next-modal">
                     Next
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editCharModal" class="modal bottom-sheet mainform">
+    <a class="close-btn modal-close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </a>
+    <div class="modal-content">
+        <h5>Edit "{{edit.name}}" {{char[''+edit.path1][''+edit.path2]}}</h5>
+        <form class="col s12" name="vtm_main_form">
+            <div class="row">
+                <div class="input-field col s12" ng-if="edit.type=='text'">
+                    <input type="text" class="validate" ng-model="char[''+edit.path1][''+edit.path2]">
+                </div>
+                <div class="input-field col s12" ng-if="edit.type=='num'">
+                    <div class="col s12 center pm-row">
+                        <div class="pm-minus">
+                            <i class="fa fa-plus right" ng-click="changeStat(''+edit.path1, -1, ''+edit.path2)"></i>
+                        </div>
+                        <div class="pm-center">
+                            {{char[''+edit.path1][''+edit.path2] || 0}}
+                        </div>
+                        <div class="pm-plus">
+                            <i class="fa fa-plus right" ng-click="changeStat(''+edit.path1, 1, ''+edit.path2)"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="closeEditStat()" class="waves-effect waves-green btn-flat close-modal">
+                    Back
+                </button>
+                <button ng-click="editCharacterProceed()" class="waves-effect waves-green btn-flat next-modal">
+                    Save
                 </button>
             </div>
         </form>

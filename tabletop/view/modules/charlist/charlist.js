@@ -8,10 +8,12 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $translate.refresh();
             });
         };
+        var listId = '';
 
-        window.saveCharacterProceed = function(newChar) {
+        window.saveCharacterProceed = function(newChar, isNpc) {
             userRequests.CRUDUser('saveCharacterList', {
                 newChar : newChar,
+                npc : isNpc,
                 schema_id : $rootScope.userInfo.server_info.schema_id
             }, function (data) {
                 $scope.error = data.error;
@@ -19,8 +21,26 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $rootScope.hideLoader = true;
                 if (!data.error) {
                     $('#modalCharFinish').openModal();
-                    $scope.currentChar = data.data.char.list;
-                    $location.path('/bio' + data.data.char.id + "?new");
+                    if(!isNpc) {
+                        $scope.currentChar = data.data.char.list;
+                        $location.path('/bio' + data.data.char.id + "?new");
+                    }
+                }
+                else {
+
+                }
+            });
+        };
+        window.editCharacterProceed = function(list) {
+            userRequests.CRUDUser('editCharacterList', {
+                list : list,
+                listId : listId
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                $rootScope.hideLoader = true;
+                if (!data.error) {
+                    $('#editCharFinish').closeModal();
                 }
                 else {
 
@@ -41,6 +61,7 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 if (!data.error) {
                     $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
                     $scope.currentChar = data.data.list;
+                    listId = data.data.id;
                     translateSchema();
                     $rootScope.getUserData();
                 }

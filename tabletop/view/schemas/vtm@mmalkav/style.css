@@ -36,6 +36,7 @@ input[type=text]:focus:not([readonly]) {
 .pmtbl .col i {
     position: absolute;
     margin: 0;
+    line-height: 15px;
 }
 .pmtbl .col i.left {
     left: 0;

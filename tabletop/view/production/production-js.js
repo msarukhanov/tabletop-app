@@ -49257,7 +49257,7 @@ templates["../tabletop/view/modules/actions/actions.html"] = "<div class=\"globa
    "</script>";
 
 templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrapper bio\" ng-init=\"getCharacterBio()\">\n" +
-   "    <h4 class=\"page-header global-page-header center\">{{\"BIO\" | translate}}</h4>\n" +
+   "    <h5 class=\"page-header global-page-header center\">{{\"Bio\" | translate}}</h5>\n" +
    "\n" +
    "    <div class=\"panel global-panel-default\">\n" +
    "        <div class=\"row\">\n" +
@@ -49305,12 +49305,12 @@ templates["../tabletop/view/modules/bio/bio.html"] = "<div class=\"global-wrappe
 
 templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"global-wrapper charl\" ng-init=\"getCharacterData()\">\n" +
    "\n" +
-   "    <h4 class=\"page-header global-page-header center\">\n" +
+   "    <h5 class=\"page-header global-page-header center\">\n" +
    "        {{\"Character\" | translate}}\n" +
-   "        <a ng-click=\"createCharacterDialog()\" ng-if=\"userInfo.type != 'player'\" class=\"right btn-floating waves-effect waves-light red\" style=\"position: absolute;right: 10px;\">\n" +
+   "        <a ng-click=\"createCharacterDialog()\" ng-show=\"hideLoader && !currentChar\" ng-if=\"userInfo.type != 'player'\" class=\"right btn-floating waves-effect waves-light red\" style=\"position: absolute;right: 10px;\">\n" +
    "            <i class=\"material-icons\">add</i>  New Char\n" +
    "        </a>\n" +
-   "    </h4>\n" +
+   "    </h5>\n" +
    "\n" +
    "    <!--<h4 class=\"page-header global-page-header center\" ng-show=\"hideLoader\">-->\n" +
    "        <!-- -->\n" +
@@ -49323,15 +49323,11 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                    Players' chars.\n" +
    "                </div>\n" +
    "                <div class=\"collapsible-body\">\n" +
-   "                    <div class=\"row\">\n" +
-   "                        <div class=\"col s12\">\n" +
-   "                            <ul class=\"collection\">\n" +
-   "                                <li class=\"collection-item\" ng-repeat=\"char in charList.players\">\n" +
-   "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}} ({{char.username}})</a>\n" +
-   "                                </li>\n" +
-   "                            </ul>\n" +
-   "                        </div>\n" +
-   "                    </div>\n" +
+   "                    <ul class=\"collection\">\n" +
+   "                        <li class=\"collection-item\" ng-repeat=\"char in charList.players\">\n" +
+   "                            <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}} ({{char.username}})</a>\n" +
+   "                        </li>\n" +
+   "                    </ul>\n" +
    "                </div>\n" +
    "            </li>\n" +
    "            <li>\n" +
@@ -49339,15 +49335,11 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "                    NPCs.\n" +
    "                </div>\n" +
    "                <div class=\"collapsible-body\">\n" +
-   "                    <div class=\"row\">\n" +
-   "                        <div class=\"col s12\">\n" +
-   "                            <ul class=\"collection\">\n" +
-   "                                <li class=\"collection-item\" ng-repeat=\"char in charList.npc\">\n" +
-   "                                    <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}}</a>\n" +
-   "                                </li>\n" +
-   "                            </ul>\n" +
-   "                        </div>\n" +
-   "                    </div>\n" +
+   "                    <ul class=\"collection\">\n" +
+   "                        <li class=\"collection-item\" ng-repeat=\"char in charList.npc\">\n" +
+   "                            <a ng-href=\"/#!/charlist{{char.id}}\">{{char.char_name}}</a>\n" +
+   "                        </li>\n" +
+   "                    </ul>\n" +
    "                </div>\n" +
    "            </li>\n" +
    "        </ul>\n" +
@@ -49368,10 +49360,10 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "";
 
 templates["../tabletop/view/modules/home/home.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
-   "    <h4 class=\"page-header global-page-header center\" ng-show=\"!userInfo.char_info.length\">\n" +
+   "    <h5 class=\"page-header global-page-header center\" ng-show=\"!userInfo.char_info.length\">\n" +
    "        {{userInfo.username}}\n" +
    "        <!--{{\"Character\" | translate}}-->\n" +
-   "    </h4>\n" +
+   "    </h5>\n" +
    "\n" +
    "    <div class=\"panel global-panel-default\">\n" +
    "        <div class=\"panel-body global-panel-body\" ng-show=\"hideLoader\">\n" +
@@ -49479,11 +49471,11 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "                            <i class=\"fa fa-home fa-fw\"></i> {{\"Home\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
-   "                    <li>\n" +
-   "                        <a ng-click='menuLink(\"/games\")' ng-class=\"{active: activeTab=='/games'}\">\n" +
-   "                            <i class=\"fa fa-globe fa-fw\"></i> {{\"Games\" | translate}}\n" +
-   "                        </a>\n" +
-   "                    </li>\n" +
+   "                    <!--<li>-->\n" +
+   "                        <!--<a ng-click='menuLink(\"/games\")' ng-class=\"{active: activeTab=='/games'}\">-->\n" +
+   "                            <!--<i class=\"fa fa-globe fa-fw\"></i> {{\"Games\" | translate}}-->\n" +
+   "                        <!--</a>-->\n" +
+   "                    <!--</li>-->\n" +
    "                    <li ng-if=\"userInfo.server_info.schema_id\">\n" +
    "                        <a ng-click='menuLink(\"/charlist\")' ng-class=\"{active: activeTab=='/charlist'}\">\n" +
    "                            <i class=\"fa fa-address-card fa-fw\"></i> {{\"Charlist\" | translate}}\n" +
@@ -49516,7 +49508,7 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "        </div>\n" +
    "    </nav>\n" +
    "\n" +
-   "    <div ng-view id=\"main\"></div>\n" +
+   "    <div ng-view ng-click=\"toggleLeftMenu(false)\" id=\"main\"></div>\n" +
    "\n" +
    "    <div class=\"pre-loader global-loader global-wrapper center valign-wrapper\" ng-show=\"!hideLoader\">\n" +
    "        <i class=\"fa fa-cog fa-spin fa-3x pre-loader  valign center-block\"></i>\n" +
@@ -49851,10 +49843,12 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $translate.refresh();
             });
         };
+        var listId = '';
 
-        window.saveCharacterProceed = function(newChar) {
+        window.saveCharacterProceed = function(newChar, isNpc) {
             userRequests.CRUDUser('saveCharacterList', {
                 newChar : newChar,
+                npc : isNpc,
                 schema_id : $rootScope.userInfo.server_info.schema_id
             }, function (data) {
                 $scope.error = data.error;
@@ -49862,8 +49856,26 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $rootScope.hideLoader = true;
                 if (!data.error) {
                     $('#modalCharFinish').openModal();
-                    $scope.currentChar = data.data.char.list;
-                    $location.path('/bio' + data.data.char.id + "?new");
+                    if(!isNpc) {
+                        $scope.currentChar = data.data.char.list;
+                        $location.path('/bio' + data.data.char.id + "?new");
+                    }
+                }
+                else {
+
+                }
+            });
+        };
+        window.editCharacterProceed = function(list) {
+            userRequests.CRUDUser('editCharacterList', {
+                list : list,
+                listId : listId
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                $rootScope.hideLoader = true;
+                if (!data.error) {
+                    $('#editCharFinish').closeModal();
                 }
                 else {
 
@@ -49884,6 +49896,7 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 if (!data.error) {
                     $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
                     $scope.currentChar = data.data.list;
+                    listId = data.data.id;
                     translateSchema();
                     $rootScope.getUserData();
                 }
@@ -49987,8 +50000,8 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
             $location.url(link);
             $rootScope.showLM = false;
         };
-        $rootScope.toggleLeftMenu = function() {
-            $rootScope.showLM = !$rootScope.showLM;
+        $rootScope.toggleLeftMenu = function(param) {
+            $rootScope.showLM = param!=undefined ? param : !$rootScope.showLM;
         };
         $scope.logout = function () {
             $cookieStore.remove('ttapp_token');
