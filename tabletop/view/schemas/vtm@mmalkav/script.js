@@ -161,7 +161,7 @@ window.prepareCharListFunctions = function ($scope, $rootScope, $translate) {
         }
     ];
     window.createCharacterDialog = function(isNew) {
-        if($scope.char && $scope.char.main && $scope.char.main.Name && !isNew) {
+        if(($scope.char && $scope.char.main && $scope.char.main.Name) || (!isNew)) {
             console.log("start edit func");
             startEditFunctions();
         }

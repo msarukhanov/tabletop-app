@@ -1,5 +1,14 @@
 {
   "LOGOUT" : "ВЫХОД",
   "Character" : "Персонаж",
-  "Actions" : "Действия"
+  "Actions" : "Действия",
+  "List" : "Лист",
+  "Lists" : "Список",
+  "Home" : "Главная",
+  "World" : "Мир",
+  "Current Game." : "Текущая игра.",
+  "Current Character." : "Текущий персонаж.",
+  "curgameTitle" : "Название",
+  "curcharName" : "Имя",
+  "curgameUsers" : "Игроки"
 }

@@ -49359,7 +49359,7 @@ templates["../tabletop/view/modules/charlist/charlist.html"] = "<div class=\"glo
    "\n" +
    "";
 
-templates["../tabletop/view/modules/home/home.html"] = "<div class=\"global-wrapper\" ng-init=\"getCharacterData()\">\n" +
+templates["../tabletop/view/modules/home/home.html"] = "<div class=\"global-wrapper\" ng-init=\"getHomeData()\">\n" +
    "    <h5 class=\"page-header global-page-header center\" ng-show=\"!userInfo.char_info.length\">\n" +
    "        {{userInfo.username}}\n" +
    "        <!--{{\"Character\" | translate}}-->\n" +
@@ -49368,38 +49368,48 @@ templates["../tabletop/view/modules/home/home.html"] = "<div class=\"global-wrap
    "    <div class=\"panel global-panel-default\">\n" +
    "        <div class=\"panel-body global-panel-body\" ng-show=\"hideLoader\">\n" +
    "            <ul class=\"collapsible\" data-collapsible=\"expandable\" ng-show=\"!userInfo.char_info.length\">\n" +
-   "                <li ng-show=\"userInfo.server_info.schema_id\">\n" +
+   "                <li ng-show=\"userInfo.server_info.schema_id && server_info\">\n" +
    "                    <div class=\"collapsible-header active\">\n" +
-   "                        <i class=\"material-icons\">language</i> Current Game.\n" +
+   "                        <i class=\"material-icons\">language</i> {{\"Current Game.\" | translate }}\n" +
    "                    </div>\n" +
    "                    <div class=\"collapsible-body\">\n" +
-   "                        <div class=\"row\">\n" +
-   "                            <div class=\"col offset-s1 s4 bold\">{{\"Title\" | translate}}</div>\n" +
-   "                            <div class=\"col s6\">{{userInfo.server_info.name}}</div>\n" +
+   "                        <div class=\"row\" style=\"margin-top: 15px\">\n" +
+   "                            <div class=\"col offset-s1 s4 bold\">{{\"curgameTitle\" | translate}}</div>\n" +
+   "                            <div class=\"col s7\">{{userInfo.server_info.name}}</div>\n" +
+   "                            <div class=\"col offset-s1 s4 bold\">{{\"Master\" | translate}}</div>\n" +
+   "                            <div class=\"col s7\">\n" +
+   "                                {{server_info.master.username}} <img style=\"width: 16px;vertical-align: middle;\" src=\"/files/images/icons/fleur-de-lys.svg\" alt=\"master\">\n" +
+   "                            </div>\n" +
+   "                            <div class=\"col offset-s1 s4 bold\">{{\"curgameUsers\" | translate}}</div>\n" +
+   "                            <div class=\"col s7\">\n" +
+   "                                <span ng-repeat=\"user in server_info.users track by $index\">\n" +
+   "                                    {{user.username}} {{$index < server_info.users.length - 1 ? \",\" : \"\"}}\n" +
+   "                                </span>\n" +
+   "                            </div>\n" +
    "                        </div>\n" +
    "                    </div>\n" +
    "                </li>\n" +
    "                <li ng-show=\"userInfo.char_info.char_id\">\n" +
    "                    <div class=\"collapsible-header active\">\n" +
-   "                        <i class=\"material-icons\">assignment</i> Current Character.\n" +
+   "                        <i class=\"material-icons\">assignment</i> {{\"Current Character.\" | translate }}\n" +
    "                    </div>\n" +
    "                    <div class=\"collapsible-body\">\n" +
-   "                        <div class=\"row\">\n" +
-   "                            <div class=\"col offset-s1 s4 bold\">{{\"Name\" | translate}}</div>\n" +
+   "                        <div class=\"row\" style=\"margin-top: 15px\">\n" +
+   "                            <div class=\"col offset-s1 s4 bold\">{{\"curcharName\" | translate}}</div>\n" +
    "                            <div class=\"col s6\">{{userInfo.char_info.char_name}}</div>\n" +
    "                        </div>\n" +
    "                    </div>\n" +
    "                </li>\n" +
-   "                <li>\n" +
-   "                    <div class=\"collapsible-header\">\n" +
-   "                        <i class=\"material-icons\">language</i> Available Games.\n" +
-   "                    </div>\n" +
-   "                    <div class=\"collapsible-body\">\n" +
-   "                        <span>Lorem ipsum dolor sit amet.</span>\n" +
-   "                        <span>Lorem ipsum dolor sit amet.</span>\n" +
-   "                        <span>Lorem ipsum dolor sit amet.</span>\n" +
-   "                    </div>\n" +
-   "                </li>\n" +
+   "                <!--<li>-->\n" +
+   "                    <!--<div class=\"collapsible-header\">-->\n" +
+   "                        <!--<i class=\"material-icons\">language</i> {{\"Available Games.\" | translate }}-->\n" +
+   "                    <!--</div>-->\n" +
+   "                    <!--<div class=\"collapsible-body\">-->\n" +
+   "                        <!--&lt;!&ndash;<span>Lorem ipsum dolor sit amet.</span>&ndash;&gt;-->\n" +
+   "                        <!--&lt;!&ndash;<span>Lorem ipsum dolor sit amet.</span>&ndash;&gt;-->\n" +
+   "                        <!--&lt;!&ndash;<span>Lorem ipsum dolor sit amet.</span>&ndash;&gt;-->\n" +
+   "                    <!--</div>-->\n" +
+   "                <!--</li>-->\n" +
    "                <!--<li>-->\n" +
    "                    <!--<div class=\"collapsible-header\">-->\n" +
    "                        <!--<i class=\"material-icons\">people</i> Party (coming soon)-->\n" +
@@ -49419,17 +49429,6 @@ templates["../tabletop/view/modules/home/home.html"] = "<div class=\"global-wrap
    "    });\n" +
    "</script>\n" +
    "";
-
-templates["../tabletop/view/modules/leftmenu/leftmenu.html"] = "<!DOCTYPE html>\n" +
-   "<html lang=\"en\">\n" +
-   "<head>\n" +
-   "    <meta charset=\"UTF-8\">\n" +
-   "    <title></title>\n" +
-   "</head>\n" +
-   "<body>\n" +
-   "\n" +
-   "</body>\n" +
-   "</html>";
 
 templates["../tabletop/view/modules/login/login.html"] = "<div class=\"container login-container valign-wrapper\" ng-controller=\"Login\">\n" +
    "    <div class=\"login-panel panel panel-default valign center-block\">\n" +
@@ -49462,36 +49461,89 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "    <nav>\n" +
    "        <div class=\"nav-wrapper\">\n" +
    "            <div class=\"left\">\n" +
-   "                <a href=\"\" data-activates=\"mobile-demo\" class=\"button-collapse dropdown-button\" ng-click=\"toggleLeftMenu()\">\n" +
-   "                    <i class=\"fa fa-navicon\"></i>\n" +
-   "                </a>\n" +
-   "                <ul class=\"dropdown-content dr-left menu lm_{{showLM}}\" id=\"mobile-demo\">\n" +
+   "                <a href=\"#\" data-activates=\"slide-out\" class=\"button-collapse\"><i class=\"material-icons\">menu</i></a>\n" +
+   "                <ul id=\"slide-out\" class=\"side-nav\">\n" +
    "                    <li>\n" +
-   "                        <a ng-click='menuLink(\"/\")' ng-class=\"{active: activeTab=='/'}\">\n" +
-   "                            <i class=\"fa fa-home fa-fw\"></i> {{\"Home\" | translate}}\n" +
+   "                        <div class=\"userView\">\n" +
+   "                            <div class=\"background\">\n" +
+   "                                <img src=\"/files/images/sidenavbg.jpg\">\n" +
+   "                            </div>\n" +
+   "                            <a href=\"#!name\">\n" +
+   "                                <span class=\"white-text name\">{{userInfo.username}}</span>\n" +
+   "                            </a>\n" +
+   "                            <!--<a href=\"#!email\"><span class=\"white-text email\">jdandturk@gmail.com</span></a>-->\n" +
+   "                        </div>\n" +
+   "                    </li>\n" +
+   "                    <li>\n" +
+   "                        <a class=\"waves-effect\" ng-click='menuLink(\"/\")' ng-class=\"{active: activeTab=='/'}\">\n" +
+   "                            <img src=\"/files/images/icons/home.svg\" alt=\"home\"> {{\"Home\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
    "                    <!--<li>-->\n" +
-   "                        <!--<a ng-click='menuLink(\"/games\")' ng-class=\"{active: activeTab=='/games'}\">-->\n" +
-   "                            <!--<i class=\"fa fa-globe fa-fw\"></i> {{\"Games\" | translate}}-->\n" +
-   "                        <!--</a>-->\n" +
+   "                    <!--<a ng-click='menuLink(\"/games\")' ng-class=\"{active: activeTab=='/games'}\">-->\n" +
+   "                    <!--<i class=\"fa fa-globe fa-fw\"></i> {{\"Games\" | translate}}-->\n" +
+   "                    <!--</a>-->\n" +
    "                    <!--</li>-->\n" +
+   "                    <li><div class=\"divider\"></div></li>\n" +
+   "                    <li><a class=\"subheader\">{{\"Character\" | translate}}</a></li>\n" +
    "                    <li ng-if=\"userInfo.server_info.schema_id\">\n" +
-   "                        <a ng-click='menuLink(\"/charlist\")' ng-class=\"{active: activeTab=='/charlist'}\">\n" +
-   "                            <i class=\"fa fa-address-card fa-fw\"></i> {{\"Charlist\" | translate}}\n" +
+   "                        <a ng-if=\"userInfo.type != 'player'\" class=\"waves-effect\" ng-click='menuLink(\"/charlist\")' ng-class=\"{active: activeTab=='/charlist'}\">\n" +
+   "                            <img src=\"/files/images/icons/charlists.svg\" alt=\"charlist\"> {{\"Lists\" | translate}}\n" +
+   "                        </a>\n" +
+   "                        <a ng-if=\"userInfo.type == 'player'\" class=\"waves-effect\" ng-click='menuLink(\"/charlist\")' ng-class=\"{active: activeTab=='/charlist'}\">\n" +
+   "                            <img src=\"/files/images/icons/charlist.svg\" alt=\"charlist\"> {{\"List\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
    "                    <li ng-if=\"userInfo.server_info.schema_id\">\n" +
-   "                        <a ng-click='menuLink(\"/bio\")' ng-class=\"{active: activeTab=='/bio'}\">\n" +
-   "                            <i class=\"fa fa-book fa-fw\"></i> {{\"Bio\" | translate}}\n" +
+   "                        <a class=\"waves-effect\" ng-click='menuLink(\"/bio\")' ng-class=\"{active: activeTab=='/bio'}\">\n" +
+   "                            <img src=\"/files/images/icons/bio.svg\" alt=\"bio\"> {{\"Bio\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
+   "                    <li><div class=\"divider\"></div></li>\n" +
+   "                    <li><a class=\"subheader\">{{\"World\" | translate}}</a></li>\n" +
    "                    <li ng-if=\"userInfo.server_info.schema_id\">\n" +
-   "                        <a ng-click='menuLink(\"/actions\")' ng-class=\"{active: activeTab=='/actions'}\">\n" +
-   "                            <i class=\"fa fa-bolt fa-fw\"></i> {{\"Actions\" | translate}}\n" +
+   "                        <a class=\"waves-effect\" ng-click='menuLink(\"/actions\")' ng-class=\"{active: activeTab=='/actions'}\">\n" +
+   "                            <img src=\"/files/images/icons/actions.svg\" alt=\"actions\"> {{\"Actions\" | translate}}\n" +
+   "                        </a>\n" +
+   "                    </li>\n" +
+   "                    <li><div class=\"divider\"></div></li>\n" +
+   "                    <li><a class=\"subheader\">{{\"Profile\" | translate}}</a></li>\n" +
+   "                    <li ng-if=\"userInfo.server_info.schema_id\">\n" +
+   "                        <a class=\"waves-effect\"  href=\"/#!/\" ng-click=\"logout()\">\n" +
+   "                            <img src=\"/files/images/icons/logout.svg\" alt=\"logout\"> {{\"LOGOUT\" | translate}}\n" +
    "                        </a>\n" +
    "                    </li>\n" +
    "                </ul>\n" +
+   "                <!--<a href=\"\" data-activates=\"mobile-demo\" class=\"button-collapse dropdown-button\" ng-click=\"toggleLeftMenu()\">-->\n" +
+   "                <!--<i class=\"fa fa-navicon\"></i>-->\n" +
+   "                <!--</a>-->\n" +
+   "                <!--<ul class=\"dropdown-content dr-left menu lm_{{showLM}}\" id=\"mobile-demo\">-->\n" +
+   "                <!--<li>-->\n" +
+   "                <!--<a ng-click='menuLink(\"/\")' ng-class=\"{active: activeTab=='/'}\">-->\n" +
+   "                <!--<i class=\"fa fa-home fa-fw\"></i> {{\"Home\" | translate}}-->\n" +
+   "                <!--</a>-->\n" +
+   "                <!--</li>-->\n" +
+   "                <!--&lt;!&ndash;<li>&ndash;&gt;-->\n" +
+   "                <!--&lt;!&ndash;<a ng-click='menuLink(\"/games\")' ng-class=\"{active: activeTab=='/games'}\">&ndash;&gt;-->\n" +
+   "                <!--&lt;!&ndash;<i class=\"fa fa-globe fa-fw\"></i> {{\"Games\" | translate}}&ndash;&gt;-->\n" +
+   "                <!--&lt;!&ndash;</a>&ndash;&gt;-->\n" +
+   "                <!--&lt;!&ndash;</li>&ndash;&gt;-->\n" +
+   "                <!--<li ng-if=\"userInfo.server_info.schema_id\">-->\n" +
+   "                <!--<a ng-click='menuLink(\"/charlist\")' ng-class=\"{active: activeTab=='/charlist'}\">-->\n" +
+   "                <!--<i class=\"fa fa-address-card fa-fw\"></i> {{\"Charlist\" | translate}}-->\n" +
+   "                <!--</a>-->\n" +
+   "                <!--</li>-->\n" +
+   "                <!--<li ng-if=\"userInfo.server_info.schema_id\">-->\n" +
+   "                <!--<a ng-click='menuLink(\"/bio\")' ng-class=\"{active: activeTab=='/bio'}\">-->\n" +
+   "                <!--<i class=\"fa fa-book fa-fw\"></i> {{\"Bio\" | translate}}-->\n" +
+   "                <!--</a>-->\n" +
+   "                <!--</li>-->\n" +
+   "                <!--<li ng-if=\"userInfo.server_info.schema_id\">-->\n" +
+   "                <!--<a ng-click='menuLink(\"/actions\")' ng-class=\"{active: activeTab=='/actions'}\">-->\n" +
+   "                <!--<i class=\"fa fa-bolt fa-fw\"></i> {{\"Actions\" | translate}}-->\n" +
+   "                <!--</a>-->\n" +
+   "                <!--</li>-->\n" +
+   "                <!--</ul>-->\n" +
    "            </div>\n" +
    "            <ul class=\"right\">\n" +
    "                <li>\n" +
@@ -49499,11 +49551,11 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "                        <i class=\"fa fa-user fa-fw\"></i> {{userInfo.username}}\n" +
    "                    </a>\n" +
    "                </li>\n" +
-   "                <li>\n" +
-   "                    <a href=\"/#!/\" ng-click=\"logout()\">\n" +
-   "                        {{\"LOGOUT\" | translate}} <i class=\"fa fa-sign-out\"></i>\n" +
-   "                    </a>\n" +
-   "                </li>\n" +
+   "                <!--<li>-->\n" +
+   "                    <!--<a href=\"/#!/\" ng-click=\"logout()\">-->\n" +
+   "                        <!--{{\"LOGOUT\" | translate}} <i class=\"fa fa-sign-out\"></i>-->\n" +
+   "                    <!--</a>-->\n" +
+   "                <!--</li>-->\n" +
    "            </ul>\n" +
    "        </div>\n" +
    "    </nav>\n" +
@@ -49534,6 +49586,12 @@ templates["../tabletop/view/modules/main/main.html"] = "<div id=\"page-wrapper\"
    "<script>\n" +
    "    $('.collapsible').collapsible({\n" +
    "        accordion: false\n" +
+   "    });\n" +
+   "    $(\".button-collapse\").sideNav({\n" +
+   "        menuWidth: 200, // Default is 300\n" +
+   "        edge: 'left', // Choose the horizontal origin\n" +
+   "        closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor\n" +
+   "        draggable: true // Choose whether you can drag to open on touch screens\n" +
    "    });\n" +
    "</script>";
 
@@ -49678,7 +49736,7 @@ app.directive('charList', ['$rootScope', '$translate', '$compile', '$templateReq
                 var listInit = false;
                 function makeList() {
                     //scope.char &&
-                    if( scope.schema) {
+                    if(scope.schema) {
                         listInit = true;
                         window.prepareCharList = function() {
                             console.log("preparing charlist controller");
@@ -49696,12 +49754,9 @@ app.directive('charList', ['$rootScope', '$translate', '$compile', '$templateReq
                     }
                 }
                 makeList();
-                scope.$watch('schema', function(oldVal, newVal) {
+                scope.$watch('schema', function() {
                     if(!listInit) makeList();
                 });
-                // scope.$watchGroup(['char','schema'], function(oldVal, newVal) {
-                //     if(!listInit) makeList();
-                // });
             }
         };
     }
@@ -49894,8 +49949,8 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $scope.message = data.message;
                 $rootScope.hideLoader = true;
                 if (!data.error) {
+                    $scope.currentChar = data.data.list || data.data.char.list;
                     $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
-                    $scope.currentChar = data.data.list;
                     listId = data.data.id;
                     translateSchema();
                     $rootScope.getUserData();
@@ -49936,9 +49991,35 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
     }
 ]);
 
-app.controller('Home', ['$scope', '$rootScope', '$routeParams',
-    function ($scope, $rootScope, $routeParams) {
+app.controller('Home', ['$scope', '$rootScope', 'userRequests',
+    function ($scope, $rootScope, userRequests) {
 
+        $scope.server_info = {};
+
+        function getServerInfo() {
+            userRequests.CRUDUser('getServerInfo', {
+                server_id : $rootScope.userInfo.server_info.server_id
+            }, function (data) {
+                $scope.error = data.error;
+                $scope.message = data.message;
+                if (!data.error) {
+                    $scope.server_info = data;
+                }
+                else {
+
+                }
+            });
+        }
+
+        $scope.getHomeData = function() {
+            getServerInfo();
+        };
+
+        $scope.$watch(function() {
+            return $rootScope.userInfo.server_id;
+        }, function() {
+            getServerInfo();
+        });
 
     }
 ]);

@@ -59,8 +59,8 @@ app.controller('Charlist', ['$scope', '$rootScope', '$routeParams', '$location',
                 $scope.message = data.message;
                 $rootScope.hideLoader = true;
                 if (!data.error) {
+                    $scope.currentChar = data.data.list || data.data.char.list;
                     $rootScope.currentSchema = data.data.schema || $rootScope.userInfo.server_info.charlist_name;
-                    $scope.currentChar = data.data.list;
                     listId = data.data.id;
                     translateSchema();
                     $rootScope.getUserData();

@@ -40,11 +40,28 @@
 nav {
     background-color: #000;
 }
+#slide-out .waves-effect img {
+    width: 25px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+nav .button-collapse a {
+    height: 50px !important;
+    line-height: 50px !important;
+}
 nav .button-collapse {
     margin-left: 5px;
 }
 nav .button-collapse i {
     font-size: 1.7rem;
+    height: 50px !important;
+    line-height: 50px !important;
+}
+.side-nav .userView a {
+    height: 72px;
+}
+.side-nav .userView img {
+    width: 100%;
 }
 .lm_true {
     display: block;

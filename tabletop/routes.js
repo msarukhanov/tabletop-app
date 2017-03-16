@@ -108,6 +108,9 @@ module.exports = function (app) {
     var Bio = require('./models/bio')(app, knex);
     Bio.regRoutes();
 
+    var Server = require('./models/server')(app, knex);
+    Server.regRoutes();
+
 	app.get('/', function (req, res) {
         process.env.PORT ? res.render('./index', {title: 'TableTapp'}) : res.render('./index_dev', {title: 'TableTapp'});
 	});

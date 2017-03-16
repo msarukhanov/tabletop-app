@@ -33,7 +33,7 @@
 
 <div ng-show="char" class="row vtm_main" ng-init="prepareCharList()">
     <div class="col s12 center">
-        {{char.main.Name}}
+        <span ng-click="editStatOpen('Name','main.Name','text')">{{char.main.Name}}</span>
     </div>
     <div class="col s6">
         <p class="main_info" ng-click="editStatOpen('Nature','main.Nature','text')">
@@ -444,7 +444,7 @@
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>
     <div class="modal-content">
-        <h5>Edit "{{edit.name}}" {{char[''+edit.path1][''+edit.path2]}}</h5>
+        <h5>"{{edit.name | translate}}"</h5>
         <form class="col s12" name="vtm_main_form">
             <div class="row">
                 <div class="input-field col s12" ng-if="edit.type=='text'">

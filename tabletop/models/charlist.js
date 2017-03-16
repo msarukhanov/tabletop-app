@@ -2,7 +2,7 @@
  * Created by Mark Sarukhanov on 22.11.2016.
  */
 
-module.exports = function(app, knex, wait, moment, redisRequests, Prematch){
+module.exports = function(app, knex){
 
     return {
         regRoutes: function () {

@@ -1,4 +1,4 @@
-<div class="global-wrapper" ng-init="getCharacterData()">
+<div class="global-wrapper" ng-init="getHomeData()">
     <h5 class="page-header global-page-header center" ng-show="!userInfo.char_info.length">
         {{userInfo.username}}
         <!--{{"Character" | translate}}-->
@@ -7,38 +7,48 @@
     <div class="panel global-panel-default">
         <div class="panel-body global-panel-body" ng-show="hideLoader">
             <ul class="collapsible" data-collapsible="expandable" ng-show="!userInfo.char_info.length">
-                <li ng-show="userInfo.server_info.schema_id">
+                <li ng-show="userInfo.server_info.schema_id && server_info">
                     <div class="collapsible-header active">
-                        <i class="material-icons">language</i> Current Game.
+                        <i class="material-icons">language</i> {{"Current Game." | translate }}
                     </div>
                     <div class="collapsible-body">
-                        <div class="row">
-                            <div class="col offset-s1 s4 bold">{{"Title" | translate}}</div>
-                            <div class="col s6">{{userInfo.server_info.name}}</div>
+                        <div class="row" style="margin-top: 15px">
+                            <div class="col offset-s1 s4 bold">{{"curgameTitle" | translate}}</div>
+                            <div class="col s7">{{userInfo.server_info.name}}</div>
+                            <div class="col offset-s1 s4 bold">{{"Master" | translate}}</div>
+                            <div class="col s7">
+                                {{server_info.master.username}} <img style="width: 16px;vertical-align: middle;" src="/files/images/icons/fleur-de-lys.svg" alt="master">
+                            </div>
+                            <div class="col offset-s1 s4 bold">{{"curgameUsers" | translate}}</div>
+                            <div class="col s7">
+                                <span ng-repeat="user in server_info.users track by $index">
+                                    {{user.username}} {{$index < server_info.users.length - 1 ? "," : ""}}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </li>
                 <li ng-show="userInfo.char_info.char_id">
                     <div class="collapsible-header active">
-                        <i class="material-icons">assignment</i> Current Character.
+                        <i class="material-icons">assignment</i> {{"Current Character." | translate }}
                     </div>
                     <div class="collapsible-body">
-                        <div class="row">
-                            <div class="col offset-s1 s4 bold">{{"Name" | translate}}</div>
+                        <div class="row" style="margin-top: 15px">
+                            <div class="col offset-s1 s4 bold">{{"curcharName" | translate}}</div>
                             <div class="col s6">{{userInfo.char_info.char_name}}</div>
                         </div>
                     </div>
                 </li>
-                <li>
-                    <div class="collapsible-header">
-                        <i class="material-icons">language</i> Available Games.
-                    </div>
-                    <div class="collapsible-body">
-                        <span>Lorem ipsum dolor sit amet.</span>
-                        <span>Lorem ipsum dolor sit amet.</span>
-                        <span>Lorem ipsum dolor sit amet.</span>
-                    </div>
-                </li>
+                <!--<li>-->
+                    <!--<div class="collapsible-header">-->
+                        <!--<i class="material-icons">language</i> {{"Available Games." | translate }}-->
+                    <!--</div>-->
+                    <!--<div class="collapsible-body">-->
+                        <!--&lt;!&ndash;<span>Lorem ipsum dolor sit amet.</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<span>Lorem ipsum dolor sit amet.</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<span>Lorem ipsum dolor sit amet.</span>&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</li>-->
                 <!--<li>-->
                     <!--<div class="collapsible-header">-->
                         <!--<i class="material-icons">people</i> Party (coming soon)-->
