@@ -15,7 +15,7 @@ app.controller('MainCtrl', ['userRequests', '$rootScope', '$scope', '$cookieStor
         $scope.logout = function () {
             $cookieStore.remove('ttapp_token');
             $rootScope.isLoggedIn = false;
-            location.reload();
+            $location.url("/");
         };
 
         $rootScope.getUserData = function () {

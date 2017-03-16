@@ -1,17 +1,9 @@
-var app = angular.module("tabletapApp", ['ngRoute', 'pascalprecht.translate', 'ngCookies', 'ngSanitize']);
+var app = angular.module("tabletapApp", ['ngRoute', 'pascalprecht.translate', 'ngCookies']);
 
 app.config(['$routeProvider', '$translateProvider', '$httpProvider', '$locationProvider',
     function ($routeProvider, $translateProvider, $httpProvider, $locationProvider) {
 
-        // $translateProvider.useStaticFilesLoader({
-        //     'prefix': 'files/',
-        //     'suffix': '.json'
-        // });
-
-        //$translateProvider.preferredLanguage('en');
-        $translateProvider.useLoader('asyncLoader', {
-            schema : ''
-        });
+        $translateProvider.useLoader('asyncLoader');
 
         $routeProvider
             .when("/", {
