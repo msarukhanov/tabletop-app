@@ -1,21 +1,24 @@
-var express         = require('express');
-var session         = require('express-session');
-var bodyParser      = require('body-parser');
-var cookieParser    = require('cookie-parser');
-var jade            = require('jade');
-var redis = require('redis');
-var RedisStore = require('connect-redis')(session);
+let express         = require('express');
+let session         = require('express-session');
+let bodyParser      = require('body-parser');
+let cookieParser    = require('cookie-parser');
+let jade            = require('jade');
+let redis = require('redis');
+let RedisStore = require('connect-redis')(session);
 
 global._            = require('underscore');
 
-global.redisClient = redis.createClient('//redis-18000.c11.us-east-1-3.ec2.cloud.redislabs.com:18000', {no_ready_check: true});
-redisClient.auth('theweavepassnodejs111', function (err) { if (err) throw err; });
-var session_storage = new RedisStore({ host: '//redis-18000.c11.us-east-1-3.ec2.cloud.redislabs.com', port: 18000, client: redisClient});
+global.redisClient = redis.createClient('//redis-10291.c15.us-east-1-2.ec2.cloud.redislabs.com:10291', {no_ready_check: true});
+redisClient.auth('IHxeojO8lhpg8sE12gNQ5gN0dVne5Nx9', function (err) { if (err) {
+    console.error(err);
+    throw err;
+} });
+let session_storage = new RedisStore({ host: '//redis-10291.c15.us-east-1-2.ec2.cloud.redislabs.com:10291', port: 18000, client: redisClient});
 
 function redisLog(type) {
     return function () {
-        var arguments = (typeof arguments != 'undefined') ? arguments : '';
-        console.log(type, arguments);
+        // let arguments = (typeof arguments != 'undefined') ? arguments : '';
+        // console.log(type, arguments);
     }
 }
 
@@ -26,7 +29,7 @@ redisClient.on('reconnecting', redisLog('Redis Connection Reconnecting ... '));
 redisClient.on('error', redisLog('Redis Connection Error ...'));
 redisClient.on('end', redisLog('Redis Connection End ...'));
 
-var app = express();
+let app = express();
 
 
 app.set('view engine', 'jade');
@@ -42,17 +45,17 @@ app.use(session({
 }));
 //app.use(i18n.init);
 app.set('views', '' + __dirname + '/tabletop/view');
-app.use(express.favicon(__dirname + '/tabletop/view/images/theweave.ico'));
+app.use('/favicon.ico', express.static('/tabletop/view/images/theweave.ico'));
 require('./tabletop')('routes', app);
 
-var port = parseInt(process.env.PORT) || 8877;
+let port = parseInt(process.env.PORT) || 8877;
 
-var server = app.listen(port, function() {
+let server = app.listen(port, function() {
     console.log( 'Server listening on port %d in %s mode', port, 'dev' );
 });
 
 app.io = require('socket.io')();
-//var server = require('http').createServer(app);
+//let server = require('http').createServer(app);
 app.io.listen(server);
 
 app.io.on('connection', function(socket){
@@ -66,8 +69,8 @@ app.io.on('connection', function(socket){
                 case 'start':
                     socket.join('server_' + socket.UserInfo.server_id, function() {
                        // console.log(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id]);
-                       //  var clients = app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].sockets;
-                       //  for (var clientId in clients) {
+                       //  let clients = app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].sockets;
+                       //  for (let clientId in clients) {
                        //      console.log(app.io.sockets.connected[clientId].UserInfo);
                        //  }
                        // // console.log(app.io);
@@ -94,7 +97,7 @@ app.io.on('connection', function(socket){
                         case 'roll':
                             msg[2].dt = new Date();
                             msg[2].username = socket.UserInfo.username;
-                            var D = msg[2].text.split(",")[0], N = msg[2].text.split(",")[1], result = [], i;
+                            let D = msg[2].text.split(",")[0], N = msg[2].text.split(",")[1], result = [], i;
                             for(i=0;i<N;i++){result.push(Math.floor(Math.random() * D) + 1)}
                             msg[2].text = N+"d"+D+" roll results : " + result.join(",");
                             if(app.io.sockets.adapter.rooms['server_' + socket.UserInfo.server_id].logs) {
